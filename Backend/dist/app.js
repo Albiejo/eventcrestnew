@@ -17,7 +17,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const OtpExpiration_1 = require("./Middleware/OtpExpiration");
 const path_1 = __importDefault(require("path"));
-const { initializeSocket } = require('./socket');
+const { initializeSocket } = require('./socket.js');
 const http_1 = require("http");
 dotenv_1.default.config();
 (0, db_config_1.default)();

@@ -17,7 +17,7 @@ import { Request,Response } from 'express';
 
 
 
-const { initializeSocket } = require('./socket')
+const { initializeSocket } = require('./socket.js')
 import {createServer} from 'http';
 
 dotenv.config();
