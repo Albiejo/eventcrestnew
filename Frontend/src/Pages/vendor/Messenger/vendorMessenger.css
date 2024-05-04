@@ -1,0 +1,130 @@
+.messenger{
+    height: calc(100vh - 70px);
+    display: flex;
+}
+
+
+.chatmenu{
+    flex: 3.5;
+    border: 2px solid white;
+    background-color: #2D3F50;
+    border-radius: 20px;
+}
+
+.chatmenuInput{
+width: 100%;
+padding: 10px 0;
+border:none;
+border-bottom:1px solid gray;
+border-radius: 10px;
+}
+
+
+.chatbox{
+    flex: 5.5;
+   
+}
+
+
+
+.chatboxBottom{
+margin-top: 5px;
+display:flex;
+align-items: center;
+justify-content: space-between;
+
+}
+
+.chatMessageInput{
+    width: 80%;
+    height: 90px;
+    padding: 10px;
+    border:1px solid gray
+
+}
+
+.chatSubmitButton{
+    width: 70px;
+    height: 40px;
+    padding: 10px;
+    border:none;
+    border-radius: 5px;
+    background-color: teal;
+    color: white;
+    cursor: pointer;
+}
+
+.chatOnline{
+    flex: 3;
+    border: 2px solid white;
+    background-color: skyblue;
+    border-radius: 20px;
+}
+
+.chatboxWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    position: relative;
+    
+    
+}
+
+.chatboxTop{
+    height: 100%;
+    overflow-y: scroll;
+    padding-right: 10px;
+    border: 2px solid skyblue;
+    padding: 5px;
+   
+}
+
+.chatmenuWrapper ,.chatboxWrapper, .chatOnlineWrapper{
+padding: 10px;
+
+}
+
+
+.navbar{
+    width: 100%;
+    height: 30px;
+    background-color: rgb(42, 23, 255);
+    border-radius: 20px;
+}
+
+.noConversationtext{
+position: absolute;
+top: 10%;
+font-size: 20px;
+color: gray;
+cursor: default;
+padding-left:30%;
+
+}
+
+
+.userTyping {
+    display: flex;
+    align-items: center;
+    height: 20px; /* Adjust height as needed */
+    padding: 5px 10px; /* Add pabackground-color: #f0f0f0; /* Background color */
+    color: #000000; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    margin-top: 10px; /* Adjust margin-top as needed */
+    margin-left: 10px;
+    font-weight: bold; /* Specify font-weight value */
+    margin-top: 50%;
+}
+
+.userTyping::after {
+    content:"..."; 
+    animation: typing 1s infinite;
+    margin-left: 5px; 
+}
+
+@keyframes typing {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}

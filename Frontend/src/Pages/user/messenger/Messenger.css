@@ -1,0 +1,133 @@
+.messenger{
+    display: flex;
+}
+
+
+.chatmenu{
+
+    background-color: #002F5E;
+    border-radius: 18px;
+    width: 100px; 
+    overflow-y: scroll;
+}
+
+.chatmenuInput{
+width: 100%;
+padding: 10px 0;
+border:none;
+border-bottom:1px solid gray;
+border-radius: 10px;
+}
+
+.chatmenuWrapper ,.chatboxWrapper, .chatOnlineWrapper{
+    padding: 10px;
+}
+
+
+.chatbox{
+    flex: 5.5;
+}
+
+
+
+.chatboxBottom{
+margin-top: 5px;
+display:flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.chatMessageInput{
+    width: 80%;
+    height: 90px;
+    padding: 10px;
+    border:1px solid gray
+
+}
+
+.chatSubmitButton{
+    width: 70px;
+    height: 40px;
+    padding: 10px;
+    border:none;
+    border-radius: 5px;
+    background-color: teal;
+    color: white;
+    cursor: pointer;
+}
+
+
+.chatboxWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    position: relative;
+
+    
+}
+
+.chatboxTop{
+    height: 100%;
+    overflow-y: scroll;
+    border: 2px solid skyblue;
+   
+}
+
+
+
+
+
+.navbar{
+    width: 100%;
+    height: 20px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.noConversationtext{
+position: absolute;
+top: 10%;
+font-size: 20px;
+color: gray;
+cursor: default;
+padding-left:30%;
+
+}
+
+.userTyping {
+    color: #000000;
+    margin-left: 10px;
+    font-weight: bold; 
+}
+
+.userTyping::after {
+    content:"..."; 
+    animation: typing 1s infinite;
+    margin-left: 5px; 
+}
+
+@keyframes typing {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+
+.about{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    width: 30%;
+    border-radius: 20px;
+    position: relative;
+    
+   
+}
+
+.aboutImg{
+    position: absolute;
+    top: 0;
+}
