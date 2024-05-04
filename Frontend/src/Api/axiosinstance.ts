@@ -9,6 +9,8 @@ const endpoints = {
     message: import.meta.env.VITE_MESSAGEAPI
 };
 
+console.log(endpoints)
+
 const createAxiosInstance = (baseURL:string, tokenKey:string) => {
     const instance = axios.create({ baseURL });
 
