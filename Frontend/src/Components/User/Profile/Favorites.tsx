@@ -50,11 +50,21 @@ function Favorites() {
   return (
 
     <>
+
     <div className="m-20 flex flex-row flex-wrap gap-4 mb-10">
-         {vendors.map((vendor, index) => (
-            <VendorListingCard {...vendor} key={index}/>
-        ))}    
+    {vendors.length === 0 ? (
+        <div className="flex items-center">
+        <p className="text-red-900 font-bold">Sorry, you have no favorited any profiles yet !</p>
+        <img src="https://t4.ftcdn.net/jpg/02/93/39/43/360_F_293394303_rukjodBxnDY37RXIqWipbWoE4XcUdTBL.jpg" alt="no favorites" />
     </div>
+    ) : (
+        vendors.map((vendor, index) => (
+            <VendorListingCard {...vendor} key={index}/>
+        ))
+    )} 
+    </div>
+
+
     {vendors.length > 0 && (
   <div className="flex justify-center mt-8">
     <div className="space-x-2">

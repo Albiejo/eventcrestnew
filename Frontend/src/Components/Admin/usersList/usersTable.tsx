@@ -82,7 +82,7 @@ const UsersTable=()=> {
 
 
   return (
-    <Card className="h-full w-full"  placeholder={undefined}>
+    <Card className="h-full w-full "  placeholder={undefined}>
       <CardHeader floated={false} shadow={false} className="rounded-none"  placeholder={undefined}>
         <div className="mb-2 flex items-center justify-between gap-8">
           <div>
@@ -110,7 +110,7 @@ const UsersTable=()=> {
       
       </CardHeader>
       <CardBody className="overflow-scroll px-0"  placeholder={undefined}>
-        <table className="mt-4 w-full min-w-max table-auto text-left">
+        <table className="mt-4 w-full min-w-max table-auto text-left ">
           <thead>
             <tr>
               {TABLE_HEAD.map((head) => (

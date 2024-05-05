@@ -54,9 +54,9 @@ const UserLoginForm=()=> {
         .post("/login", values)
         .then((response) => {
           localStorage.setItem("userToken", response.data.token)
-          console.log("first token", response.data.token)
           localStorage.setItem("userrefreshToken", response.data.refreshToken)
           dispatch(setUserInfo(response.data.userData));
+          toast.success("Successfully logged in ! ")
           navigate("/");
         })
         .catch((error) => {
@@ -69,12 +69,12 @@ const UserLoginForm=()=> {
 
   return (
     <div className="w-full h-screen flex flex-col md:flex-row items-start">
-    <div className="w-full md:w-1/2 h-full object-cover" style={{backgroundImage:`url('/public/imgs/dj.jpg')`,backgroundSize:"cover",backgroundRepeat:"no-repeat",backdropFilter:"revert-layer"}}>
+    <div className="w-full md:w-1/2 h-full object-cover" style={{backgroundImage:`url('/imgs/dj.jpg')`,backgroundSize:"cover",backgroundRepeat:"no-repeat",backdropFilter:"revert-layer"}}>
     </div>
     <div className="w-full md:w-1/2 mt-20 md:mt-0 ">
    
    <GoogleOAuthProvider clientId={clientId}>   
-          <Card className="w-full md:w-96 m-auto mt-10  bg-dark border border-gray-800 rounded-lg"  placeholder={undefined} shadow={false}>
+          <Card className="w-full md:w-96 m-auto mt-16  bg-dark border border-gray-800 rounded-lg"  placeholder={undefined} shadow={false}>
 
             <CardHeader
               floated={false}
@@ -201,7 +201,7 @@ const UserLoginForm=()=> {
             </CardFooter>
 
             </Card>
-    </GoogleOAuthProvider>
+   </GoogleOAuthProvider>
 
     </div>
     </div>

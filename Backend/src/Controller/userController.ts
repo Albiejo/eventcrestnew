@@ -77,6 +77,7 @@ class UserController{
           otpCode: otpCode,
           otpSetTimestamp: Date.now(),
         };
+        console.log("first",req.session.user)
         return res.status(200).json({ message: "OTP send to email for verification..", email: email });
       } else {
         console.log("couldn't generate otp, error occcured ,please fix !!");
@@ -99,6 +100,7 @@ class UserController{
     try {
      
       const otp = req.body.otp;
+      console.log("second",req.session.user)
       const userData: UserSession | undefined = req.session.user;
       
       if (!userData) {

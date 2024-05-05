@@ -119,7 +119,7 @@ const MyNavbar=()=> {
         <Typography
           className="mr-4 cursor-pointer py-1.5 font-medium font-bold" color="pink" placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}        >
           <Link to={USERROUTES.USER_HOME}>
-          <img src="../../../public/imgs/log.jpeg" alt="" width={150}/>
+          <img src="/imgs/log.jpeg" alt="" width={150}/>
           </Link>
         </Typography>
         

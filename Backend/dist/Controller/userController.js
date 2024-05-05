@@ -50,6 +50,7 @@ class UserController {
                         otpCode: otpCode,
                         otpSetTimestamp: Date.now(),
                     };
+                    console.log("first", req.session.user);
                     return res.status(200).json({ message: "OTP send to email for verification..", email: email });
                 }
                 else {
@@ -70,6 +71,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const otp = req.body.otp;
+                console.log("second", req.session.user);
                 const userData = req.session.user;
                 if (!userData) {
                     res.status(400).json({ error: "Session data not found. Please sign up again." });

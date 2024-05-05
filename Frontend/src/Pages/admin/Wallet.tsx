@@ -38,6 +38,7 @@ function Wallet() {
     axiosInstanceAdmin
       .get(`/getall-payment-details?page=${currentPage}`, { withCredentials: true })
       .then((response) => {
+
         setPayments(response.data.payment.result);
         setadmin(response.data.payment.AdminData);
         setTotalPages(response.data.totalPages);

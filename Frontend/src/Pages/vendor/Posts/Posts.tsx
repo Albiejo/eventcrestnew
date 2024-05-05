@@ -55,7 +55,15 @@ export default function Posts() {
       <DefaultLayout>
         <Breadcrumb pageName="Posts" folderName=""/>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 m-2">
-          {posts.map(({ imageUrl, caption, _id }, index) => (
+          { 
+          posts.length === 0 ? (
+        <div >
+            <p className='ml-2 text-center mb-8 text-red-700 font-bold'>Sorry, you haven't created any posts yet !</p>
+            <img src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAyL3YxNDUtcG95ZC1mYWgtMDQtaWxsdXN0cmF0aW9ucy1qb2IxNzM3LnBuZw.png" alt="no favorites" />
+        </div>
+    ) :
+       (   
+          posts.map(({ imageUrl, caption, _id }, index) => (
             <div key={index} className="card shadow-lg rounded-lg relative">
               <div className="card-body">
                 <img
@@ -72,7 +80,8 @@ export default function Posts() {
                 <p className="mt-4 text-center p-2">{caption}</p>
               </div>
             </div>
-          ))}
+          )))
+        }
         </div>
       </DefaultLayout>
     </>

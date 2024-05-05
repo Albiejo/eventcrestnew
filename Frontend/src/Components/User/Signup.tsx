@@ -85,11 +85,12 @@ const UserSignupForm = () => {
       ) : (
         <>
          <div className="w-full h-screen flex flex-col md:flex-row items-start">
-         <div className="w-full md:w-1/2 h-full object-cover" style={{backgroundImage:`url('/public/imgs/dj.jpg')`,backgroundSize:"cover",backgroundRepeat:"no-repeat",backdropFilter:"revert-layer"}}>
+         <div className="w-full md:w-1/2 h-full object-cover" style={{backgroundImage:`url('/imgs/dj.jpg')`,backgroundSize:"cover",backgroundRepeat:"no-repeat",backdropFilter:"revert-layer"}}>
           {/* <h1 className="text-4xl md:text-4xl text-white font-bold mt-20 mx-4">Elevate Your Event Experience</h1>
           <p className="text-xl md:text-2xl text-white font-normal mt-5 mx-4">Find, Connect, and Collaborate with Top Event Planners</p> */}
          </div>
-         <div className="w-full md:w-1/2 mt-10 md:mt-0">
+         
+         <div className="w-full md:w-1/2 md:mt-12">
           <GoogleOAuthProvider clientId={clientId}>
             <Card
               className="w-96 mt-50 m-auto bg-dark mx-auto max-w-md bg-white rounded-lg shadow-lg  bg-dark border border-gray-800"

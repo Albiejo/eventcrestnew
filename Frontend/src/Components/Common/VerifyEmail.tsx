@@ -126,9 +126,9 @@ const handleResendOtp=()=>{
       {/* <h1 className="text-4xl md:text-4xl text-white font-bold mt-20 mx-4">Elevate Your Event Experience</h1>
       <p className="text-xl md:text-2xl text-white font-normal mt-5 mx-4">Find, Connect, and Collaborate with Top Event Planners</p> */}
     </div>
-    <div className="w-full md:w-1/2 mt-10 md:mt-0">
+    <div className="w-full md:w-1/2 mt-10 md:mt-28">
     <Card
-      className="w-96 mt-50 m-auto bg-dark border border-black"
+      className="w-96  m-auto bg-dark border border-black"
       placeholder={undefined}
       shadow={false}
     >
@@ -143,6 +143,7 @@ const handleResendOtp=()=>{
           Verify OTP
         </Typography>
       </CardHeader>
+      
       <form onSubmit={formik.handleSubmit}>
         <CardBody className="flex flex-col gap-4" placeholder={undefined}>
           <Input
@@ -188,10 +189,12 @@ const handleResendOtp=()=>{
           >
             Verify and Login
           </Button>
+
         </CardBody>
       </form>
     </Card>
     </div>
+
     </div>
   );
 }
