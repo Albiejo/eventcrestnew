@@ -26,7 +26,6 @@ class LiveController {
     addLive(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("inside live controller 2 and adding live to db");
                 const { url } = req.body;
                 const data = yield (0, liveService_1.addNewLive)(url);
                 return res.status(200).json({ live: data });
@@ -39,9 +38,7 @@ class LiveController {
     changeLiveStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("inside live controller 3");
                 const { url } = req.body;
-                console.log(url);
                 const data = yield (0, liveService_1.changeStatus)(url);
                 return res.status(200).json({ live: data });
             }

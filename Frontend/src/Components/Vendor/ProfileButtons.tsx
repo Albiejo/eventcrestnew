@@ -10,9 +10,12 @@ import {
 } from '@material-tailwind/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Link, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { axiosInstanceChat } from '../../Api/axiosinstance';
 import axios, { AxiosError } from 'axios';
+import { useSelector } from 'react-redux';
+import UserRootState from '../../Redux/rootstate/UserState';
+import { toast } from 'react-toastify';
 
 
 interface ProfileButtonsProps {
@@ -28,12 +31,19 @@ interface ProfileButtonsProps {
 const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,userId }) => {
 
 
+  const user  = useSelector((state:UserRootState)=>state.user.userdata)
+
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen((cur) => !cur);
   const navigate = useNavigate();
 
 
   const handleChat =async()=>{
+    if(!user){
+      toast.warning("login first to initiate a chat ");
+      return;
+    }
     const body ={
       senderId :userId,
       receiverId:vendorId
@@ -51,7 +61,15 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
       }
     }
   }
+  
 
+  const handleredirection = ()=>{
+    if(!user){
+      toast.warning("login first to Book a vendor ");
+      return;
+    }
+    navigate(`/bookevent?vid=${vendorId}`)
+  }
   
   return (
     <>
@@ -68,17 +86,18 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
           </Button>
         </div>
         <div className="mr-1 p-3 text-center">
-          <Link to={`/bookevent?vid=${vendorId}`}>
+          
           <Button
             className="w-fit"
             style={{ backgroundColor: 'red', color: 'white' }}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
+            onClick={handleredirection}
           >
             Book Now
           </Button>
-          </Link>
+         
         </div>
         <div className="mr-1 p-3 text-center">
           <Button

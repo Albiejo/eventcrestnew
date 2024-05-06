@@ -59,9 +59,20 @@ const randomImage = (bytes = 32) => crypto.randomBytes(bytes).toString("hex");
 
 
 
-
+interface userObject{
+  email:string;
+  password:string;
+  name:string;
+  phone:number;
+  otpCode:string;
+  otpSetTimestamp:number;
+}
+var userObject:userObject
 
 class UserController{
+
+
+
 
   async UserSignup(req: Request, res: Response){
     try {
@@ -69,7 +80,7 @@ class UserController{
       const { email, password, name, phone } = req.body;
       const otpCode = await generateOtp(email);
       if (otpCode !== undefined) {
-        req.session.user = {
+        userObject= {
           email: email,
           password: password,
           name: name,
@@ -77,7 +88,7 @@ class UserController{
           otpCode: otpCode,
           otpSetTimestamp: Date.now(),
         };
-        console.log("first",req.session.user)
+        console.log("signup",userObject)
         return res.status(200).json({ message: "OTP send to email for verification..", email: email });
       } else {
         console.log("couldn't generate otp, error occcured ,please fix !!");
@@ -98,13 +109,15 @@ class UserController{
   
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
-     
+
+  
+
       const otp = req.body.otp;
-      console.log("second",req.session.user)
-      const userData: UserSession | undefined = req.session.user;
+      console.log("verify session data",userObject)
+      const userData: UserSession | undefined = userObject;
       
       if (!userData) {
-        res.status(400).json({ error: "Session data not found. Please sign up again." });
+        res.status(400).json({ error: "Session data not found. Please start the signup process again." });
         return;
       }
 
@@ -116,13 +129,13 @@ class UserController{
         throw new CustomError("OTP Expired...Try again with new OTP !!", 400);
       }
       const otpCode = userData.otpCode;
-
-      if (otp === otpCode) {
+console.log(otp);
+console.log(otpCode)
+      if (otp.toString() === otpCode.toString()) {
         const user = await signup(email, password, name, phone);
 
         if (user) {
           delete req.session.user;
-        //signup data in session deleted  after storing in DB
           res.status(201).json(user);
         }
       } else {

@@ -29,6 +29,7 @@ export default function authenticate(req: AuthenticatedRequest, res: Response, n
     }
 
     req.user = decoded;
+
    
     
     next();

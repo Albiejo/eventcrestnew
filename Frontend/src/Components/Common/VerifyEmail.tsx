@@ -82,8 +82,8 @@ const formik = useFormik({
               .post("/verify", values, { withCredentials: true })
               .then((response) => {
                 dispatch(setUserInfo(response.data.user));
-                toast.success("Successfully registered..! Login now");
-                navigate("/login");
+                toast.success("Successfully registered..!");
+                navigate("/");
               })
               .catch((error) => {
                 console.log("error received:", error)

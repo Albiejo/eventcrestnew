@@ -6,7 +6,7 @@ const { Server } = require('socket.io');
     
     const io = new Server(httpServer, {
         cors: {
-            origin: ["http://localhost:5000" ,"http://localhost:3001" ]
+            origin: ["http://localhost:5000" ,"http://localhost:3001" ,"https://eventcrest.online" ]
         }
     });
 
@@ -49,13 +49,8 @@ const isUserActive = (lastSeen) => {
 
 
 
-
-
-
-
-
 io.on("connection", (socket) => {
-   
+
 console.log("socket server running");
 
     

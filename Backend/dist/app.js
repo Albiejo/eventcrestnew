@@ -53,6 +53,6 @@ app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../../Frontend/dist/index.html'));
 });
 const PORT = process.env.PORT;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`BACKEND SERVER RUNNING ON ${PORT}...`);
 });

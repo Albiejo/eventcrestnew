@@ -67,19 +67,18 @@ const Messenger = () => {
     const [messages , setmessages] = useState<MessageType[]>([]);
     const [arrivalMessage , setArrivalMessage] = useState<MessageType | null>(null);
     const [newMessage, setnewMessage] = useState("");
-
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [typing , setTyping] = useState(false);
     const [filemodal, setFileModal] = useState(false);
     const [file, setFile] = useState<FileState | null>(null);
 
     const scrollRef = useRef<HTMLDivElement>(null);
-    const socket = useRef(io("ws://localhost:8900")); 
+    const socket = useRef(io("https://eventcrest.online")); 
 
 
 
     useEffect(()=>{
-        socket.current = io("ws://localhost:8900")
+        socket.current = io("https://eventcrest.online")
         socket.current.on("getMessage" , (data)=>{
             setArrivalMessage({
                 senderId : data.senderId , 

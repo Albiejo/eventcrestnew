@@ -20,7 +20,9 @@ const AdminApp: React.FC = () => {
         <AdminNavbar />
         {isAdminSignedIn && <Sidebar />}
         <div style={{ marginLeft: isAdminSignedIn ? '7%' : '35%', transition: 'margin 0.3s' }}>
+
           <Outlet />
+
         </div>
     
       

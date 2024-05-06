@@ -73,7 +73,7 @@ app.get('*',(req:Request,res:Response) =>{
 
 
 const PORT = process.env.PORT;
-app.listen(PORT , ()=>{
+server.listen(PORT , ()=>{
     console.log(`BACKEND SERVER RUNNING ON ${PORT}...`);
     
 });

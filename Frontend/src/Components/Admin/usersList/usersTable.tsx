@@ -44,7 +44,7 @@ const UsersTable=()=> {
 
     fetchData(pageParam, searchParam);
 
-  }, [location.search , value]);
+  }, [location.search , value ]);
 
   
 

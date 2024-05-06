@@ -35,6 +35,7 @@ const s3 = new client_s3_1.S3Client({
     region: process.env.BUCKET_REGION,
 });
 const randomImage = (bytes = 32) => crypto_1.default.randomBytes(bytes).toString("hex");
+var userObject;
 class UserController {
     UserSignup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -42,7 +43,7 @@ class UserController {
                 const { email, password, name, phone } = req.body;
                 const otpCode = yield (0, generateOtp_1.default)(email);
                 if (otpCode !== undefined) {
-                    req.session.user = {
+                    userObject = {
                         email: email,
                         password: password,
                         name: name,
@@ -50,7 +51,7 @@ class UserController {
                         otpCode: otpCode,
                         otpSetTimestamp: Date.now(),
                     };
-                    console.log("first", req.session.user);
+                    console.log("signup", userObject);
                     return res.status(200).json({ message: "OTP send to email for verification..", email: email });
                 }
                 else {
@@ -71,10 +72,10 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const otp = req.body.otp;
-                console.log("second", req.session.user);
-                const userData = req.session.user;
+                console.log("verify session data", userObject);
+                const userData = userObject;
                 if (!userData) {
-                    res.status(400).json({ error: "Session data not found. Please sign up again." });
+                    res.status(400).json({ error: "Session data not found. Please start the signup process again." });
                     return;
                 }
                 const email = userData.email;
@@ -85,11 +86,12 @@ class UserController {
                     throw new CustomError_1.CustomError("OTP Expired...Try again with new OTP !!", 400);
                 }
                 const otpCode = userData.otpCode;
-                if (otp === otpCode) {
+                console.log(otp);
+                console.log(otpCode);
+                if (otp.toString() === otpCode.toString()) {
                     const user = yield (0, userService_1.signup)(email, password, name, phone);
                     if (user) {
                         delete req.session.user;
-                        //signup data in session deleted  after storing in DB
                         res.status(201).json(user);
                     }
                 }

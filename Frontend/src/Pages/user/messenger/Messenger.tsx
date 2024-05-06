@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import UserRootState from '../../../Redux/rootstate/UserState';
 import { useEffect, useRef, useState } from 'react';
 import { axiosInstanceAdmin, axiosInstanceChat, axiosInstanceMsg } from '../../../Api/axiosinstance';
-import {io} from 'socket.io-client'
+import {io } from 'socket.io-client'
 import Message from '../../../Components/User/messages/Message';
 import Picker from '@emoji-mart/react'
 import { IconButton } from '@material-tailwind/react';
@@ -15,12 +15,12 @@ import React from 'react';
 import { MessageType } from '../../../Types/messageType';
 import { VendorData } from '../../../Types/vendorType';
 import {
-    S3Client,
-    PutObjectCommand,
-    GetObjectCommand,
-  } from "@aws-sdk/client-s3";
-
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
 
 
 
@@ -35,6 +35,7 @@ const ACCESS_KEY = import.meta.env.VITE_ACCESS_KEY|| "";
 const BUCKET_REGION = import.meta.env.VITE_BUCKET_REGION || "";
 const BUCKET_NAME = import.meta.env.VITE_BUCKET_NAME || "";
 const SECRET_ACCESS_KEY = import.meta.env.VITE_SECRET_ACCESS_KEY || "";
+
 
 interface FileState {
   filename: string;
@@ -64,7 +65,8 @@ const Messenger = () => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [receiverdata , setReceiverdata] = useState<VendorData | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
-    const socket = useRef(io("ws://localhost:8900")); 
+
+    const socket = useRef(io("https://eventcrest.online")); 
 
     //typing status state
     const [typingstatus , settypingstatus] = useState(false);
@@ -91,7 +93,8 @@ const Messenger = () => {
     //setting typing and no typing status
     useEffect(()=>{
 
-        socket.current = io("ws://localhost:8900")
+        
+        socket.current = io("https://eventcrest.online");
        
         socket.current.on("getMessage" , (data)=>{
             setArrivalMessage({
@@ -118,7 +121,7 @@ const Messenger = () => {
         })
    
 
-    },[typingstatus ,messages])
+    },[typingstatus ,messages , conversation])
 
 
 
@@ -195,34 +198,29 @@ const Messenger = () => {
     }
 
 
-     const handleSubmit=async(e: MouseEvent<HTMLButtonElement>)=>{
-        e.preventDefault();
-        sendHeartbeat();
-        const message = {
-            senderId: user?._id,
-            text:newMessage,
-            image: "",
-            imageUrl: "",
-            conversationId: currentchat?._id
-        };
-        socket.current.emit("sendMessage" , {
-            senderId : user?._id,
-            receiverId,
-            text:newMessage
-        })
+        const handleSubmit=async(e: MouseEvent<HTMLButtonElement>)=>{
+            e.preventDefault();
+            sendHeartbeat();
+            const message = {
+                senderId: user?._id,
+                text:newMessage,
+                image: "",
+                imageUrl: "",
+                conversationId: currentchat?._id
+            };
+            socket.current.emit("sendMessage" , {
+                senderId : user?._id,
+                receiverId,
+                text:newMessage
+            })
 
-  axiosInstanceMsg.post('/' , message).then((res)=>{
-   setmessages([...messages , res.data]);
-   setnewMessage("")
- }).catch ((error)=>{
-console.log(error)
- })
-};
-
-
-
-
-
+      axiosInstanceMsg.post('/' , message).then((res)=>{
+      setmessages([...messages , res.data]);
+      setnewMessage("")
+    }).catch ((error)=>{
+    console.log(error)
+    })
+    };
 
         const handleTyping = () => {
            
@@ -237,10 +235,6 @@ console.log(error)
             setnewMessage(e.target.value);
             handleTyping();
         };
-           
-           
-
-
         
         const handleEmojiSelect = (emoji: string | { native: string }) => {
           if (typeof emoji === 'string') {
@@ -556,7 +550,7 @@ console.log(error)
                               
                                 <div className="mt-4">
                                     <img
-                                        src='/imgs/banner1.jpg'
+                                        src={receiverdata.coverpicUrl}
                                         alt="image"
                                         className="w-full h-full "
                                     />
