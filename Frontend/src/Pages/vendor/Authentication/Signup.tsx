@@ -29,6 +29,7 @@ interface VendorFormValues {
   vendor_type: string;
   email: string;
   password: string;
+  Confirmpassword:string;
   city: string;
   phone: string;
 }
@@ -38,6 +39,7 @@ const initialValues: VendorFormValues = {
   vendor_type: "",
   email: "",
   password: "",
+  Confirmpassword:"",
   city: "",
   phone: "",
 };
@@ -54,6 +56,7 @@ const VendorSignupForm = () => {
   name: "",
   email: "",
   password: "",
+  Confirmpassword:"",
   city: "",
   phone: "",
   vendor_type: "",
@@ -72,7 +75,7 @@ const VendorSignupForm = () => {
   ) => {
     if (typeof e === "string") {
       setFormValues({ ...formValues, vendor_type: e });
-      setFormValues({...formValues})
+      
 
     } else {
       const { name, value } = e.target as HTMLInputElement & HTMLSelectElement;
@@ -103,8 +106,6 @@ const VendorSignupForm = () => {
     e.preventDefault();
     const errors = validate(formValues);
     setFormErrors(errors);
-    console.log(errors);
-    console.log(Object.values(errors))
     if (Object.values(errors).every((error) => error === "")) {
     
       setIsLoading(true);
@@ -132,7 +133,7 @@ const VendorSignupForm = () => {
       {isLoading ?(<LoadingSpinner/>) : (
         <>
          <div className="w-full h-screen flex flex-col md:flex-row items-start">
-         <div className="w-full md:w-1/2 h-full object-cover " style={{backgroundImage:`url('/public/imgs/dj.jpg')`,backgroundSize:"cover",backgroundRepeat:"no-repeat",backdropFilter:"revert-layer", minHeight: '300px', maxHeight: '800px'}}>
+         <div className="w-full md:w-1/2 h-full object-cover " style={{backgroundImage:`url('/imgs/dj.jpg')`,backgroundSize:"cover",backgroundRepeat:"no-repeat",backdropFilter:"revert-layer", minHeight: '300px', maxHeight: '800px'}}>
           
          </div>
          <div className="w-full md:w-1/2 mt-10 md:mt-0">
@@ -258,6 +259,7 @@ const VendorSignupForm = () => {
               {formErrors.phone}
             </p>
           ) : null}
+        
           <Input
             label="Password"
             type="password"
@@ -277,6 +279,28 @@ const VendorSignupForm = () => {
               {formErrors.password}
             </p>
           ) : null}
+
+          <Input
+            label="Confirm Password"
+            type="password"
+            size="md"
+            onChange={handleChange}
+            value={formValues.Confirmpassword}
+            name="Confirmpassword"
+            crossOrigin={undefined}
+            color="pink"
+            className="bg-white bg-opacity-50"
+          />
+          {formErrors.Confirmpassword ? (
+            <p
+              className="text-sm"
+              style={{ color: "red", marginBottom: -10, marginTop: -10 }}
+            >
+              {formErrors.Confirmpassword}
+            </p>
+          ) : null}
+
+
           <Button
             variant="gradient"
             fullWidth

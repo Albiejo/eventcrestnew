@@ -226,13 +226,14 @@ export const updateNotificationstatus=async(userid:string , notifiID:string)=>{
 
 export const clearNotification = async(userid :string) => {
 try {
-  const userdata = await User.findById(userid);
+  let userdata = await User.findById(userid);
   if (!userdata) {
     throw new Error('User not found');
   }
   userdata.notifications = [];
   await userdata.save();
-  return true;
+  userdata=await User.findById(userid);
+  return {userdata:userdata};
 } catch (error) {
   throw error;
 }

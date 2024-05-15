@@ -5,7 +5,7 @@ export interface bookingDocument extends Document{
     date:string;
     name:string;
     eventName:string;
-    city:string;
+    venue:string;
     pin:number;
     mobile:number;
     createdAt:Date;
@@ -31,7 +31,7 @@ const bookingSchema=new Schema<bookingDocument>({
         type:String,
         required:true
     },
-    city:{
+    venue:{
         type:String,
         required:true
     },

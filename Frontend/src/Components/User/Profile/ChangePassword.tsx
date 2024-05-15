@@ -6,7 +6,7 @@ import {
     Typography,
   } from "@material-tailwind/react";
   import { axiosInstance } from "../../../Api/axiosinstance";
-  import { toast } from "react-toastify";
+  import toast from "react-hot-toast";
   import { useNavigate } from "react-router-dom";
   import { validate } from "../../../Validations/changePwdValidation";
   import { useSelector } from "react-redux";
@@ -29,6 +29,8 @@ import {
   
   
   const ChangeUserPassword = () => {
+
+
     const user = useSelector((state: UserRootState) => state.user.userdata);
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState<FormValues>(initialValues);
@@ -46,14 +48,12 @@ import {
   
   
     const submitHandler = async (e: { preventDefault: () => void }) => {
-
       e.preventDefault();
 
       const errors = validate(formValues);
-
       setFormErrors(errors)
 
-      console.log(Object.values(errors))
+     
 
       if (Object.values(errors).every((error) => error === "")) {
         axiosInstance
@@ -64,7 +64,7 @@ import {
             navigate("/profile/change-password");
           })
           .catch((error) => {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message )
             console.log("couldnt update password , error is:", error);
           });
       }
@@ -72,7 +72,7 @@ import {
   
     return (
       <Card
-        className="w-96  m-auto mt-20  border-4 border-gray-600"
+      className="w-96 mx-auto m-auto"
         placeholder={undefined}
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
@@ -88,6 +88,7 @@ import {
            <Typography variant="h4" className="text-center" placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
             Change Password
           </Typography>
+
           <Input
           type="password"
            color="black"
@@ -102,6 +103,7 @@ import {
             onPointerLeaveCapture={undefined}
           />
            {formErrors.current_password ? <p className="text-sm" style={{color:"red",marginBottom:-10,marginTop:-10}}>{formErrors.current_password}</p> : null}
+           
           <Input
           type="password"
           color="black"

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import {axiosInstanceVendor} from "../../../Api/axiosinstance";
 import { DialogWithImage } from "./DialogWithImage";
 import { AxiosResponse } from 'axios'; 
+import { Typography } from "@material-tailwind/react";
 
 
 interface Post {
@@ -60,19 +61,24 @@ const VendorPosts: React.FC = () => {
 
  return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-      {posts.map(({ imageUrl, _id }, index) => (
+       {posts.length === 0 ? (
+      <Typography className="text-center text-red-500 font-bold" placeholder={undefined}>No posts added yet!</Typography>
+    ) : (
+      posts.map(({ imageUrl, _id }, index) => (
         <div key={index} className="relative" onClick={() => { setSelectedPost({ imageUrl, _id }); handleOpen(); }}>
           <img
             className="h-40 w-full max-w-full rounded-lg object-cover object-center"
             src={imageUrl}
             alt="gallery-photo"
           />
-          {path=="/viewVendor"?"":<button
-            onClick={() => handleDelete(_id)}
-            className="absolute top-0 right-0 m-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>}
+          {path === "/viewVendor" ? "" : (
+            <button
+              onClick={() => handleDelete(_id)}
+              className="absolute top-0 right-0 m-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          )}
           
           {selectedPost && (
             <DialogWithImage
@@ -82,7 +88,8 @@ const VendorPosts: React.FC = () => {
             />
           )}
         </div>
-      ))}
+      ))
+    )}
     </div>
  );
 };

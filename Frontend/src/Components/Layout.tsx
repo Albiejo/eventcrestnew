@@ -1,11 +1,6 @@
 
 
 import React from 'react';
-import "../../public/css/user-unauth.css"
-import '../../public/css/userAuth.css'
-import '../../public/css/vendor-unauth.css'
-import '../../public/css/vendorAuth.css'
-import '../../public/css/admin.css'
 import { useSelector } from 'react-redux';
 import UserRootState from '../Redux/rootstate/UserState';
 import VendorRootState from '../Redux/rootstate/VendorState';

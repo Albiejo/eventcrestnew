@@ -21,7 +21,7 @@ export const signup = async (email:string ,password:string, name:string , phone:
     try {
       const existingVendor = await findvendorByEmail(email);
       if (existingVendor) {
-        throw new Error('vendor already exists');
+        throw new CustomError('vendor already exists' , 400);
       }
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -38,10 +38,9 @@ export const signup = async (email:string ,password:string, name:string , phone:
 
     } catch (error) {
       console.error("Error fetching signup", error);
-      throw new CustomError("Unable to fetch signup", 500);
+      throw error;
     }
   };
-
 
 
 
@@ -82,7 +81,7 @@ export const signup = async (email:string ,password:string, name:string , phone:
         
       } catch (error) {
         console.error("Error fetching login", error);
-        throw new CustomError("Unable to fetch login", 500);
+        throw error;
       }
 }
 
@@ -93,7 +92,7 @@ export const CheckExistingVendor = async(email:string)=>{
     return existingVendor;
   } catch (error) {
     console.error("Error fetching CheckExistingVendor", error);
-    throw new CustomError("Unable to fetch CheckExistingVendor", 500);
+    throw error;
   }
 }
 
@@ -114,19 +113,19 @@ export const createRefreshToken = async (refreshToken:string)=>{
 
   } catch (error) {
     console.error("Error fetching createRefreshToken", error);
-    throw new CustomError("Unable to fetch createRefreshToken", 500);
+    throw new CustomError("Unable to process , please login again", 500);
   }
 }
 
 
-export const getVendors=async(page: number, pageSize: number, search:string , sortBy: string | null , category:string)=>{
+export const getVendors=async(page: number, pageSize: number, search:string , sortBy: string | null , category:string )=>{
   try {
-    const vendors=await findAllVendors(page ,pageSize , search ,sortBy ,category);
+    const vendors=await findAllVendors(page ,pageSize , search ,sortBy ,category );
     const totalVendorsCount = await getTotalVendorsCount();
     return { vendors, totalVendorsCount };
   } catch (error) {
     console.error("Error fetching getVendors", error);
-    throw new CustomError("Unable to fetch getVendors", 500);
+    throw error;
   }
 }
 
@@ -136,7 +135,7 @@ export const toggleVendorBlock = async(vendorId:string): Promise<void> =>{
   try {
     const Vendor = await vendor.findById(vendorId)
     if (!Vendor) {
-        throw new Error('Vendor not found');
+        throw new CustomError('Vendor not found' , 400);
     }
     
     Vendor.isActive = !Vendor.isActive; 
@@ -153,7 +152,7 @@ export const toggleVendorBlock = async(vendorId:string): Promise<void> =>{
     console.log("notifi pushed",Admin);
 } catch (error) {
   console.error("Error fetching toggleVendorBlock", error);
-  throw new CustomError("Unable to fetch toggleVendorBlock", 500);
+  throw error;
 }
 
 }
@@ -169,7 +168,7 @@ export const getSingleVendor = async(vendorId:string): Promise<VendorDocument> =
    return Vendor;
 } catch (error) {
     console.error("Error fetching getSingleVendor", error);
-    throw new CustomError("Unable to fetch getSingleVendor", 500);
+    throw error;
 }
 
 }
@@ -185,7 +184,7 @@ export const ResetVendorPasswordService = async(password:string , email:string)=
     }
   } catch (error) {
     console.error("Error fetching ResetVendorPasswordService", error);
-    throw new CustomError("Unable to fetch ResetVendorPasswordService", 500);
+    throw error;
   }
 }
 
@@ -196,11 +195,9 @@ export const PushVendorReview = async(content:string , rating:number , username:
     return  data;
   } catch (error) {
     console.error("Error fetching PushVendorReview", error);
-    throw new CustomError("Unable to fetch PushVendorReview", 500);
+    throw new CustomError("Unable to process Vendor Review now , try again after some time", 500);
   }
 }
-
-
 
 
 
@@ -222,12 +219,9 @@ try {
     return passwordMatch; 
 } catch (error) {
   console.error("Error fetching checkVendorCurrentPassword", error);
-  throw new CustomError("Unable to fetch checkVendorCurrentPassword", 500);
+  throw error;
 }
 }
-
-
- 
 
 
 export const UpdateVendorPasswordService=async(newPassword:string , vendorid:string)=>{
@@ -249,14 +243,14 @@ export const UpdateVendorPasswordService=async(newPassword:string , vendorid:str
     return false
   } catch (error) {
     console.error("Error fetching UpdateVendorPasswordService", error);
-    throw new CustomError("Unable to fetch UpdateVendorPasswordService", 500); 
+    throw error;
   }
 }
 
 export const updateVendorprof=async(vendorId: string, formData: any, coverpicUrl: string|undefined, logoUrl: string|undefined,logo:string|undefined,coverpic:string|undefined): Promise<any> =>{
   try {
-    console.log("inside update service");
-    
+  
+  
     await updateVendorprofData(vendorId, formData, coverpicUrl, logoUrl,logo,coverpic);
    
     const updatedVendor = await findVerndorId(vendorId);
@@ -264,7 +258,7 @@ export const updateVendorprof=async(vendorId: string, formData: any, coverpicUrl
     return updatedVendor;
 } catch (error) {
   console.error("Error fetching updateVendorprof", error);
-  throw new CustomError("Unable to fetch updateVendorprof", 500);
+  throw new CustomError("Unable to update Vendor profile  now , try again after some time", 500);
 }
 }
 
@@ -276,7 +270,7 @@ export const addReviewReplyController=async(vendorId:string,content:string,revie
     return vendordata;
   } catch (error) {
     console.error("Error fetching addReviewReplyController", error);
-    throw new CustomError("Unable to fetch addReviewReplyController", 500);
+    throw new CustomError("Unable to process  Review Reply now .", 500);
   }
 }
 
@@ -288,7 +282,7 @@ export const  verificationRequest=async(vendorId:string)=>{
     return data
   } catch (error) {
     console.error("Error fetching verificationRequest", error);
-    throw new CustomError("Unable to fetch verificationRequest", 500);
+    throw new CustomError("Unable to process verification Request now !", 500);
   }
 }
 
@@ -299,7 +293,7 @@ export async function changeVerifyStatus(vendorId:string,status:string){
     return data
   } catch (error) {
     console.error("Error fetching changeVerifyStatus", error);
-    throw new CustomError("Unable to fetch changeVerifyStatus", 500);
+    throw error;
   }
 }
 
@@ -309,16 +303,17 @@ try {
   return data;
 } catch (error) {
     console.error("Error fetching updateNotification", error);
-    throw new CustomError("Unable to fetch updateNotification", 500);
+    throw new CustomError("Unable to update Notification now , try after some time", 500);
 }
 }
 
-export const clearalldata = async(vendorid:string):Promise<boolean>=>{
+export const clearalldata = async(vendorid:string):Promise<object>=>{
   try {
    const data  = await clearNotification(vendorid);
    return data;
   } catch (error) {
     console.error("Error fetching clearalldata", error);
-    throw new CustomError("Unable to fetch clearalldata", 500);
+    throw new CustomError("Unable to clear all notifications now, try after some time.", 500);
   }
 }
+

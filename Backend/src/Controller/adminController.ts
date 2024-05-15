@@ -36,7 +36,6 @@ class AdminController {
       const {refreshToken ,  token, adminData, message } = await adminService.login(email, password);
       
       res.cookie('jwtToken', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-      console.log("testing");
       return res.status(200).json({token, refreshToken , adminData, message });
       
     } catch (error) {
@@ -58,7 +57,6 @@ class AdminController {
     try {
      
       const { refreshToken } = req.body;
-
       const token = await adminService.createRefreshTokenAdmin(refreshToken);
       
       return  res.status(200).json({ token });
@@ -180,6 +178,30 @@ class AdminController {
       handleError(res, error, "getRevenue");
     }
   }
+
+
+  async clearAllNotification(req: Request, res: Response): Promise<void>{
+    try {
+      
+      const adminId:string  = req.query.userId as string; 
+      const data  = await adminService.clearalldata(adminId)
+      res.status(200).json(data)
+    } catch (error) {
+      handleError(res, error, "clearAllNotifications");
+    }
+  }
+
+
+  async AdmincreateAdmin(req: Request, res: Response){
+    try {
+      const {email  , password } : {email:string , password:string} = req.body;
+      const data   = await adminService.createAnotherAdmin(email , password);
+      return res.status(200).json(data)
+    } catch (error) {
+      handleError(res , error , "AdmincreateAnotherAdmin")
+    }
+  }
+
 
 };
 

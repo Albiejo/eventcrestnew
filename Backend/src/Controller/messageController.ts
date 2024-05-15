@@ -1,32 +1,26 @@
 import { Request, Response } from "express";
 import messageModel from '../Model/MessageModel';
-import { ErrorMessages } from "../Util/enums";
-import Conversation from "../Model/Conversation";
+import messageService from "../Service/messageService";
 import { handleError } from "../Util/handleError";
-
+import conversationService from "../Service/conversationService";
 
 
 class messageController{
 
-
-    async createMessage (req: Request, res: Response):Promise<void>{
-
-        const {conversationId , senderId , text , imageName,imageUrl } = req.body;
-    
-        const message = new messageModel({
-            conversationId,
-            senderId,
-            text,
-            imageName,
-            imageUrl
-        })   
+    async createMessage (req: Request, res: Response):Promise<void>{ 
         try {
-            const response = await message.save();
-
-            await Conversation.findByIdAndUpdate(
+            const {conversationId , senderId , text , imageName,imageUrl } = req.body;
+            const response = await messageService.createMessage(
                 conversationId,
-                { latestMessageTimestamp: new Date() },
-                { new: true } 
+                senderId,
+                text,
+                imageName,
+                imageUrl
+              );
+
+            await conversationService.updateConversation(
+                conversationId,
+                text
             );
 
             res.status(200).json(response);
@@ -36,17 +30,28 @@ class messageController{
     }
 
 
+    async getMessages (req: Request, res: Response): Promise<any>{
 
-    async getMessages (req: Request, res: Response){
-        const conversationId = req.query.conversationId;
+        const conversationId: string = req.query.conversationId as string;
         try {
-            const messages = await messageModel.find({conversationId: conversationId});
-            return res.status(200).json(messages);
+            const messages = await messageService.findMessages(conversationId);
+            res.status(200).json(messages);
         } catch (error) {
             handleError(res, error, "getMessages");
             
         }
     }
+
+
+    async changeRead(req: Request, res: Response): Promise<any> {
+        try {
+          const { chatId, senderId } = req.body;
+          const messages = await messageService.changeReadStatus(chatId,senderId)
+          res.status(200).json({ messages });
+        } catch (error) {
+          handleError(res, error, "changeRead");
+        }
+      }
 
 
 }

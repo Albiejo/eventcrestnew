@@ -7,8 +7,8 @@ export const addNewLive = async (url:string) => {
       const data = await createLive(url);
       return data;
     } catch (error) {
-      console.error("Error fetching addNewLive", error);
-      throw new CustomError("Unable to fetch addNewLive", 500);
+      console.error("Error fetching add New Live to database", error);
+      throw new CustomError("unable to share stream link now , try after some time" , 400);
     }
   };
 
@@ -17,8 +17,8 @@ export const changeStatus=async (url:string) => {
       const data = await changeStatusById(url);
       return data;
     } catch (error) {
-      console.error("Error fetching changeStatus in live", error);
-      throw new CustomError("Unable to fetch changeStatus in live", 500);
+      console.error("Error fetching change Status in live", error);
+      throw error;
     }
   };
 
@@ -28,7 +28,7 @@ export const getAllLive= async() => {
       const data = await findAllLive();
       return data;
     } catch (error) {
-        console.error("Error fetching getAllLive", error);
-        throw new CustomError("Unable to fetch getAllLive", 500);
+        console.error("Error fetching get All Live stream links from DB", error);
+        throw new CustomError("unable to retrieve stream links now, try after some time" , 400);
     }
   };

@@ -23,6 +23,7 @@ export const USERROUTES = {
     PROFILE_CHANGEPASSWORD:'/profile/change-password',
     FAVORITES:'/profile/Favorites',
     BOOKINGS:'/profile/Bookings',
+    BOOKING:'/profile/booking'
 
 
 
@@ -44,6 +45,7 @@ export const ADMINROUTES = {
         ADMIN_WALLET:'/admin/wallet',
         ADMIN_NOTIFICATIONS:'/admin/notifications',
         ADMIN_LOGOUT:'/logout',
+        ADMIN_ADDADMIN :'/admin/addAdmin'
 
 
 }

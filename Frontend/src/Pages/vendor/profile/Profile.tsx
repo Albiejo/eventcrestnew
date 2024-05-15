@@ -84,12 +84,13 @@ const Profile = () => {
 
   return (
     <DefaultLayout>
+      
       <Breadcrumb pageName="Profile" folderName="" />
 
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative z-20 h-full  md:h-65">
           <img
-            src={vendor?.coverpicUrl}
+            src={vendor?.coverpicUrl ? vendor.coverpicUrl : '/img/defaultImage.jpg'}
             alt="profile cover"
             className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
           />
@@ -101,7 +102,7 @@ const Profile = () => {
           <div className="relative z-30 mx-auto -mt-16  w-full  rounded-full bg-black/20  backdrop-blur sm:h-44 sm:w-44 ">
             <div className="relative drop-shadow-2 w-44 h-44 overflow-hidden">
               <img
-                src={vendor?.logoUrl}
+                src={vendor?.logoUrl ? vendor?.logoUrl : '/img/defaultImage.jpg'}
                 alt="profile"
                 className="w-full h-full  object-cover-full rounded-full"
               />

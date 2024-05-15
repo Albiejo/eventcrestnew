@@ -22,7 +22,7 @@ import AdminLogin from './Components/Admin/Login.tsx'
 import AdminPrivateRoute from './Components/Admin/AdminPrivateRoute.tsx';
 import Wallet from './Pages/admin/Wallet.tsx';
 import AdminNotifications from './Pages/admin/AdminNotifications.tsx';
-
+import AdminAddAdmin from './Pages/admin/AdminAddAdmin.tsx';
 
 //common routes
 import HomePage from './Pages/home/HomePage.tsx'
@@ -70,10 +70,10 @@ const router = createBrowserRouter(
               <Route path={USERROUTES.VERIFY} element={<VerifyEmail />} />
               <Route path={USERROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
               <Route path={USERROUTES.RESET_PASSWORD} element={<ResetPassword />} />
-              <Route path={USERROUTES.ABOUT}       element={<AboutPage/>} />
+              <Route path={USERROUTES.ABOUT} element={<AboutPage/>} />
               <Route path={USERROUTES.VIEW_VENDOR} element={<UserVendorProfile/>}/>
               <Route path={USERROUTES.VENDORS} element={<VendorListing/>}/>
-              <Route path={USERROUTES.CHAT} element={<Messenger/>}/>
+             
               <Route path="*" element={<NotFound role={"user"}/>}/>
            {/* User Private Routes */}
           <Route path="" element={<UserPrivateRoute/>}>
@@ -82,6 +82,7 @@ const router = createBrowserRouter(
               <Route path={USERROUTES.PAYMENT_SUCCESS} element={<PaymentSuccess/>}/> 
               <Route path={USERROUTES.LIVE} element={<LiveStreaming/>}/>
               <Route path={USERROUTES.ROOM} element={<Room/>}/>
+              <Route path={USERROUTES.CHAT} element={<Messenger/>}/>
           </Route>
     </Route>
 
@@ -100,6 +101,7 @@ const router = createBrowserRouter(
             <Route path={ADMINROUTES.ADMIN_VENDOR} element={<VendorProfile />} />
             <Route path={ADMINROUTES.ADMIN_WALLET} element={<Wallet />} />
             <Route path={ADMINROUTES.ADMIN_NOTIFICATIONS} element={<AdminNotifications />} />
+            <Route path ={ADMINROUTES.ADMIN_ADDADMIN} element={<AdminAddAdmin/>} />
        </Route>
     </Route>
   

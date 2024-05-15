@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import UserRootState from '../../../Redux/rootstate/UserState';
 import VendorRootState from '../../../Redux/rootstate/VendorState';
 import { useEffect, useRef, useState } from 'react';
-import { axiosInstanceChat, axiosInstanceMsg } from '../../../Api/axiosinstance';
+import { axiosInstanceAdmin, axiosInstanceChat, axiosInstanceMsg } from '../../../Api/axiosinstance';
 import {io} from 'socket.io-client';
 import DefaultLayout from '../../../Layout/VendorLayout';
 import Picker from '@emoji-mart/react';
@@ -20,6 +20,8 @@ import { IconButton } from '@material-tailwind/react';
 import { MessageType } from '../../../Types/messageType';
 import  { MouseEvent } from 'react';
 import { ChangeEvent } from 'react';
+import { UserData } from '../../../Types/userType';
+
 
   const ACCESS_KEY = import.meta.env.VITE_ACCESS_KEY || "";
   const BUCKET_REGION = import.meta.env.VITE_BUCKET_REGION || "";
@@ -71,14 +73,18 @@ const Messenger = () => {
     const [typing , setTyping] = useState(false);
     const [filemodal, setFileModal] = useState(false);
     const [file, setFile] = useState<FileState | null>(null);
+    const [receiverdata , setReceiverdata] = useState<UserData | null>(null);
+    const [Active , setActive] = useState(false);
 
     const scrollRef = useRef<HTMLDivElement>(null);
-    const socket = useRef(io("https://eventcrest.online")); 
+    
+    const socket = useRef(io("http://localhost:3001")); 
 
 
 
     useEffect(()=>{
-        socket.current = io("https://eventcrest.online")
+        socket.current = io("http://localhost:3001")
+
         socket.current.on("getMessage" , (data)=>{
             setArrivalMessage({
                 senderId : data.senderId , 
@@ -120,6 +126,8 @@ const Messenger = () => {
         })
     },[user])
 
+
+
     //getting conversations
     useEffect(()=>{
         const getconversation = async()=>{  
@@ -133,24 +141,39 @@ const Messenger = () => {
         }
         getconversation();
 
-    } , [user?._id])
 
-    //gettin messages
-    useEffect(()=>{
         const getmessages = async()=>{
-            try {
-                const res = await axiosInstanceMsg.get(`/?conversationId=${currentchat?._id}`)
-                setmessages(res.data)
-                
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getmessages();
-    },[currentchat])
-    
-    const receiverId = currentchat?.members.find((member)=>member !==vendorData?._id)
+          try {
+              const res = await axiosInstanceMsg.get(`/?conversationId=${currentchat?._id}`)
+              setmessages(res.data)
+              
+          } catch (error) {
+              console.log(error)
+          }
+      }
+      getmessages();
 
+    } , [user?._id , currentchat])
+
+    
+
+    const handleDivClick = (conversation:conversationType) => {
+      setcurrentchat(conversation)
+      const receiverId = currentchat?.members.find((member)=>member !==user?._id)
+      checkUserActiveStatus(receiverId as string);
+      fetchreceiverdata();
+  }
+
+    const checkUserActiveStatus = (receiverId:string) => {
+      socket.current.emit("checkUserActiveStatus", receiverId);
+  };
+
+    const fetchreceiverdata = async()=>{
+      await axiosInstanceAdmin.get(`/getUser?userId=${receiverId}`,{withCredentials:true})
+      .then((res)=>{
+          setReceiverdata(res.data.data)
+      })
+  }
 
 
      const handleSubmit=async(e: MouseEvent<HTMLButtonElement>)=>{
@@ -179,8 +202,6 @@ const Messenger = () => {
         }
 
      };
-
-
 
      //scrolling to bottom when new msg arrives
      useEffect(()=>{
@@ -304,7 +325,7 @@ const Messenger = () => {
                             <div className="chatmenuWrapper" >
                                 
                             {conversation.map((c) => (
-                                    <div onClick={()=> setcurrentchat(c)}>
+                                    <div onClick={()=>handleDivClick(c)}>
                                     <Conversation  conversation={c} currentUser={{ _id: vendorData?._id || '' }}/>
                                     </div>
                                 ))}
@@ -316,6 +337,13 @@ const Messenger = () => {
                         {!filemodal ? (
                         <div className="chatbox">
                             <div className="chatboxWrapper">
+                                  <div className="chatboxHeader">
+                                      <div className="headerUserInfo">
+                                          <img src="userAvatar.jpg" alt="User Avatar" className="avatar" />
+                                          <span className="username">Username</span>
+                                      </div>
+                                      
+                                  </div>
                                 {
                                     currentchat ?
                                     (

@@ -18,6 +18,7 @@ import {
   createRefreshToken,
   updateNotification,
   clearalldata,
+  
 } from "../Service/vendorService";
 import moment from 'moment';
 import generateOtp from "../Util/generateOtp";
@@ -83,6 +84,12 @@ const s3 = new S3Client({
   region: process.env.BUCKET_REGION!,
 });
 
+
+
+
+
+
+
 class VendorController {
 
   async vendorSignup(req: Request, res: Response) {
@@ -102,7 +109,7 @@ class VendorController {
           otpSetTimestamp: Date.now(),
           vendor_type: vendor_type,
         };
-
+        
         return res
           .status(200)
           .json({
@@ -245,13 +252,17 @@ class VendorController {
 
   async getAllVendors(req: Request, res: Response) {
     try {
+
       const page: number = parseInt(req.query.page as string) || 1;
-      const search =
-        req.query.search !== undefined ? req.query.search.toString() : "";
+      const search = req.query.search !== undefined ? req.query.search.toString() : "";
       const sortBy: string | null = req.query.sortBy as string | null;
       const pageSize: number = parseInt(req.query.pageSize as string) || 8;
       let sortCriteria: string | null = null;
       const category: string = req.query.category as string;
+      
+      
+
+      
 
       switch (sortBy) {
         case "rating":
@@ -269,10 +280,11 @@ class VendorController {
         pageSize,
         search.toString(),
         sortCriteria,
-        category
+        category,
+        
       );
       const totalPages = Math.ceil(totalVendorsCount / pageSize);
-
+     
       return res.status(200).json({ vendors: vendors, totalPages: totalPages });
     } catch (error) {
       handleError(res, error, "getAllVendors");
@@ -645,6 +657,8 @@ class VendorController {
       handleError(res, error, "getRevenue");
     }
   }
+  
+
 
 
 }

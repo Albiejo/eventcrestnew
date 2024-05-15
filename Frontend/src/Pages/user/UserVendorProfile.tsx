@@ -8,11 +8,11 @@
     MapPinIcon,
   } from '@heroicons/react/24/solid';
 import Footer from '../../Components/Home/Footer';
-  import { useLocation } from 'react-router-dom';
-  import { useEffect, useState } from 'react';
+  import {  useLocation } from 'react-router-dom';
+  import { useEffect, useState ,useRef } from 'react';
   import { axiosInstance } from '../../Api/axiosinstance';
   import VendorTabs from '../../Components/Vendor/Profile/VendorTabs';
-  import { toast } from 'react-toastify';
+  import { toast } from 'react-toastify'
   import UserRootState from '../../Redux/rootstate/UserState';
   import { useSelector } from 'react-redux';
   import {Review} from '../../Components/Vendor/Profile/Review';
@@ -20,7 +20,6 @@ import Footer from '../../Components/Home/Footer';
   import { useDispatch } from 'react-redux';
   import { setUserInfo } from '../../Redux/slices/UserSlice';
 import { setVendorInfo } from '../../Redux/slices/VendorSlice';
-
 
   interface Review {
     _id:string;
@@ -54,6 +53,7 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
   export function UserVendorProfile() {
     
     const user = useSelector((state: UserRootState) => state.user.userdata);
+    const topRef = useRef<HTMLDivElement | null>(null);
     
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -62,9 +62,8 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
 
     const [vendor, setVendor] = useState<Vendor>();
     const [favourite,setFavourite]=useState(false);
-   
     const dispatch = useDispatch();
-  
+
     useEffect(() => {
      
       if (user?.favorite.includes(id)) { 
@@ -83,13 +82,21 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
         });
     }, [user]);
   
+    useEffect(() => {
+      
+      if (topRef.current) {
+          topRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+  }, []);
+
+
   const bookedDates = vendor?.bookedDates;
 
 
     const handleFavourite=async()=>{
       try {
         if(!user){
-          toast.error("Please login first..");
+          toast.error("Please login first..")
           return;
         }
         axiosInstance
@@ -118,10 +125,10 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
     
     return (
       <>
-  <section className="relative block h-[80vh] overflow-hidden">
-    <div className="absolute top-0 left-0 w-full h-full bg-cover scale-105" style={{ backgroundImage: `url(${vendor?.coverpicUrl})` }} />
-    <div className="absolute top-0 h-full w-full bg-black/20 bg-cover bg-center" />
-  </section>
+      <section className="relative block h-[80vh] overflow-hidden" ref={topRef}>
+        <div className="absolute top-0 left-0 w-full h-full bg-cover scale-105" style={{ backgroundImage: `url(${vendor?.coverpicUrl})` }} />
+        <div className="absolute top-0 h-full w-full bg-black/20 bg-cover bg-center" />
+      </section>
         <section className="relative bg-white py-10">
           <div className="relative -mt-40 flex w-full px-8 min-w-0 flex-col break-words bg-white px-15">
             <div className="container mx-auto">

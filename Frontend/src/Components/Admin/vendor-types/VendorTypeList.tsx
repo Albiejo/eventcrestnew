@@ -6,7 +6,7 @@ import { axiosInstanceAdmin } from "../../../Api/axiosinstance";
 import { useNavigate } from "react-router-dom";
 import EditTypeModal from "./EditTypeModal";
 import DeleteTypeModal from "./DeleteTypeModal";
-
+import Pagination from "../../Common/Pagination";
 
 interface VendorType {
   _id: string;
@@ -22,14 +22,14 @@ const VendorTypeList=()=> {
   const [deleteId , setDeleteId] = useState<string>('');
   const [openEditBox , setOpenEditBox] = useState(false);
   const [openDeleteBox , setOpenDeleteBox] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const vendorstypePerPage = 5;
 
 
 
   useEffect(() => {
     axiosInstanceAdmin.get("/vendor-types")
       .then((response) => {
-        console.log(response)
         setVendorType(response.data);
       })
       .catch((error) => {
@@ -37,7 +37,13 @@ const VendorTypeList=()=> {
       });
   }, [ openEditBox , openDeleteBox]); 
 
+  const indexOfLastVendor = currentPage * vendorstypePerPage;
+  const indexOfFirstVendor = indexOfLastVendor - vendorstypePerPage;
+  const currentVendorstype = vendorType.slice(indexOfFirstVendor, indexOfLastVendor);
 
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   const handleDelete=(Id:string)=>{
     console.log("id is :",Id)
@@ -132,7 +138,7 @@ const VendorTypeList=()=> {
               </tr>
             </thead>
             <tbody>
-              {vendorType.map((type,index)=>(
+              {currentVendorstype.map((type,index)=>(
                 <tr key={index}>
                 <td className="p-4 border-b border-blue-gray-50">
                   <div className="flex gap-3">
@@ -168,6 +174,11 @@ const VendorTypeList=()=> {
           </table>
         </div>
       </div>
+      <Pagination
+      onPageChange={handlePageChange}
+      currentPage={currentPage}
+      totalPages={Math.ceil(vendorType.length / vendorstypePerPage)}
+      />
 
       <EditTypeModal open={openEditBox} onClose={handleCloseEditModal} vendorTypeId={editId} />
       <DeleteTypeModal open={openDeleteBox} onClose={handleCloseDeleteBox} vendorTypeId={deleteId} onDelete={handleDelete} />

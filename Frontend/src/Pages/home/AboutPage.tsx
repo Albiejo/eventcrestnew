@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import Footer from '../../Components/Home/Footer';
 import { Button } from '@material-tailwind/react';
@@ -6,12 +7,9 @@ import { Button } from '@material-tailwind/react';
 
 
 
-
 const AboutPage = () => {
   
-  
-  
-  
+
   return (
         <>
         <div className=" text-white pt-2"  style={{ fontFamily: 'Arial, sans-serif' }}>
@@ -28,7 +26,9 @@ const AboutPage = () => {
                 <h2 className="text-3xl font-bold text-black justify-center font-bold pt-16">We are Event Crest</h2>
                 <p className="mt-2 text-lg   text-black font-bold" >Bringing dream Events to life!</p>
               </div>   
+            
               <h2 className="mt-2 text-3xl text-black font-bold" >About us</h2>          
+             
             </div>
 
             <div className="text-center mt-10">
@@ -53,7 +53,7 @@ const AboutPage = () => {
                   <h3 className="text-2xl font-bold mt-8 mb-4 text-black ">Trusted Wedding Vendors</h3>
                   <p className="text-lg mb-4 text-gray-700 ">We totally understand how crucial your wedding is, which is precisely why you’ll only find the most trusted vendors who are verified by our team. Be assured that you’ll have the best vendor in your budget, thanks to our natively built machine-learning based vendor matching algorithm which perfectly matches your requirements, dates & budget to that of thousands of vendors and choose the best options for you!</p>
                   <Link to='/vendors'>
-                  <Button className='lg:w-60 lg:h-14 rounded-full py-2 px-4 text-white font-bold bg-pink-500'  placeholder={undefined}>Hire a Vendor</Button>
+                  <Button className='lg:w-60 lg:h-14 rounded-full py-2 px-4 text-white font-bold bg-blue-500'  placeholder={undefined}>Hire a Vendor</Button>
                   </Link>
                 </div>
             </div>

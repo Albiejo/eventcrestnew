@@ -47,6 +47,7 @@ const LiveEvents = () => {
     axiosInstance
       .get('/get-live')
       .then((response) => {
+        console.log(response.data)
         setLive(response.data.data);
       })
       .catch((error) => {

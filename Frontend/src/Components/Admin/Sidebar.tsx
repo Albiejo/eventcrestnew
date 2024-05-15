@@ -140,6 +140,15 @@ export default function Sidebar() {
             </ListItem>
             </Link>
 
+            <Link to={ADMINROUTES.ADMIN_ADDADMIN}>
+              <ListItem  placeholder={undefined} style={{ color: 'white' }}>
+              <ListItemPrefix  placeholder={undefined}>
+              <i className="fa-solid fa-bolt"></i>
+              </ListItemPrefix>
+                Add New Admin        
+            </ListItem>
+            </Link>
+
             <hr className="my-2 border-blue-gray-50" />
 
 

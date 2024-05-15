@@ -55,7 +55,8 @@ const UserLoginForm=()=> {
         .then((response) => {
           localStorage.setItem("userToken", response.data.token)
           localStorage.setItem("userrefreshToken", response.data.refreshToken)
-          dispatch(setUserInfo(response.data.userData));
+          const userDataWithAuthMethod = { ...response.data.userData, authMethod: "normal" }; 
+          dispatch(setUserInfo(userDataWithAuthMethod));
           toast.success("Successfully logged in ! ")
           navigate("/");
         })

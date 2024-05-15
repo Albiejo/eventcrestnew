@@ -15,8 +15,8 @@ export const addNewPayment=async(amount:number,userId:string,vendorId:string,boo
       return booking;
 
     } catch (error) {
-      console.error("Error fetching addNewPayment", error);
-      throw new CustomError("Unable to fetch addNewPayment", 500);
+      console.error("Error fetching add New Payment", error);
+      throw new CustomError("unable to process payment now, try after some time" , 400);
     }
 }
 
@@ -26,8 +26,8 @@ export const getPayments=async(skip:number , limit:number)=>{
     const payment=await findAllPayments(skip, limit);
     return payment;
   } catch (error) {
-    console.error("Error fetching getPayments", error);
-    throw new CustomError("Unable to fetch getPayments", 500);
+    console.error("Error fetching get Payments from DB", error);
+    throw new CustomError("unable to get payments now , try after some time" , 400);
   }
 }
 
@@ -35,10 +35,9 @@ export const updateAdminWallet= async(amount:number)=>{
 try {
   await updateAdminWalletAmount(amount);
   
-} catch (error) {
-  console.log(error);
-  console.error("Error fetching updateAdminWallet", error);
-  throw new CustomError("Unable to fetch updateAdminWallet", 500);
+}catch (error) {
+  console.error("Error fetching update Admin Wallet", error);
+  throw new CustomError("unable to update wallet now , try after some time" , 400);
 }
 }
 
@@ -47,7 +46,7 @@ export const CountTotalPayments = async()=>{
     const count=await findPaymentCount();
     return count;
   } catch (error) {
-    console.error("Error fetching CountTotalPayments", error);
-      throw new CustomError("Unable to fetch CountTotalPayments", 500);
+     console.error("Error fetching Count Total Payments", error);
+     throw error;
   }
 }

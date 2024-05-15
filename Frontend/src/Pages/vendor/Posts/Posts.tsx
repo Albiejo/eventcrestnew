@@ -16,6 +16,8 @@ interface Post {
 }
 
 export default function Posts() {
+
+
   const vendorData = useSelector(
     (state: VendorRootState) => state.vendor.vendordata,
   );
@@ -23,6 +25,13 @@ export default function Posts() {
   const [fetchTrigger, setFetchTrigger] = useState(false);
   const navigate = useNavigate();
 
+
+  const customToastStyle = {
+    background: 'red', // Change 'red' to the desired background color
+    color: 'white', // Optional: Change 'white' to the desired text color
+  };
+
+  
   useEffect(() => {
     axiosInstanceVendor
       .get(`/posts?vendorid=${vendorData?._id}`, { withCredentials: true })
@@ -45,7 +54,7 @@ export default function Posts() {
         navigate('/Vendor/view-posts');
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message , {style:customToastStyle});
         console.log('here', error);
       });
   };

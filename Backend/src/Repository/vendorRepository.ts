@@ -22,7 +22,7 @@ export const findvendorByEmail = async (email: string): Promise<VendorDocument |
 
 
 
-export const findAllVendors = async (page: number, pageSize: number , search:string ,sortBy: string | null , category:string ): Promise<VendorDocument[] | null> => {
+export const findAllVendors = async (page: number, pageSize: number , search:string ,sortBy: string | null , category:string): Promise<VendorDocument[] | null> => {
   try {
     let query: any = {};
    
@@ -30,6 +30,9 @@ export const findAllVendors = async (page: number, pageSize: number , search:str
       const categories = category.split(',').map(c => c.trim());
       query.vendor_type = { $in: categories };
     }
+
+   
+
 
     if (search && search.trim()) {
       query = {
@@ -229,14 +232,16 @@ export const updateNotificationstatus =async(vendorid:string , notifid:string)=>
 
 export const clearNotification = async(vendorid :string) => {
   try {
-    const vendorData = await Vendor.findById(vendorid);
+    let vendorData = await Vendor.findById(vendorid);
     if (!vendorData) {
       throw new Error('vendor not found');
     }
     vendorData.notifications = [];
     await vendorData.save();
-    return true;
+    vendorData=await Vendor.findById(vendorid);
+    return {vendorData:vendorData};
   } catch (error) {
     throw error;
   }
   }
+

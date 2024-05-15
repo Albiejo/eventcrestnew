@@ -59,15 +59,8 @@ const randomImage = (bytes = 32) => crypto.randomBytes(bytes).toString("hex");
 
 
 
-interface userObject{
-  email:string;
-  password:string;
-  name:string;
-  phone:number;
-  otpCode:string;
-  otpSetTimestamp:number;
-}
-var userObject:userObject
+
+
 
 class UserController{
 
@@ -80,7 +73,7 @@ class UserController{
       const { email, password, name, phone } = req.body;
       const otpCode = await generateOtp(email);
       if (otpCode !== undefined) {
-        userObject= {
+        req.session.user = {
           email: email,
           password: password,
           name: name,
@@ -88,7 +81,7 @@ class UserController{
           otpCode: otpCode,
           otpSetTimestamp: Date.now(),
         };
-        console.log("signup",userObject)
+       
         return res.status(200).json({ message: "OTP send to email for verification..", email: email });
       } else {
         console.log("couldn't generate otp, error occcured ,please fix !!");
@@ -103,9 +96,6 @@ class UserController{
     }
   }
 
-
-
-
   
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
@@ -113,8 +103,8 @@ class UserController{
   
 
       const otp = req.body.otp;
-      console.log("verify session data",userObject)
-      const userData: UserSession | undefined = userObject;
+    
+      const userData: UserSession | undefined =  req.session.user ;
       
       if (!userData) {
         res.status(400).json({ error: "Session data not found. Please start the signup process again." });
@@ -174,8 +164,6 @@ console.log(otpCode)
 
 
 
-
-
   async getUser(req: Request, res: Response){
     try {
       
@@ -191,9 +179,6 @@ console.log(otpCode)
 
 
 
-
-
-
   async UserLogout(req: Request, res: Response){
     try {
       res.clearCookie("jwtToken");
@@ -202,7 +187,6 @@ console.log(otpCode)
       handleError(res, error, "UserLogout");
     }
   }
-
 
 
   async createRefreshToken(req: Request, res: Response){
@@ -218,9 +202,6 @@ console.log(otpCode)
       handleError(res, error, "createRefreshToken");
     }
   }
-
-
-
 
 
   async allUsers(req: Request, res: Response){
@@ -248,7 +229,7 @@ console.log(otpCode)
       await toggleUserBlock(userId);
       const User = await user.findById(userId);
 
-      return res.status(200).json({ message: "User block status updated." });
+      return res.status(200).json({ message: "User block status updated.", User:User });
     } catch (error) {
       handleError(res, error, "Toggleblock user block");
     }

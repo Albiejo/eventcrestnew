@@ -1,20 +1,18 @@
 import { CustomError } from "../Error/CustomError";
 import { createVendorType, findVerndorTypeByName ,findVerndorTypes , VendorfindByIdAndDelete , getVendorById , UpdateTypeById} from "../Repository/vendorTypeRepository";
 
-
 export const addType = async (type: string, status: string)=> {
   try {
     const existingType = await findVerndorTypeByName(type);
     if (existingType) {
-      throw new Error("Type already exist!");
+      throw new CustomError("Type already exist!" , 400);
     }
     
     const new_type=await createVendorType({type,status:status==="Active"})
-
     return {  message: "New Type added..." ,new_type};
   } catch (error) {
     console.error("Error fetching addType", error);
-    throw new CustomError("Unable to fetch addType", 500);
+    throw error;
   }
 };
 
@@ -26,14 +24,14 @@ export const getTypes = async ()=> {
     return availableTypes;
   } catch (error) {
     console.error("Error fetching getTypes", error);
-    throw new CustomError("Unable to fetch getTypes", 500);
+    throw new CustomError("Unable to process get Types now , try after some time", 500);
   }
 };
 
 
 export const deleteVendorType = async(vendorId:string): Promise<void> =>{
   try {
-    console.log("service" , vendorId , typeof vendorId);
+    
     
     const deletedVendor = await VendorfindByIdAndDelete(vendorId);
     
@@ -42,7 +40,7 @@ export const deleteVendorType = async(vendorId:string): Promise<void> =>{
     }
   } catch (error) {
     console.error("Error fetching deleteVendorType", error);
-    throw new CustomError("Unable to fetch deleteVendorType", 500);
+    throw error;
   }
 
 }
@@ -53,7 +51,7 @@ try {
   return await getVendorById(vendorId)
 } catch (error) {
   console.error("Error fetching getSingleVendordata", error);
-  throw new CustomError("Unable to fetch getSingleVendordata", 500);
+  throw error;
 }
 }
 
@@ -64,7 +62,7 @@ try {
   return updateddata;
 } catch (error) {
   console.error("Error fetching updateVendorType", error);
-  throw new CustomError("Unable to fetch updateVendorType", 500);
+  throw error;
 }
 }
 

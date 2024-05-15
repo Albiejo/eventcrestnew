@@ -41,7 +41,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
   const handleChat =async()=>{
     if(!user){
-      toast.warning("login first to initiate a chat ");
+      toast.error("Please login first to initiate a chat ");
       return;
     }
     const body ={
@@ -65,7 +65,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
   const handleredirection = ()=>{
     if(!user){
-      toast.warning("login first to Book a vendor ");
+      toast.error("Please login first to Book a vendor ");
       return;
     }
     navigate(`/bookevent?vid=${vendorId}`)

@@ -12,7 +12,9 @@ class LiveController{
   async getLive(req: Request, res: Response){
 
     try {
+      console.log("live function called:")
       const data = await getAllLive();
+      console.log("live data :",data)
       return res.status(200).json({ data: data });
     } catch (error) {
       handleError(res, error, "getLive");

@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { validate } from '../../Validations/BookingValidation';
 import { axiosInstance } from '../../Api/axiosinstance';
 import { useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import UserRootState from '../../Redux/rootstate/UserState';
 import { useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ const initialValues: FormValues = {
   eventName: '',
   name: '',
   date: '',
-  city: '',
+  venue: '',
   pin: '',
   mobile: '',
 };
@@ -33,7 +33,7 @@ const BookEventForm: React.FC = () => {
     eventName: '',
     name: '',
     date: '',
-    city: '',
+    venue: '',
     pin: '',
     mobile: '',
   });
@@ -178,24 +178,24 @@ const BookEventForm: React.FC = () => {
                 </div>
                 <div className="mb-4">
                   <Input
-                    label="City"
+                    label="venue"
                     type="text"
                     size="md"
                     onChange={handleChange}
-                    value={formValues.city}
-                    name="city"
+                    value={formValues.venue}
+                    name="venue"
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
                     crossOrigin={undefined}
                   />
-                        {formErrors.city ? (
+                        {formErrors.venue ? (
                     <p
                       className="text-sm"
                       style={{
                         color: 'red',
                       }}
                     >
-                      {formErrors.city}
+                      {formErrors.venue}
                     </p>
                   ) : null}
                 </div>

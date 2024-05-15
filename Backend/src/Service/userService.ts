@@ -36,6 +36,7 @@ export const signup = async (
 ): Promise<object> => {
   try {
     const existingUser = await findUserByEmail(email);
+
     if (existingUser) {
       throw new CustomError(`User email already exists`, 401);
     }
@@ -55,8 +56,8 @@ export const signup = async (
     return {user: newUser };
 
   } catch (error) {
-      console.error("Error fetching signup", error);
-      throw new CustomError("Unable to fetch signup", 500);
+      console.error("Error processing user  signup", error);
+      throw error;
   }
 };
 
@@ -72,7 +73,7 @@ export const createRefreshToken = async (refreshToken:string)=>{
   
 
     if (!user || user.refreshToken !== refreshToken) {
-        throw new Error('Invalid refresh token');
+        throw new Error('Invalid refresh token , please login again.');
       }
 
     const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET!, { expiresIn: '24h' });
@@ -82,7 +83,7 @@ export const createRefreshToken = async (refreshToken:string)=>{
 
   } catch (error) {
     console.error("Error fetching user createRefreshToken", error);
-    throw new CustomError("Unable to fetch createRefreshToken", 500);
+    throw error;
   }
 }
 
@@ -124,8 +125,8 @@ export const login = async (
       message: "Successfully logged in..",
     };
   } catch (error) {
-      console.error("Error fetching login", error);
-      throw new CustomError("Unable to fetch login", 500);
+      console.error("Error processing  login", error);
+      throw error;
   }
 };
 
@@ -134,17 +135,19 @@ export const getUsers = async (page: number, limit: number, search: string) => {
     const users = await findAllUsers(page, limit, search);
     return users;
   } catch (error) {
-    console.error("Error fetching getUsers", error);
-    throw new CustomError("Unable to fetch getUsers", 500);
+    console.error("Error fetching get Users", error);
+    throw error;
   }
 };
 
 
 export const toggleUserBlock = async (userId: string): Promise<void> => {
   try {
+
     const user = await User.findById(userId);
+
     if (!user) {
-      throw new Error("User not found");
+      throw new CustomError("User not found" , 400 );
     }
 
     user.isActive = !user.isActive; // Toggle the isActive field
@@ -152,6 +155,7 @@ export const toggleUserBlock = async (userId: string): Promise<void> => {
 
     const admindata = await admin.find();
     const Admin:any= admindata[0];
+    
     Admin.notifications.push({
       _id: new mongoose.Types.ObjectId(),
       message:`${user.name}'s status was toggled , ${user.isActive ? "active" : "blocked"} now`,
@@ -159,11 +163,10 @@ export const toggleUserBlock = async (userId: string): Promise<void> => {
     })
   
     await Admin.save();
-    console.log("notifi pushed",Admin);
     
   } catch (error) {
-    console.error("Error fetching toggleUserBlock", error);
-    throw new CustomError("Unable to fetch toggleUserBlock", 500);
+    console.error("Error fetching toggle User Block", error);
+    throw error;
   }
 };
 
@@ -173,8 +176,8 @@ try {
   const user = await findUserById(userId)
   return user;
 } catch (error) {
-      console.error("Error fetching findUser", error);
-      throw new CustomError("Unable to fetch findUser", 500);
+      console.error("Error fetching find User", error);
+      throw error;
 }
 
 };
@@ -187,11 +190,11 @@ export const generateOtpForPassword = async (email: string) => {
       return otpCode;
     } else {
       console.log("error on generating otp , please fix ..");
-      throw new Error(`couldn't generate otp, error occcured ,please fix !!`);
+      throw new Error(`couldn't generate otp, error occcured ,please try after some time !!` );
     }
   } catch (error) {
     console.error("Error fetching generateOtpForPassword", error);
-    throw new CustomError("Unable to fetch generateOtpForPassword", 500);
+    throw new CustomError("Unable to generate otp now , try after some time" ,500);
   }
 };
 
@@ -205,7 +208,7 @@ export const ResetPassword = async (password: string, email: string) => {
     }
   } catch (error) {
       console.error("Error fetching ResetPassword", error);
-      throw new CustomError("Unable to fetch ResetPassword", 500);
+      throw new CustomError("Unable to update password  now , try after some time" ,500);
   }
 };
 
@@ -216,8 +219,8 @@ export const CheckExistingUSer = async (email: string) => {
     const existingUser = await findUserByEmail(email);
     return existingUser;
   } catch (error) {
-      console.error("Error fetching CheckExistingUSer", error);
-      throw new CustomError("Unable to fetch CheckExistingUSer", 500);
+      console.error("Error fetching Check Existing USer", error);
+      throw error;
   }
 };
 
@@ -254,7 +257,7 @@ export const gLogin = async (email: string, password: string) => {
     };
   } catch (error) {
       console.error("Error fetching gLogin", error);
-      throw new CustomError("Unable to fetch gLogin", 500);
+      throw error;
   }
 };
 
@@ -278,7 +281,7 @@ export const googleSignup = async (
     return { token: token, user: newUser };
   } catch (error) {
     console.error("Error fetching googleSignup", error);
-    throw new CustomError("Unable to fetch googleSignup", 500);
+    throw error;
   }
 };
 
@@ -334,7 +337,7 @@ export const FavoriteVendor = async(vendorId:string , userId:string)=>{
     
 } catch (error) {
   console.error("Error fetching FavoriteVendor", error);
-  throw new CustomError("Unable to fetch FavoriteVendor", 500);
+  throw new CustomError("Unable to favorite vendor  now , try after some time" ,500);
 }
 };
 
@@ -345,8 +348,7 @@ export const checkCurrentPassword = async(currentpassword:string , userId:string
   try {
     
     const existingUser = await findUserById(userId);
-    console.log("existingUser is",existingUser);
-    console.log("current password in service is:",currentpassword);
+   
     if(!existingUser){
      throw new Error("user not found")
     }
@@ -360,7 +362,7 @@ export const checkCurrentPassword = async(currentpassword:string , userId:string
 
   } catch (error) {
     console.error("Error fetching checkCurrentPassword", error);
-    throw new CustomError("Unable to fetch checkCurrentPassword", 500);
+    throw new CustomError("Unable to check current  password  now , try after some time" ,500);
   }
 }
 
@@ -390,7 +392,7 @@ export const UpdatePasswordService = async(newPassword:string , userId:string)=>
     return false
   } catch (error) {
       console.error("Error fetching UpdatePasswordService", error);
-      throw new CustomError("Unable to fetch UpdatePasswordService", 500);
+      throw new CustomError("Unable to update password now , try after some time" ,500);
   }
 }
 
@@ -405,7 +407,7 @@ export const UpdateUserProfile=async(userId:string , name:string , phone:number 
     return data;
   } catch (error) {
       console.error("Error fetching UpdateUserProfile", error);
-      throw new CustomError("Unable to fetch UpdateUserProfile", 500);
+      throw new CustomError("Unable to update profile now , try after some time" ,500);
   }
 }
 
@@ -416,7 +418,7 @@ export const FavoriteVendors=async(userid:string , page: number, pageSize: numbe
       return {favoriteVendors , totalFavVendorsCount}
     } catch (error) {
       console.error("Error fetching FavoriteVendors", error);
-      throw new CustomError("Unable to fetch FavoriteVendors", 500);
+      throw new CustomError("Unable to fetch Favorite Vendors now , try after some time", 500);
     }
 }
 
@@ -427,17 +429,17 @@ export const updateNotification = async(userid:string ,notifiID:string ):Promise
     return data
   } catch (error) {
     console.error("Error fetching updateNotification", error);
-    throw new CustomError("Unable to fetch updateNotification", 500);
+    throw new CustomError("Unable to update Notification , try after some time", 500);
   }
 }
 
 
-export const clearalldata = async(userid:string):Promise<boolean>=>{
+export const clearalldata = async(userid:string):Promise<object>=>{
   try {
    const data  = await clearNotification(userid);
    return data;
   } catch (error) {
       console.error("Error fetching clearalldata", error);
-      throw new CustomError("Unable to fetch clearalldata", 500);
+      throw new CustomError("Unable to clear all notification , try after some time. ", 500);
   }
 }

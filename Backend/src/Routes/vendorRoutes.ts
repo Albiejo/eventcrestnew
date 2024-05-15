@@ -5,6 +5,7 @@ import PostController  from '../Controller/postController';
 import multer from 'multer';
 import BookingController  from '../Controller/bookingController';
 import authenticate from '../Middleware/VendorAuth';
+import vendorController from '../Controller/vendorController';
 
 
 const router = express.Router();

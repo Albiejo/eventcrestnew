@@ -40,13 +40,13 @@ function VendorsList() {
     <div className="m-20">
       <div className="mb-5 flex justify-between items-center">
 
-        <h3 className="block font-sans text-3xl font-semibold leading-snug text-inherit">
+        <h3 className="block font-sans md:text-3xl font-semibold leading-snug text-inherit">
           Vendors List
         </h3>
 
-        <Button variant="gradient" className="rounded-full"  placeholder={undefined}>
+        <Button variant="gradient" className="md:w-38 md:h-12  "   placeholder={undefined}>
           <Link to="/admin/vendor-types">
-            View Vendor Types
+            Vendor Types
           </Link>
         </Button>
 

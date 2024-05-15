@@ -45,6 +45,10 @@ router.get('/getallBookings',authenticate ,bookingController.getallBookings)
 router.get('/revenue' , authenticate , adminController.getRevenue)
 router.get('/notificationCount' ,authenticate , adminController.countNotifications)
 
+router.patch('/ClearAll' , authenticate , adminController.clearAllNotification )
+
+router.post('/createAdmin'  , adminController.AdmincreateAdmin)
+
 
 export default router;
 

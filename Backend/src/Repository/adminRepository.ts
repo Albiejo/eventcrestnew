@@ -14,6 +14,10 @@ export class AdminRepository extends BaseRepository<AdminDocument>{
     return await Admin.findOne({ email });
   }
 
+  async findById(id: string): Promise<AdminDocument | null> {
+    return await Admin.findById(id);
+  }
+
 }
 
 

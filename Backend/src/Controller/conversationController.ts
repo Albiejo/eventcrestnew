@@ -2,6 +2,7 @@ import ConversationModel from '../Model/Conversation';
 import { Request, Response } from "express";
 import { ErrorMessages } from '../Util/enums';
 import { handleError } from '../Util/handleError';
+import conversationService from '../Service/conversationService';
 
 
 
@@ -9,21 +10,12 @@ import { handleError } from '../Util/handleError';
 class conversationController{
 
   
-  async createChat(req: Request, res: Response){
-
-    const {senderId , receiverId} = req.body;
+  async createChat(req: Request, res: Response): Promise<void>{
 
     try {
-
-      let chat = await ConversationModel.findOne({ members: [senderId, receiverId] });
-
-      if (!chat) {
-        const newChat = new ConversationModel({ members: [senderId, receiverId] });
-        chat = await newChat.save();
-      }
-
-     return res.status(200).json(chat);
-
+      const {senderId , receiverId} = req.body;
+      const chat=await conversationService.createConversation(senderId,receiverId)
+      res.status(200).json(chat);
     } catch (error) {
       handleError(res, error, "createChat");
     }
@@ -32,16 +24,11 @@ class conversationController{
 
 
 
-  async findUserchats(req: Request, res: Response){
-
-    const {userId }  = req.query;
-    try {
-
-      const chats = await ConversationModel.find({ members: { $in: [userId] } });
-    
-      chats.sort((a, b) => (b.latestMessageTimestamp || new Date()).getTime() - (a.latestMessageTimestamp || new Date()).getTime());
-      
-      return res.status(200).json(chats);
+  async findUserchats(req: Request, res: Response): Promise<void>{
+    try {    
+      const userId :string = req.query.userId as string;
+      const chats = await conversationService.findChat(userId); 
+       res.status(200).json(chats);
     } catch (error) {
       handleError(res, error, "findUserchats");
     }

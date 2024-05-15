@@ -10,7 +10,8 @@ export interface UserData{
     phone:string,
     imageUrl:string,
     favorite:Array<string>,
-    notifications:Array<object>
+    notifications:Array<object>,
+    authMethod: string;
 }
 
 export interface UserState{

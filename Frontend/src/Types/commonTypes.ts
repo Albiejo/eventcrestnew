@@ -6,7 +6,7 @@ export interface FormValues {
     eventName: string;
     name: string;
     date: string;
-    city: string;
+    venue: string;
     pin: string;
     mobile: string;
   }
@@ -16,7 +16,7 @@ export interface FormValues {
     date:string;
     name:string;
     eventName:string;
-    city:string;
+    venue:string;
     pin:number;
     mobile:number;
     createdAt:Date;

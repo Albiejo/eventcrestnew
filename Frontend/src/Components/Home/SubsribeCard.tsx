@@ -25,6 +25,10 @@ const SubsribeCard: React.FC = () => {
          console.log(res.data);
          toast.success("successfully subscribed to eventcrest.")
          setSubscribed(true);
+         setEmail("");
+         setTimeout(()=>{
+          setSubscribed(false);
+         },2000)
       }).catch((err) => {
         setError("Please try again later.");
         console.log(err.message);

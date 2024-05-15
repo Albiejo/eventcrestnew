@@ -16,7 +16,7 @@ import {
   import { useSelector } from 'react-redux';
   import { useLocation } from 'react-router-dom';
   import Swal from 'sweetalert2';
-
+  import toast from 'react-hot-toast';
 
   interface Vendor {
     _id: string;
@@ -134,6 +134,7 @@ const SingleBooking = () => {
         })
         .catch((error) => {
           console.log('here', error);
+          toast.error("some issue occured during payment , try later." , {style:{background:'red'}})
         });
     };
   
@@ -142,12 +143,12 @@ const SingleBooking = () => {
     return (
 
       <>
-      <div className='flex flex-col md:flex-row justify-between gap-4 ' style={{ marginLeft: '-7vw' }}>
+      <div className='flex flex-col md:flex-row justify-between gap-4 ' >
         <span className='font-bold text-black '>Booking Details</span>
       </div>
 
-{booking.payment_status === 'Pending' && booking.status === "Accepted" ? (
-         <div className="flex flex-col md:flex-row justify-between gap-4 mr-28 "style={{ marginLeft: '-8vw' }}>
+    {booking?.payment_status === 'Pending' && booking?.status === "Accepted" ? (
+         <div className="flex flex-col md:flex-row justify-between gap-4 mr-28 ">
          <Alert icon={<Icon />} color="red">
            Complete your payment!
          </Alert>
@@ -157,7 +158,7 @@ const SingleBooking = () => {
           ''
         )}
 
-<div className="flex flex-col md:flex-row justify-between gap-4 mr-28" style={{ marginLeft: '-8vw' }}>
+<div className="flex flex-col md:flex-row justify-between gap-4 mr-28" >
 <Card
     className="mt-6 w-full px-5 border-2 border-gray-700  text-black"
     placeholder={undefined}
@@ -338,7 +339,7 @@ const SingleBooking = () => {
 
 <Card
     className="mt-2 mr-28 border-2 border-gray-700 text-black"
-    style={{ marginLeft: '-8vw' }}
+  
     placeholder={undefined}
     onPointerEnterCapture={undefined}
     onPointerLeaveCapture={undefined}

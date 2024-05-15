@@ -1,12 +1,28 @@
 import {Navigate,Outlet} from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import UserRootState from '../../Redux/rootstate/UserState';
-
+import { logout } from '../../Redux/slices/UserSlice';
 
 const UserPrivateRoute = () => {
-    const user = useSelector((state : UserRootState) => state.user.isUserSignedIn);
+
+  const dispatch= useDispatch();
+
+  
+  const user = useSelector((state : UserRootState) => state.user.isUserSignedIn);
+  const userData = useSelector((state:UserRootState)=>state.user.userdata)
+  
+  const isUserActive = userData?.isActive;
+
+  if (!isUserActive) {
+    dispatch(logout());
+  }
+
   return (
-    user ? <Outlet/> :<Navigate to='/login' replace/>
+    user && isUserActive  ? <Outlet/> :
+    ( 
+    <Navigate to='/login' replace/>
+    )
+    
   )
 }
 

@@ -4,12 +4,15 @@ import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
 import { axiosInstance } from '../../Api/axiosinstance';
 
 
+
+
+
 function randomID(len: number) {
   let result = '';
   if (result) return result;
   const chars =
-      '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
-    maxPos = chars.length;
+  '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
+  maxPos = chars.length;
   let i;
   len = len || 5;
   for (i = 0; i < len; i++) {
@@ -20,8 +23,12 @@ function randomID(len: number) {
 
 
 const Room = () => {
+  
 
+  const CLIENTURL:string = import.meta.env.VITE_CLIENT_URL || "";
+  
   const { roomId,role_str} = useParams();
+  
   const role =
     role_str === 'Host'
       ? ZegoUIKitPrebuilt.Host
@@ -30,20 +37,25 @@ const Room = () => {
         : ZegoUIKitPrebuilt.Audience;
 
   const sharedLinks: { name: string; url: string; }[] = [];
-  if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
+
+  if (role === ZegoUIKitPrebuilt.Host ) {
+
     sharedLinks.push({
-      name: 'Join as co-host',
-      url:`http://localhost:5000/room/${roomId}/Cohost`
+      name: 'Join as host',
+      url:`${CLIENTURL}/room/${roomId}/Cohost`
     });
+    
   }
 
   sharedLinks.push({
     name: 'Join as audience',
-    url:`http://localhost:5000/room/${roomId}/Audience`
+    url:`${CLIENTURL}/room/${roomId}/Audience`
   });
 
 
   const handleLiveStart = (url: string) => {
+
+    if (role === ZegoUIKitPrebuilt.Host ) {
     axiosInstance
       .post('/add-live', { url }, { withCredentials: true })
       .then((response) => {
@@ -52,7 +64,8 @@ const Room = () => {
       .catch((error) => {
         console.log('here', error);
       });
-  };
+  }
+}
 
 
   
@@ -60,7 +73,7 @@ const handleLiveEnd = () => {
     axiosInstance
       .patch(
         `/change-live-status`,
-        { url:`http://localhost:5000/room/${roomId}/Audience`},
+        { url:`${CLIENTURL}/room/${roomId}/Audience`},
         { withCredentials: true },
       )
       .then((response) => {
@@ -90,7 +103,7 @@ const handleLiveEnd = () => {
     zp.joinRoom({
         container: element,
         onLiveStart: () => {
-          handleLiveStart(`http://localhost:5000/room/${roomId}/Audience`);
+          handleLiveStart(`${CLIENTURL}/room/${roomId}/Audience`);
         },
         onLiveEnd: () => {
           handleLiveEnd();

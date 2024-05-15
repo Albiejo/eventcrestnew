@@ -128,3 +128,31 @@ padding-left:30%;
     50% { opacity: 1; }
     100% { opacity: 0; }
 }
+
+
+.chatboxHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #043059; 
+    color: white;
+}
+
+.headerUserInfo {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-weight: bold;
+}
+
+

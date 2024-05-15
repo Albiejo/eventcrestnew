@@ -46,12 +46,22 @@ const ProfileCard = () => {
   });
 
   const [file, setFile] = useState<File | undefined>(undefined);
+  const [nameError, setNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [editMode, setEditMode] = useState(false);
 
 
 
-  const checkerror = (file :File )=>{
+  const handleEditClick = () => {
+    setEditMode(true);
+};
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif' , 'image/jpg'];
+const handleCancel = () => {
+  setEditMode(false );
+};
+
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif' , 'image/jpg'];
+  const checkerror = (file :File )=>{   
     if (!allowedTypes.includes(file?.type)) {
      toast.error("Only JPEG, JPG , PNG, and GIF image formats are allowed.");
      return;
@@ -61,7 +71,33 @@ const ProfileCard = () => {
 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
+
+    const isFormUpdated = inputs.name !== user?.name || inputs.phone !== user?.phone || file;
+   
+     if (!isFormUpdated) {
+      toast.error("Please make changes before updating.");
+      return;
+    }
+
+    if (inputs.name.length == 0) {
+      setNameError("Name is required");
+      return;
+    }
+    if (!/^[A-Za-z\s]+$/i.test(inputs.name)) {
+      setNameError("Enter a valid name");
+      return;
+    }
+    if (inputs?.phone?.length == 0) {
+      setPhoneError("Phone is required");
+      return;
+    }
+    if (!/^[0-9]+$/u.test(inputs.phone!)) {
+      setPhoneError("Enter a valid Phone");
+      return;
+    }
+
 
     const formData = new FormData();
     formData.append("name", inputs.name);
@@ -73,9 +109,7 @@ const ProfileCard = () => {
     }
 
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif' , 'image/jpg'];
-
-    if (!allowedTypes.includes((file as File).type)) {
+    if (file && !allowedTypes.includes((file as File).type)) {
       toast.error("Only JPEG, JPG , PNG, and GIF image formats are allowed.");
       return;
     }
@@ -93,6 +127,8 @@ const ProfileCard = () => {
         toast.error(error.response.data.message);
         console.log("some error here", error);
       });
+
+      setEditMode(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,9 +141,9 @@ const ProfileCard = () => {
   
   return (
     <>
-    <div className="flex justify-center">
+         
     <Card
-    className="w-full md:w-96  lg:mt-20 md:mt-0 md:ml-4 border-4 border-gray-700 mr-40"
+      className="w-96 mx-auto"
       placeholder={undefined}
       onPointerEnterCapture={undefined}
       onPointerLeaveCapture={undefined}
@@ -115,12 +151,14 @@ const ProfileCard = () => {
       <form onSubmit={handleSubmit}>
 
         <CardHeader
-          floated={false}
-          className="h-50 bg-transparent shadow-none flex items-center justify-center"
+         
+         className="h-50 bg-transparent shadow-none flex items-center justify-center"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
+         
+   
           {previewUrl ? (
             <img
               src={previewUrl}
@@ -130,7 +168,7 @@ const ProfileCard = () => {
           ) : (
             <label
               htmlFor="file-upload"
-              className="cursor-pointer flex items-center justify-center inline-block text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+              className="cursor-pointer h-40 w-40 flex items-center justify-center inline-block text-white font-bold py-2 px-4 rounded transition-colors duration-200"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +185,7 @@ const ProfileCard = () => {
                 />
               </svg>
             </label>
-          )}
+          )}  
           <input
             id="file-upload"
             type="file"
@@ -170,11 +208,12 @@ const ProfileCard = () => {
 
 
         <CardBody
-          className="text-center flex flex-col gap-4"
+        className="text-center flex flex-col gap-4"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
+         
           {user?.email && (
             <Input
               label="Email"
@@ -186,6 +225,7 @@ const ProfileCard = () => {
               crossOrigin={undefined}
             />
           )}
+
           <Input
             label="Name"
             size="md"
@@ -197,6 +237,12 @@ const ProfileCard = () => {
             crossOrigin={undefined}
           />
 
+          {nameError ? (
+            <p className="text-red-500 text-sm -m-2">{nameError}</p>
+          ) : (
+            ""
+          )}
+
           <Input
             label="Phone"
             size="md"
@@ -207,20 +253,61 @@ const ProfileCard = () => {
             onPointerLeaveCapture={undefined}
             crossOrigin={undefined}
           />
-          <Button
-            variant="gradient"
-            fullWidth
-            type="submit"
-            placeholder={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-          >
-            Update
-          </Button>
+
+          {phoneError ? (
+            <p className="text-red-500 text-sm -m-2">{phoneError}</p>
+          ) : (
+            ""
+          )}
+
+
+                   { !editMode && 
+                    
+                    <Button
+                    onClick={handleEditClick}
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  style={{background:"#002D62"}}
+                    >
+                      Edit
+                    </Button>
+                   
+                   }
+
+                      {editMode && (
+                        <>
+                            <Button
+                                variant="gradient"
+                                fullWidth
+                                type="submit"
+                                placeholder={undefined}
+                                onPointerEnterCapture={undefined}
+                                onPointerLeaveCapture={undefined}
+                                style={{background:"green"}}
+                            >
+                                Update
+                            </Button>
+
+                            <Button
+                                variant="gradient"
+                                fullWidth
+                                onClick={handleCancel}
+                                placeholder={undefined}
+                                onPointerEnterCapture={undefined}
+                                onPointerLeaveCapture={undefined}
+                                style={{background:"red"}}
+                            >
+                                Cancel
+                            </Button>
+
+                        </>
+                           
+                        )}
         </CardBody>
       </form>
     </Card>
-    </div>
+    
     </>
     
   );

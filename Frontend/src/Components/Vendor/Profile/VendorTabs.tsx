@@ -5,7 +5,6 @@ import {
   TabsBody,
   Tab,
   TabPanel,
-  Button,
 } from "@material-tailwind/react";
 import VendorPosts from "./VendorPosts";
 import ReviewCard from "../ReviewCard";
@@ -63,36 +62,28 @@ export default function VendorTabs({ reviews } : { reviews: Review[]  }) {
             
           
 
-{value === 'reviews' && ( 
-  <div className="grid grid-cols-1 gap-4 ">
-    {reviews?.map((review, index) => (
-      <div key={index} className="border-2 border-blue-600 bg-gray-200  rounded-md p-4">
-        <ReviewCard {...review} />
-        {review.reply && review.reply.length > 0 && (
-          <div className="ml-8">
-            {review.reply.map((reply, replyIndex) => (
-              <div key={replyIndex} className="bg-gray-300 p-2 rounded-md mb-2">
-                <p style={{color:'black'}}> replied : {reply}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-)}
-
-            <div className="flex justify-center">
-              <Button
-                variant="outlined"
-                placeholder={undefined}
-                color="pink"
-                size="lg"
-                className="mr-3 mt-5 text-center"
-              >
-                View More
-              </Button>
-            </div>
+            {value === 'reviews' && ( 
+                <div className="grid grid-cols-1 gap-4">
+                  {reviews?.length === 0 ? (
+                    <p className="text-center text-gray-500">No reviews yet!</p>
+                  ) : (
+                    reviews.map((review, index) => (
+                      <div key={index} className="border-2 border-blue-600 bg-gray-200 rounded-md p-4">
+                        <ReviewCard {...review} />
+                        {review.reply && review.reply.length > 0 && (
+                          <div className="ml-8">
+                            {review.reply.map((reply, replyIndex) => (
+                              <div key={replyIndex} className="bg-gray-300 p-2 rounded-md mb-2">
+                                <p style={{color:'black'}}> replied : {reply}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+            )}
           </TabPanel>
         ))}
       </TabsBody>

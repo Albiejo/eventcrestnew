@@ -39,7 +39,7 @@ const AdminNavbar=()=> {
     axiosInstanceAdmin.get(`/notificationCount?adminId=${admin?._id}`).then((res)=>{
       setunreadlength(res.data.data.notification)
     })
-  },[admin]) 
+  },) 
 
 
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
+
 dotenv.config();
 
 
@@ -9,7 +10,7 @@ interface AuthenticatedRequest extends Request {
   user?: any;
 }
 
-export default function authenticate(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export default async function authenticate(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
   
   const token = req.headers.authorization;
@@ -23,15 +24,16 @@ export default function authenticate(req: AuthenticatedRequest, res: Response, n
   const accessToken = token.split(' ')[1];
 
 
-  jwt.verify(accessToken, process.env.JWT_SECRET!, (err: any, decoded: any) => {
+  jwt.verify(accessToken, process.env.JWT_SECRET!, async(err: any, decoded: any) => {
+   
     if (err) {
       return res.status(401).json({ message: 'Invalid token' });
     }
 
     req.user = decoded;
-
-   
     
+
     next();
+  
   });
 }

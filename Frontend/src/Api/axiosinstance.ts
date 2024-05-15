@@ -9,9 +9,13 @@ const endpoints = {
     message: import.meta.env.VITE_MESSAGEAPI
 };
 
-console.log(endpoints)
 
-const createAxiosInstance = (baseURL:string, tokenKey:string) => {
+
+const CreateAxiosInstance = (baseURL:string, tokenKey:string , Rtoken:string|undefined) => {
+
+
+  
+
     const instance = axios.create({ baseURL });
 
     instance.interceptors.request.use(config => {
@@ -25,7 +29,8 @@ const createAxiosInstance = (baseURL:string, tokenKey:string) => {
     instance.interceptors.response.use(response => response, async error => {
         if (error.response.status === 401 && error.response.data.message === 'Invalid token') {
             try {
-                const refreshToken = localStorage.getItem(`${tokenKey}refreshToken`);
+                
+                const refreshToken = localStorage.getItem(`${Rtoken}`);
                 const response = await instance.post('/refresh-token', { refreshToken });
                 const newToken = response.data.token;
                 localStorage.setItem(tokenKey, newToken);
@@ -36,6 +41,7 @@ const createAxiosInstance = (baseURL:string, tokenKey:string) => {
                 return Promise.reject(refreshError);
             }
         }
+        
         return Promise.reject(error);
     });
 
@@ -43,8 +49,8 @@ const createAxiosInstance = (baseURL:string, tokenKey:string) => {
 };
 
 // Create axios instances for each API endpoint
-export const axiosInstance = createAxiosInstance(endpoints.user, 'userToken');
-export const axiosInstanceAdmin = createAxiosInstance(endpoints.admin, 'adminToken');
-export const axiosInstanceVendor = createAxiosInstance(endpoints.vendor, 'vendorToken');
-export const axiosInstanceChat = createAxiosInstance(endpoints.conversation, 'userToken'); // Assuming conversation API also uses userToken
-export const axiosInstanceMsg = createAxiosInstance(endpoints.message, 'userToken'); // Assuming message API also uses userToken
+export const axiosInstance = CreateAxiosInstance(endpoints.user, "userToken", "userrefreshToken");
+export const axiosInstanceAdmin = CreateAxiosInstance(endpoints.admin, 'adminToken' , "adminrefreshToken" );
+export const axiosInstanceVendor = CreateAxiosInstance(endpoints.vendor, 'vendorToken' , "vendorrefreshToken");
+export const axiosInstanceChat = CreateAxiosInstance(endpoints.conversation, 'userToken' , "" ); 
+export const axiosInstanceMsg = CreateAxiosInstance(endpoints.message, 'userToken', ""); 

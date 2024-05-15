@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import '../../../public/css/vendor-unauth.css'
+import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../Api/axiosinstance';
 import { axiosInstanceAdmin } from '../../Api/axiosinstance';
 import CardDataStats from '../../Components/Vendor/CardDataStats';

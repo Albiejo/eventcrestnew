@@ -14,7 +14,6 @@ import { useMemo } from 'react';
 
 
 
-
 interface Vendors {
   _id: string;
   name: string;
@@ -30,6 +29,7 @@ interface Vendors {
 
 const VendorsListing = () => {
   
+
   const [vendors,setVendors]=useState<Vendors[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -40,12 +40,16 @@ const VendorsListing = () => {
   const [vendorTypeData, setVendorTypeData] = useState([]);
   const [category, setCategory] = useState<string[]>([]);
   
+
+   
+
+    
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchParam = queryParams.get("search");
     memoizedFetchVendors(currentPage, searchParam);
     fetchVendorTypes();
-  }, [currentPage , search , location.search , sortBy ,category]);
+  }, [currentPage , search , location.search , sortBy ,category ]);
 
 
   const memoizedFetchVendors = useMemo(() => {
@@ -64,7 +68,7 @@ const VendorsListing = () => {
         console.error("Error fetching vendors:", error);
       }
     };
-  }, [search, sortBy, category]); 
+  }, [search, sortBy, category ]); 
 
 
 
@@ -77,6 +81,9 @@ const VendorsListing = () => {
   }
 
  }
+
+
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -128,7 +135,7 @@ const debouncedFetchVendors = debounce(memoizedFetchVendors, 300);
           <input
           type="text"
           name="search"
-          placeholder="Search vendors..."    
+          placeholder="Search by name,location.."    
           onChange={(e) =>setSearch(e.target.value)}  
           onKeyUp={handleSearch}    
           className="px-4 py-2 border border-gray-500 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
@@ -140,8 +147,9 @@ const debouncedFetchVendors = debounce(memoizedFetchVendors, 300);
       <div className="flex flex-wrap justify-center md:justify-between ">
       <div className="w-full md:w-1/6 mb-6 md:mb-0 flex-shrink-0 ">
           <h3 className="mt-4 mb-2 text-lg font-semibold">Filter By</h3>
-
+         
           <VendorFilters  vendorTypeData={vendorTypeData}   setCategory={setCategory}/>
+
       </div>
       <div className="flex flex-wrap justify-center md:justify-start w-full md:w-3/4 flex-grow">
       {noResults ? (

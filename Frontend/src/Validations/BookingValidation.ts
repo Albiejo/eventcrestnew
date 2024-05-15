@@ -2,7 +2,7 @@ interface ValidationErrors {
   eventName: string;
   name:string;
   date:string;
-  city:string;
+  venue:string;
   pin:string;
   mobile:string;
  
@@ -12,7 +12,7 @@ interface ValidationErrors {
     eventName: string;
     name:string;
     date:string;
-    city:string;
+    venue:string;
     pin:string;
     mobile:string;
 
@@ -23,7 +23,7 @@ export const validate =  (values: ValidationValues): ValidationErrors => {
     eventName: '',
     name:'',
     date:'',
-    city:'',
+    venue:'',
     pin:'',
     mobile:''
 
@@ -45,10 +45,10 @@ export const validate =  (values: ValidationValues): ValidationErrors => {
   }
 
 
-  if (!values.city.trim()) {
-    errors.city = 'City is required';
-  } else if (!/^[A-Za-z\s]+$/i.test(values.city)) {
-    errors.city = 'Should not contain numbers!';
+  if (!values.venue.trim()) {
+    errors.venue = 'venue is required';
+  } else if (!/^[A-Za-z\s]+$/i.test(values.venue)) {
+    errors.venue = 'Should not contain numbers!';
   }
 
 

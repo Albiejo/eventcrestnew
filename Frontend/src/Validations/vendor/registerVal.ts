@@ -4,6 +4,7 @@ interface ValidationErrors {
     phone:string;
     city:string;
     password: string;
+    Confirmpassword:string;
     vendor_type:string;
 
    }
@@ -14,6 +15,7 @@ interface ValidationErrors {
     phone:string;
     city:string;
     password: string;
+    Confirmpassword:string;
     vendor_type:string;
    }
 
@@ -24,6 +26,7 @@ export const validate =  (values: ValidationValues): ValidationErrors => {
        phone: "",
        city:"",
        password: "",
+       Confirmpassword:"",
        vendor_type:""
        
    };
@@ -67,8 +70,16 @@ export const validate =  (values: ValidationValues): ValidationErrors => {
       errors.password = 'Contain atleast 6 characters';
     }
 
+    if (!values.Confirmpassword.trim()) {
+      errors.Confirmpassword = 'Confirm Password is equired';
+    } else if (values.Confirmpassword.length<6) {
+      errors.Confirmpassword = 'Should Contain atleast 6 characters';
+    }else if (values.Confirmpassword !== values.password) {
+      errors.Confirmpassword = 'Passwords do not match';
+    }
 
- console.log(errors)
+
+ 
    return errors;
  };
    

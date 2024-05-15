@@ -91,8 +91,6 @@ class PostController {
 
 
 
-
-
   async deletePost(req: Request, res: Response){
     try {
       const id=req.params.id;

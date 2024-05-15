@@ -13,7 +13,7 @@ class BookingController{
     async bookAnEvent(req: Request, res: Response){
         try {
             const { vendorId, userId }: { vendorId: string; userId: string } = req.query as { vendorId: string; userId: string };
-            const { eventName, name, city }: { eventName: string; name: string; city: string } = req.body;          
+            const { eventName, name, venue }: { eventName: string; name: string; venue: string } = req.body;          
             const date = moment(req.body.date).format('DD-MM-YYYY');
             const pin=parseInt(req.body.pin);
             const mobile=parseInt(req.body.mobile);
@@ -27,7 +27,7 @@ class BookingController{
                     
                     await bookingService.acquireLockForDate(vendorId, date);
 
-                    const booking = await bookingService.addABooking(eventName, name, city,date,pin,mobile,vendorId,userId);
+                    const booking = await bookingService.addABooking(eventName, name, venue,date,pin,mobile,vendorId,userId);
                     
                     await bookingService.releaseLockForDate(vendorId, date);
 
@@ -49,7 +49,7 @@ class BookingController{
           const userId: string = req.query.userId as string;
 
           const page: number = parseInt(req.query.page as string) || 1; 
-          const pageSize: number = parseInt(req.query.pageSize as string) || 10; 
+          const pageSize: number = parseInt(req.query.pageSize as string) || 5; 
           const skip = (page - 1) * pageSize; 
           
           const totalBookings = await bookingService.countTotalBookingsByUser(userId);

@@ -28,7 +28,7 @@ class BookingRepository extends BaseRepository<bookingDocument>{
 
   async findBookingsByUserId(userId: string,  skip: number, limit: number){
     try {
-      const result = await Booking.find({ userId: userId }).populate('vendorId').skip(skip).limit(limit);
+      const result = await Booking.find({ userId: userId }).populate('vendorId').skip(skip).limit(limit).sort({ createdAt: -1 });
       return result;
     } catch (error) {
       throw error;

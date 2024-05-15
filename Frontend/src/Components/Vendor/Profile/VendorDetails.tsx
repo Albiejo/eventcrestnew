@@ -15,6 +15,8 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 export default function VendorDetails() {
+  
+  
   const location = useLocation();
   const path=location.pathname;
   
@@ -25,10 +27,10 @@ export default function VendorDetails() {
     (state: UserRootState) => state.user.userdata
   );
 
-useEffect(()=>{
-  console.log("user data ", user);
-  console.log("vendor data is",vendor);
-},[])
+  useEffect(()=>{
+    console.log("user data ", user);
+    console.log("vendor data is",vendor);
+  },[])
 
   const handleclick=()=>{
     axiosInstance.post(`/add-Favorite-Vendor?vendorId=${vendor?._id}&&userId=${user?._id}`,

@@ -3,7 +3,9 @@ import VendorListingCard from "../../Home/VendorListingCard";
 import { axiosInstance } from "../../../Api/axiosinstance";
 import UserRootState from "../../../Redux/rootstate/UserState";
 import { useSelector } from "react-redux";
-
+import toast from "react-hot-toast";
+import { Typography } from "@material-tailwind/react";
+import Pagination from "../../Common/Pagination";
 
 
 interface Vendors {
@@ -19,7 +21,7 @@ interface Vendors {
   }
 
   
-function Favorites() {
+function  Favorites() {
 
     const [vendors,setVendors]=useState<Vendors[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -39,6 +41,7 @@ function Favorites() {
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
+        toast.error("some issue occured , please try again later.." , {style:{background:'red'}})
       });
     },[currentPage])
 
@@ -47,55 +50,43 @@ function Favorites() {
       setCurrentPage(page);
     };
 
+
+
   return (
 
     <>
 
-    <div className="m-20 flex flex-row flex-wrap gap-4 mb-10">
-    {vendors.length === 0 ? (
-        <div className="flex items-center">
-        <p className="text-red-900 font-bold">Sorry, you have no favorited any profiles yet !</p>
-        <img src="https://t4.ftcdn.net/jpg/02/93/39/43/360_F_293394303_rukjodBxnDY37RXIqWipbWoE4XcUdTBL.jpg" alt="no favorites" />
-    </div>
+
+<div className="m-20 mb-10">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+    {vendors.length !== 0 ?  (
+      vendors.map((vendor, index) => (
+        <VendorListingCard {...vendor} key={index}/>
+      ))
     ) : (
-        vendors.map((vendor, index) => (
-            <VendorListingCard {...vendor} key={index}/>
-        ))
-    )} 
-    </div>
-
-
-    {vendors.length > 0 && (
-  <div className="flex justify-center mt-8">
-    <div className="space-x-2">
-      {currentPage > 1 && (
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          className="px-4 py-2 rounded-md bg-blue-900 text-gray-700"
+      <div className="flex items-center col-span-2 sm:col-span-2 lg:col-span-3">
+        <Typography
+          variant="h5"
+          color="red"
+          className="text-center mt-4"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         >
-          Previous
-        </button>
-      )}
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-        <button
-          key={page}
-          onClick={() => handlePageChange(page)}
-          className={`px-4 py-2 rounded-md ${page === currentPage ? 'bg-blue-900 text-white' : 'bg-gray-300 text-gray-700'}`}
-        >
-          {page}
-        </button>
-      ))}
-      {currentPage < totalPages && (
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          className="px-4 py-2 rounded-md bg-blue-900 text-gray-700"
-        >
-          Next
-        </button>
-      )}
-    </div>
+          No Favourite Profiles added!
+        </Typography>
+      </div>
+    ) }
   </div>
-)}
+
+  {vendors.length > 0 && (
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    />
+  )}
+</div>
 
     </>
   )

@@ -20,7 +20,7 @@ import { handleError } from "../Util/handleError";
 class PaymentController{
    
    
-async makePayment(req: Request, res: Response) {
+  async makePayment(req: Request, res: Response) {
 
     const stripeSecretKey = process.env.STRIPE_KEY as string;
     const stripe = new Stripe(stripeSecretKey, {
@@ -77,7 +77,6 @@ async makePayment(req: Request, res: Response) {
       handleError(res, error, "addPayment");
     }
   }
-
 
 
 

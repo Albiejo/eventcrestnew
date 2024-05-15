@@ -20,16 +20,8 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { conversationType } from '../../../Types/ConversationType';
 
-
-
-
-interface conversationType{
-  _id:string;
-  members: string[];
-  latestMessageTimestamp:Date;
-  timestamps: Date;
-}
 
 const ACCESS_KEY = import.meta.env.VITE_ACCESS_KEY|| "";
 const BUCKET_REGION = import.meta.env.VITE_BUCKET_REGION || "";
@@ -56,7 +48,6 @@ const Messenger = () => {
 
 
     const user = useSelector((state: UserRootState) => state.user.userdata);
-
     const [conversation , setconversation] = useState([]);
     const [currentchat , setcurrentchat]  = useState<conversationType | null>(null);
     const [messages , setmessages] = useState<MessageType[]>([]);
@@ -64,14 +55,7 @@ const Messenger = () => {
     const [newMessage, setnewMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [receiverdata , setReceiverdata] = useState<VendorData | null>(null);
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    const socket = useRef(io("https://eventcrest.online")); 
-
-    //typing status state
     const [typingstatus , settypingstatus] = useState(false);
-
-    //checking user active or not active
     const [Active , setActive] = useState(false);
     const [lastseen ,setlastseen] = useState("");
     const [notActive ,setNotActive] = useState("");
@@ -79,22 +63,22 @@ const Messenger = () => {
     const [file, setFile] =  useState<FileState | null>(null);
 
 
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const socket = useRef(io("http://localhost:3001")); 
+
     
-    //for checking lastseen
+
     const sendHeartbeat = () => {
         socket.current.emit("heartbeat");
     };
 
-    //for checking lastseen
     setInterval(sendHeartbeat, 60000);
 
 
-
-    //setting typing and no typing status
     useEffect(()=>{
 
         
-        socket.current = io("https://eventcrest.online");
+        socket.current = io("http://localhost:3001");
        
         socket.current.on("getMessage" , (data)=>{
             setArrivalMessage({
@@ -140,19 +124,24 @@ const Messenger = () => {
     },[arrivalMessage , currentchat])
 
 
+    const getconversation = async()=>{  
+      try {
+          const res = await axiosInstanceChat.get(`/?userId=${user?._id}`)
+          setconversation(res.data)
+      } catch (error) {
+          console.log(error)
+      }
+  }
+
+  useEffect(()=>{
+       
+    getconversation();
+
+  },[user?._id ])
 
 
-    //getting conversations
     useEffect(()=>{
-        const getconversation = async()=>{  
-            try {
-                const res = await axiosInstanceChat.get(`/?userId=${user?._id}`)
-                setconversation(res.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getconversation();
+
 
         const getmessages = async()=>{
             try {
@@ -163,9 +152,10 @@ const Messenger = () => {
                 console.log(error)
             }
         }
+        
         getmessages();
 
-    } , [user?._id ,currentchat])
+    } , [currentchat])
 
 
 
@@ -174,14 +164,16 @@ const Messenger = () => {
 
 
 
-   const receiverId = currentchat?.members.find((member)=>member !==user?._id)
+    const receiverId = currentchat?.members.find((member)=>member !==user?._id)
    
    
     const handleDivClick = (conversation:conversationType) => {
         setcurrentchat(conversation)
         const receiverId = currentchat?.members.find((member)=>member !==user?._id)
         checkUserActiveStatus(receiverId as string);
-        fetchreceiverdata();
+     
+          fetchreceiverdata();
+        
     }
 
     const checkUserActiveStatus = (receiverId:string) => {
@@ -198,7 +190,7 @@ const Messenger = () => {
     }
 
 
-        const handleSubmit=async(e: MouseEvent<HTMLButtonElement>)=>{
+    const handleSubmit=async(e: MouseEvent<HTMLButtonElement>)=>{
             e.preventDefault();
             sendHeartbeat();
             const message = {
@@ -214,12 +206,17 @@ const Messenger = () => {
                 text:newMessage
             })
 
-      axiosInstanceMsg.post('/' , message).then((res)=>{
-      setmessages([...messages , res.data]);
-      setnewMessage("")
-    }).catch ((error)=>{
-    console.log(error)
-    })
+            try {
+              axiosInstanceMsg.post('/' , message).then((res)=>{
+                setmessages([...messages , res.data]);
+                setnewMessage("")
+              }).catch ((error)=>{
+              console.log(error)
+              })
+            } catch (error) {
+              console.log(error)
+            }
+           getconversation();
     };
 
         const handleTyping = () => {
@@ -270,7 +267,6 @@ const Messenger = () => {
    
 
 
-        // image input
         const fileInputRef = useRef<HTMLInputElement>(null);
 
 
@@ -400,6 +396,8 @@ const Messenger = () => {
 
             <div className="chatbox">
                 <div className="chatboxWrapper">
+
+                
                     {
                         currentchat ?
                         (
