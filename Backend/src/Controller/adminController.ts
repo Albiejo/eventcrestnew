@@ -202,6 +202,16 @@ class AdminController {
     }
   }
 
+  async getAllAdminData(req: Request, res: Response){
+    try {
+      const adminData = await adminService.GetAllAdminDetails();
+      const adminEmails = adminData.map(admin => admin.email)
+      return res.status(200).json(adminEmails)
+    } catch (error) {
+      handleError(res , error , "getAllAdminData")
+    }
+  }
+
 
 };
 

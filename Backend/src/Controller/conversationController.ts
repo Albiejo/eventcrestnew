@@ -11,7 +11,6 @@ class conversationController{
 
   
   async createChat(req: Request, res: Response): Promise<void>{
-
     try {
       const {senderId , receiverId} = req.body;
       const chat=await conversationService.createConversation(senderId,receiverId)

@@ -30,20 +30,21 @@ class ConversationService {
 
   async findChat(userId:string) {
         try {
-            return await conversationRepository.findConversations(userId);
+        return await conversationRepository.findConversations(userId);
         } catch (error) {
         console.error("Error in findChat:", error);
         throw new CustomError("Error finding chats.", 500);
         }
   }
 
-  async updateConversation(id:string,text:string){
-        try {
-        return await conversationRepository.findByIdAndUpdate(id,text)
-        } catch (error) {
-        throw error;
-        }
-  }
+    async updateConversation(id:string,text:string){
+            try {
+          
+            return await conversationRepository.findByIdAndUpdate(id,text);
+            } catch (error) {
+            throw error;
+            }
+    }
 }
 
 export default new ConversationService();

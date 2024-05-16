@@ -1,5 +1,7 @@
 import { Document, Schema, model } from "mongoose";
 
+
+
 export interface conversationDocument extends Document {
     members: string[];
     latestMessage:string;

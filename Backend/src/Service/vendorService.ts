@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { createVendor , findvendorByEmail ,updateVerificationStatus, getTotalVendorsCount,findAllVendors ,UpdateVendorPassword ,AddVendorReview,findVerndorId , updateVendorprofData  , addReviewReplyById , requestForVerification ,
-  updateNotificationstatus ,clearNotification
+  updateNotificationstatus ,clearNotification ,ReviewStaticsData
 } from '../Repository/vendorRepository';
 import mongoose, { ObjectId } from 'mongoose';
 import vendor , { VendorDocument } from '../Model/Vendor';
@@ -314,6 +314,17 @@ export const clearalldata = async(vendorid:string):Promise<object>=>{
   } catch (error) {
     console.error("Error fetching clearalldata", error);
     throw new CustomError("Unable to clear all notifications now, try after some time.", 500);
+  }
+}
+
+
+export const getStatics= async(vendorid:string):Promise<object>=>{
+  try {
+    const data = await ReviewStaticsData(vendorid);
+    return data;
+  } catch (error) {
+    console.error("Error fetching review statics ", error);
+    throw new CustomError("Unable to find review staticics, try after some time.", 500);
   }
 }
 

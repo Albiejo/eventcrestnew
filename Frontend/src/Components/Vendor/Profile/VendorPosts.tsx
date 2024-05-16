@@ -85,6 +85,7 @@ const VendorPosts: React.FC = () => {
               imageUrl={selectedPost.imageUrl}
               open={open}
               handler={handleOpen}
+              vendorid={vendorid}
             />
           )}
         </div>

@@ -18,6 +18,8 @@ export class AdminRepository extends BaseRepository<AdminDocument>{
     return await Admin.findById(id);
   }
 
+  
+
 }
 
 

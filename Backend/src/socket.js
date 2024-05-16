@@ -62,7 +62,7 @@ console.log("socket server running");
 
 
     socket.on("sendMessage", ({ senderId, receiverId, text, imageName ,imageUrl}) => {
-        
+       
         const user = getUser(receiverId);
         if (user) {
             io.to(user.socketId).emit("getMessage", {

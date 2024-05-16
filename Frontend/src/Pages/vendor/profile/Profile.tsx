@@ -88,7 +88,7 @@ const Profile = () => {
       <Breadcrumb pageName="Profile" folderName="" />
 
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="relative z-20 h-full  md:h-65">
+        <div className="relative z-20  md:h-1/2">
           <img
             src={vendor?.coverpicUrl ? vendor.coverpicUrl : '/img/defaultImage.jpg'}
             alt="profile cover"

@@ -105,7 +105,7 @@ const MyNavbar=()=> {
       </Typography>
       
       
-      <Typography as="li" variant="h6" color="white" className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.ABOUT) ? 'text-white' : 'text-gray-500'}`} placeholder={undefined} placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+      <Typography as="li" variant="h6" color="white" className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.ABOUT) ? 'text-white' : 'text-gray-500'}`} placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
           <Link to={USERROUTES.ABOUT}>
               About
           </Link>

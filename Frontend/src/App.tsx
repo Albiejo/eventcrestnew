@@ -6,16 +6,20 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import MyNavbar from './Components/User/Navbar';
 import Layout from './Layout/UserLayout';
+import { SnackbarProvider } from 'notistack';
 
 
 const App: React.FC = () => {
   
   const location = useLocation();
   const isProfileRoute = location.pathname.startsWith('/profile');
+  const isAuthRoute = location.pathname.startsWith('/login') || location.pathname.startsWith('/signup');
+
 
   return (
     
     <>
+    <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
     <ToastContainer/>
       {isProfileRoute ? (
         <Layout>
@@ -25,12 +29,13 @@ const App: React.FC = () => {
               </div>
           </div>
         </Layout>
-      ) : (
+      ) : ( 
         <div >
-          <MyNavbar />
+           {!isAuthRoute && <MyNavbar />}
           <Outlet/>
         </div>
       )}
+      </SnackbarProvider>
     </>
   );
 };

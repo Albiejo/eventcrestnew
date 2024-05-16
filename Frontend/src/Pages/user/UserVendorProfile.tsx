@@ -19,7 +19,9 @@ import Footer from '../../Components/Home/Footer';
   import ProfileButtons from '../../Components/Vendor/ProfileButtons';
   import { useDispatch } from 'react-redux';
   import { setUserInfo } from '../../Redux/slices/UserSlice';
-import { setVendorInfo } from '../../Redux/slices/VendorSlice';
+  import { setVendorInfo } from '../../Redux/slices/VendorSlice';
+  import { VendorData } from '../../Types/vendorType';
+
 
   interface Review {
     _id:string;
@@ -30,25 +32,7 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
     content: string;
   }
   
-  interface Vendor {
-    _id: string;
-    name: string;
-    email: string;
-    phone: string;
-    city: string;
-    about: string;
-    isActive: boolean;
-    totalBooking: number;
-    coverpic: string;
-    logo: string;
-    reviews: Review[] | undefined;
-    logoUrl: string;
-    coverpicUrl: string;
-    favourite:Array<string>;
-    bookedDates:Array<string>
-    isVerified:boolean;
-    OverallRating:number;
-  }
+
   
   export function UserVendorProfile() {
     
@@ -60,7 +44,7 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
     const id :string= queryParams.get('vid') as string;
 
 
-    const [vendor, setVendor] = useState<Vendor>();
+    const [vendor, setVendor] = useState<VendorData>();
     const [favourite,setFavourite]=useState(false);
     const dispatch = useDispatch();
 
@@ -125,7 +109,7 @@ import { setVendorInfo } from '../../Redux/slices/VendorSlice';
     
     return (
       <>
-      <section className="relative block h-[80vh] overflow-hidden" ref={topRef}>
+      <section className="relative block h-[100vh] overflow-hidden" ref={topRef}>
         <div className="absolute top-0 left-0 w-full h-full bg-cover scale-105" style={{ backgroundImage: `url(${vendor?.coverpicUrl})` }} />
         <div className="absolute top-0 h-full w-full bg-black/20 bg-cover bg-center" />
       </section>

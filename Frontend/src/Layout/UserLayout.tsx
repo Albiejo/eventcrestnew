@@ -276,6 +276,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </ListItem>
             </Link>
 
+            <Link to={`${USERROUTES.CHAT}`}>
+              <ListItem
+                className={`${path.pathname == `${USERROUTES.LIVE}` ? "bg-gray-300" : ""}text-sm`}
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
+                <ListItemPrefix
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                >
+                  <i className="fa-solid fa-message"></i>
+                </ListItemPrefix>
+                Messages
+              </ListItem>
+            </Link>
+
             <hr className="my-2 border-blue-gray-50" />
             <Button
               onClick={handleLogout}

@@ -8,20 +8,30 @@ import {
   } from '@material-tailwind/react';
   import { useState } from 'react';
   import { useNavigate } from 'react-router-dom';
-  
+  import { useSnackbar } from 'notistack';
+
+
   const LiveStreaming = () => {
+
+
     const [roomId, setRoomId] = useState('');
     const navigate=useNavigate()
     const role_str="Host"
-  
+    const { enqueueSnackbar , closeSnackbar } = useSnackbar();
     const handleJoin=()=>{
-      
-      navigate(`/room/${roomId}/${role_str}`)
+      if (roomId.trim() === '') {
+        enqueueSnackbar('Pleas enter a room id !', { variant: 'error' , action :(key) => (
+          <button onClick={() => closeSnackbar(key)}>Close</button> )});
+      } else {
+       
+        navigate(`/room/${roomId}/${role_str}`);
+      }
+     
     }
   
     return (
-      <div>
-        <div className="flex pt-50 justify-center">
+      <div  style={{ backgroundImage: 'url(/imgs/livestreambg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' , height:'100vh' }}>
+        <div className="flex pt-50 h-full justify-center items-center">
           <Card
             className="mt-28 w-96 border-2 border-blue-900"
             placeholder={undefined}
@@ -41,7 +51,7 @@ import {
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
               >
-                Live
+                Enter Your Room Id
               </Typography>
               <Input
                 label="Room ID"

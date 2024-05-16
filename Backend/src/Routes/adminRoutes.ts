@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post('/login' , AdminController.Adminlogin);
 router.get('/logout' , AdminController.Adminlogout);
-
+router.get('/getAllAdmins' , adminController.getAllAdminData)
 router.get('/users' , UserController.allUsers);
 router.patch('/block-unblock' ,authenticate, UserController.Toggleblock)
 router.post('/refresh-token' , AdminController.createRefreshToken)

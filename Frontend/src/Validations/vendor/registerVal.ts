@@ -5,7 +5,6 @@ interface ValidationErrors {
     city:string;
     password: string;
     Confirmpassword:string;
-    vendor_type:string;
 
    }
    
@@ -16,7 +15,6 @@ interface ValidationErrors {
     city:string;
     password: string;
     Confirmpassword:string;
-    vendor_type:string;
    }
 
 export const validate =  (values: ValidationValues): ValidationErrors => {
@@ -27,7 +25,6 @@ export const validate =  (values: ValidationValues): ValidationErrors => {
        city:"",
        password: "",
        Confirmpassword:"",
-       vendor_type:""
        
    };
 
@@ -59,9 +56,6 @@ export const validate =  (values: ValidationValues): ValidationErrors => {
     errors.phone = 'Should contain 10 numbers';
   }
 
-  if (values.vendor_type.length===0) {
-    errors.vendor_type = 'Vendor Type is required';
-  }
 
 
    if (!values.password.trim()) {

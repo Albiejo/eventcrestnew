@@ -1,30 +1,38 @@
 
 import {
- Avatar,
- Dialog,
- DialogBody,
- DialogFooter,
- DialogHeader,
- Typography,
+  Avatar,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
+ 
+ } from "@material-tailwind/react";
+ 
+ 
+ import { useEffect, useState } from "react";
+ import { axiosInstanceVendor } from "../../../Api/axiosinstance";
+ import { VendorData } from "../../../Types/vendorType";
+ 
+ 
+ interface DialogWithImageProps {
+     imageUrl: string;
+     open: boolean;
+     handler: () => void;
+     vendorid:string
+    }
 
-} from "@material-tailwind/react";
-
-import VendorRootState from "../../../Redux/rootstate/VendorState";
-import { useSelector } from "react-redux";
-
-
-
-interface DialogWithImageProps {
-    imageUrl: string;
-    open: boolean;
-    handler: () => void;
-   }
-
-export function DialogWithImage({ imageUrl, open, handler }:DialogWithImageProps) {
-  const vendor = useSelector(
-    (state: VendorRootState) => state.vendor.vendordata
-  );
-
+ 
+ export function DialogWithImage({ imageUrl, open, handler , vendorid }:DialogWithImageProps) {
+  
+   const [vendor , setVendor] = useState<VendorData>();
+ 
+ 
+   useEffect(()=>{
+     axiosInstanceVendor.get(`/getVendor?Id=${vendorid}` , {withCredentials:true}).then((res)=>{
+       setVendor(res.data.data)
+     })
+   },[])
 
  return (
     <Dialog size="sm" open={open} handler={handler}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>

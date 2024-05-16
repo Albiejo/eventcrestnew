@@ -26,7 +26,6 @@ interface VendorType {
 
 interface VendorFormValues {
   name: string;
-  vendor_type: string;
   email: string;
   password: string;
   Confirmpassword:string;
@@ -36,7 +35,6 @@ interface VendorFormValues {
 
 const initialValues: VendorFormValues = {
   name: "",
-  vendor_type: "",
   email: "",
   password: "",
   Confirmpassword:"",
@@ -58,9 +56,10 @@ const VendorSignupForm = () => {
   password: "",
   Confirmpassword:"",
   city: "",
-  phone: "",
-  vendor_type: "",
+  phone: ""
   });
+  const [vendor_type, setVendorType] = useState<string>("");
+  const [vendorTypeError,setVendorTypeError]=useState("")
 
 
 
@@ -70,19 +69,11 @@ const VendorSignupForm = () => {
 
 
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement> | string
-  ) => {
-    if (typeof e === "string") {
-      setFormValues({ ...formValues, vendor_type: e });
-      
-
-    } else {
-      const { name, value } = e.target as HTMLInputElement & HTMLSelectElement;
-      setFormValues({ ...formValues, [name]: value });
-      const errors = validate({ ...formValues, [name]: value });
-      setFormErrors((prevErrors) => ({ ...prevErrors, ...errors }));
-    }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    const errors = validate({ ...formValues, [name]: value });
+    setFormErrors((prevErrors) => ({ ...prevErrors, ...errors }));
   };
   
 
@@ -106,11 +97,14 @@ const VendorSignupForm = () => {
     e.preventDefault();
     const errors = validate(formValues);
     setFormErrors(errors);
+    if(vendor_type.length==0){
+      setVendorTypeError("Choose Type")
+      return
+    }
     if (Object.values(errors).every((error) => error === "")) {
-    
       setIsLoading(true);
       axiosInstanceVendor
-        .post("/signup", formValues, { withCredentials: true })
+        .post("/signup", {...formValues , vendor_type}, { withCredentials: true })
         .then((response) => {
          
           if (response.data.email) {
@@ -177,16 +171,16 @@ const VendorSignupForm = () => {
           <Select
             label="Vendor Type"
             size="md"
-            onChange={(e) => {
-              if(e){
-                handleChange(e)
-              }
+            onChange={(e)=>{
+              setVendorType(e!);
+              setVendorTypeError("")
             }}
-            value={formValues.vendor_type}
+            value={vendor_type}
             name="vendor_type"
             color="pink"
             className="bg-white bg-opacity-50"
             placeholder={undefined}
+            key={vendor_type}
           >
             {vendorTypes.map((val, index) => 
             val.status?(
@@ -197,14 +191,14 @@ const VendorSignupForm = () => {
           </Select>
 
 
-          {formErrors.vendor_type ? (
-            <p
-              className="text-sm"
-              style={{ color: "red", marginBottom: -10, marginTop: -10 }}
-            >
-              {formErrors.vendor_type}
-            </p>
-          ) : null}
+          {vendorTypeError ? (
+                <p
+                  className="text-sm"
+                  style={{ color: "red", marginBottom: -10, marginTop: -10 }}
+                >
+                  {vendorTypeError}
+                </p>
+              ) : null}
           <Input
             label="City"
             onChange={handleChange}

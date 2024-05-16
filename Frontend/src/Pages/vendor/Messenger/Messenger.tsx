@@ -13,6 +13,7 @@ import {
     S3Client,
     PutObjectCommand,
     GetObjectCommand,
+    StorageClassAnalysisSchemaVersion,
   } from "@aws-sdk/client-s3";
   import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
   import { v4 as uuidv4 } from "uuid";
@@ -75,6 +76,8 @@ const Messenger = () => {
     const [file, setFile] = useState<FileState | null>(null);
     const [receiverdata , setReceiverdata] = useState<UserData | null>(null);
     const [Active , setActive] = useState(false);
+    const [lastseen ,setlastseen] = useState("");
+    const [notActive ,setNotActive] = useState("");
 
     const scrollRef = useRef<HTMLDivElement>(null);
     
@@ -109,7 +112,7 @@ const Messenger = () => {
 
 
      
-    },[typing])
+    },[typing , conversation , messages])
 
 
     useEffect(()=>{
@@ -128,20 +131,23 @@ const Messenger = () => {
 
 
 
-    //getting conversations
+    const getconversation = async()=>{  
+      try {
+          const res = await axiosInstanceChat.get(`/?userId=${vendorData?._id}`)
+          setconversation(res.data)
+          
+      } catch (error) {
+          console.log(error)
+      }
+  }
+
+  useEffect(()=>{
+    getconversation();
+  },[conversation])
+
+  
     useEffect(()=>{
-        const getconversation = async()=>{  
-            try {
-                const res = await axiosInstanceChat.get(`/?userId=${vendorData?._id}`)
-                setconversation(res.data)
-                
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getconversation();
-
-
+       
         const getmessages = async()=>{
           try {
               const res = await axiosInstanceMsg.get(`/?conversationId=${currentchat?._id}`)
@@ -153,25 +159,25 @@ const Messenger = () => {
       }
       getmessages();
 
-    } , [user?._id , currentchat])
+    } , [ currentchat])
 
     
+    const receiverId = currentchat?.members.find((member)=>member !== vendorData?._id)
 
-    const handleDivClick = (conversation:conversationType) => {
-      setcurrentchat(conversation)
-      const receiverId = currentchat?.members.find((member)=>member !==user?._id)
+    const handleDivClick = (conversation:conversationType) => {     
+      setcurrentchat(conversation)      
       checkUserActiveStatus(receiverId as string);
-      fetchreceiverdata();
+      fetchreceiverdata(receiverId as string);
   }
 
     const checkUserActiveStatus = (receiverId:string) => {
       socket.current.emit("checkUserActiveStatus", receiverId);
   };
 
-    const fetchreceiverdata = async()=>{
+    const fetchreceiverdata = async(receiverId:string)=>{
       await axiosInstanceAdmin.get(`/getUser?userId=${receiverId}`,{withCredentials:true})
       .then((res)=>{
-          setReceiverdata(res.data.data)
+          setReceiverdata(res.data)
       })
   }
 
@@ -182,7 +188,9 @@ const Messenger = () => {
         const message = {
             senderId: vendorData?._id,
             text:newMessage,
-            conversationId: currentchat?._id
+            conversationId: currentchat?._id,
+            image: "",
+            imageUrl: "",
         };
         
         socket.current.emit("sendMessage" , {
@@ -200,14 +208,28 @@ const Messenger = () => {
         } catch (error) {
             console.log(error)
         }
+        getconversation();
 
      };
 
-     //scrolling to bottom when new msg arrives
-     useEffect(()=>{
-        scrollRef.current?.scrollIntoView({ behavior:"smooth"})
-    
-     },[messages])
+     
+     useEffect(() => {
+
+      socket.current.on("userActiveStatus", ({  active , lastSeen }) => {
+          setActive(active);
+          const timePart = lastSeen.split(", ")[1];
+          setlastseen(timePart)
+          setNotActive("")
+      });
+
+      socket.current.on("userNotACtive", ({  message }) => {               
+          setNotActive(message);
+      });
+
+      scrollRef.current?.scrollIntoView({ behavior:"smooth"})
+
+}, [Active , lastseen ,notActive ,messages ,arrivalMessage]);
+
 
         const handleTyping = () => {
             socket.current.emit('typing', { receiverId: receiverId });
@@ -261,11 +283,8 @@ const Messenger = () => {
 
         const handleSend = async  (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
-        
             if (file) {
-        
               const imageName = uuidv4();
-        
               const params = {
                 Bucket: BUCKET_NAME!,
                 Key: imageName,
@@ -275,7 +294,6 @@ const Messenger = () => {
         
               const command = new PutObjectCommand(params);
               await s3.send(command);
-        
               const getObjectParams = {
                 Bucket: BUCKET_NAME!,
                 Key: imageName,
@@ -285,7 +303,7 @@ const Messenger = () => {
               const url = await getSignedUrl(s3, command2, { expiresIn: 86400 * 3 });
         
               const message = {
-                senderId: user?._id,
+                senderId: vendorData?._id,
                 text: "",
                 conversationId: currentchat?._id,
                 imageName: imageName,
@@ -293,7 +311,7 @@ const Messenger = () => {
               };
         
               socket.current?.emit("sendMessage", {
-                senderId: user?._id,
+                senderId: vendorData?._id,
                 receiverId,
                 text: "",
                 image: imageName,
@@ -320,30 +338,45 @@ const Messenger = () => {
    <DefaultLayout>
 
             <div className="messenger">
-            
+                     {conversation.length > 0 ? (
                         <div className="chatmenu">
                             <div className="chatmenuWrapper" >
                                 
-                            {conversation.map((c) => (
+                              
+                               { conversation.map((c) => (
                                     <div onClick={()=>handleDivClick(c)}>
                                     <Conversation  conversation={c} currentUser={{ _id: vendorData?._id || '' }}/>
                                     </div>
-                                ))}
+                                ))  
+                                }
 
                             
                             </div>
-                        </div>
+                        </div> ) : ""
+                      }
+
+
 
                         {!filemodal ? (
                         <div className="chatbox">
                             <div className="chatboxWrapper">
-                                  <div className="chatboxHeader">
+                                 {currentchat &&  <div className="chatboxHeader">
                                       <div className="headerUserInfo">
-                                          <img src="userAvatar.jpg" alt="User Avatar" className="avatar" />
-                                          <span className="username">Username</span>
+                                          <img src={receiverdata?.imageUrl ? receiverdata?.imageUrl : '/imgs/head.png' } alt="User Avatar" className="avatar" />
+                                          <span className="username">{receiverdata?.name}</span>
+                                          {notActive ? <span className="ml-2">Offline</span> : (
+                                    Active ? (
+                                        <>
+                                            <span className="ml-2">Active now</span>
+                                            <div className="inline-block w-3 h-3 ml-2  bg-green-500 rounded-full"></div>
+                                        </>
+                                    ) : `Last seen at ${lastseen}`
+                                )}
                                       </div>
                                       
-                                  </div>
+                                  </div> }
+
+                          
                                 {
                                     currentchat ?
                                     (
@@ -362,16 +395,14 @@ const Messenger = () => {
                                     </div>
                                 <div className="chatboxBottom">
                                 <div className="flex">
-                                {/* Hidden file input that triggers the file selection dialog */}
                                 <input
                                   type="file"
                                   ref={fileInputRef}
                                   style={{ display: "none" }}
                                   onChange={handleFileChange}
-                                />
+                                /> 
 
-                                {/* IconButton that triggers the hidden file input */}
-                                <IconButton
+                               <IconButton
                                   onClick={handleButtonClick}
                                   variant="text"
                                   className="rounded-full"
@@ -409,25 +440,23 @@ const Messenger = () => {
                                     <button onClick={() => setShowEmojiPicker(prev => !prev)}>😀</button>
                                     
                                 </div>
-                                    </> ):( <span className='noConversationtext'>open a conversation to start a chat</span>)
-                                }
+                                    </> ):( <span className="noConversationtext font-bold text-gray-900">open a conversation to start a chat</span> )
+                                } 
                                 
                             </div>
                         </div>
                         ) :
                         ( 
                         <>
-                            <div className="relative bg-gray-100 h-screen flex flex-col  justify-center items-center">
-                             
-                
+                            <div className="border-2 border-gray-900 relative w-3/4 bg-gray-100  flex flex-col  justify-center items-center">
                               <button
                                 onClick={handleRemoveFile}
-                                className="absolute top-2 left-2 pt-20"
+                                className="absolute top-2 left-6 pt-20"
                               >
-                                <i className="fa-solid fa-xmark"></i>
+                                <i className="fa-solid fa-xmark text-3xl"></i>
                               </button>
                 
-                              {/* Centered image */}
+                              
                               {file && (
                                 <img
                                   src={file?.filename}
@@ -435,12 +464,10 @@ const Messenger = () => {
                                   className="w-80 h-80 rounded object-cover"
                                 />
                               )}
-                
-                            
-                
+
                               <button
                                 type="button"
-                                className="rounded-full p-2 absolute bottom-4 right-4 cursor-pointer hover:bg-blue-gray-200"
+                                className="bg-green-700 rounded-full p-2 absolute bottom-14 right-4 cursor-pointer hover:bg-blue-gray-200"
                                 onClick={(e) => handleSend(e)}
                                 disabled={!file}
                               >

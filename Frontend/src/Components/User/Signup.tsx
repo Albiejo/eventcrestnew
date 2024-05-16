@@ -302,6 +302,28 @@ const UserSignupForm = () => {
                     </Typography>
                   </Link>
                 </Typography>
+
+                <Typography
+                variant="small"
+                color="black"
+                className="mt-3 flex justify-center"
+                placeholder={undefined}
+              >
+              Go back to 
+                <Link to="/">
+                  <Typography
+                    as="a"
+                    href="#signup"
+                    variant="small"
+                    color="black"
+                    className="ml-1 font-bold"
+                    placeholder={undefined}
+                  >
+                   
+                   Home
+                  </Typography>
+                </Link>
+                </Typography>
               </CardFooter>
             </Card>
           </GoogleOAuthProvider>

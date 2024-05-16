@@ -10,7 +10,7 @@ import {
   ListItemPrefix,
   Typography,
 } from "@material-tailwind/react";
-import { useState ,ChangeEvent, FormEvent } from "react";
+import { useState ,ChangeEvent, FormEvent, useEffect } from "react";
 
 import { axiosInstanceAdmin } from "../../Api/axiosinstance";
 import { toast } from "react-toastify";
@@ -23,6 +23,7 @@ const AdminAddAdmin = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [adminList , setAdminList] = useState([]);
 
      const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -79,55 +80,34 @@ const AdminAddAdmin = () => {
       };
     
 
+      useEffect(()=>{
+        axiosInstanceAdmin.get('/getAllAdmins',{withCredentials:true}).then((res)=>{
+          console.log(res.data)
+          setAdminList(res.data)
+        }).catch((error)=>{
+          console.log(error)
+        })
+      },[adminList])
 
     return (
 
         <div className="flex flex-col md:flex-row items-start mt-8">
        
         <div className="md:w-1/3 mb-8 md:mb-0 md:mr-">
-        <Card className="w-96"  placeholder={undefined}>
-      <List  placeholder={undefined}>
-        <ListItem  placeholder={undefined}>
-          <ListItemPrefix  placeholder={undefined}>
-            <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" placeholder={undefined} />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray"  placeholder={undefined}>
-              Tania Andrew
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal" placeholder={undefined}>
-              Software Engineer @ Material Tailwind
-            </Typography>
-          </div>
-        </ListItem>
-        <ListItem  placeholder={undefined}>
-          <ListItemPrefix  placeholder={undefined}>
-            <Avatar variant="circular" alt="alexander" src="https://docs.material-tailwind.com/img/face-2.jpg" placeholder={undefined} />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray" placeholder={undefined}>
-              Alexander
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal"  placeholder={undefined}>
-              Backend Developer @ Material Tailwind
-            </Typography>
-          </div>
-        </ListItem>
-        <ListItem  placeholder={undefined}>
-          <ListItemPrefix placeholder={undefined}>
-            <Avatar variant="circular" alt="emma" src="https://docs.material-tailwind.com/img/face-3.jpg" placeholder={undefined} />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray"  placeholder={undefined}>
-              Emma Willever
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal" placeholder={undefined}>
-              UI/UX Designer @ Material Tailwind
-            </Typography>
-          </div>
-        </ListItem>
-      </List>
+        <Card className="w-96" placeholder={undefined}>
+          <List placeholder={undefined}>
+            {adminList.map((email, index) => (
+              <ListItem key={index} placeholder={undefined}>
+                <div>
+                  <Typography variant="h6" color="red" placeholder={undefined}>
+                   {index+1 } :  {email}
+                  </Typography>
+                </div>
+              </ListItem>
+            ))}
+          </List>
         </Card>
+
         </div>
   
         <div className="md:w-1/2">

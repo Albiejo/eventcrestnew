@@ -18,6 +18,7 @@ import {
   createRefreshToken,
   updateNotification,
   clearalldata,
+  getStatics
   
 } from "../Service/vendorService";
 import moment from 'moment';
@@ -440,8 +441,8 @@ class VendorController {
       const vendorId: string = req.query.vendorid as string;
       const formData = req.body;
 
-      let coverpicFile, coverpicUrl;
-      let logoFile, logoUrl;
+      let coverpicFile, coverpicUrl="";
+      let logoFile, logoUrl="";
 
       if (req.files) {
         if (
@@ -450,6 +451,30 @@ class VendorController {
           Array.isArray(req.files["coverpic"])
         ) {
           coverpicFile = req.files["coverpic"][0];
+
+          const resizedCoverpicBuffer = await sharp(coverpicFile?.buffer)
+          .resize({ width: 1920, height: 1080, fit: "cover" })
+          .toBuffer();
+
+          const coverpicUploadParams = {
+            Bucket: process.env.BUCKET_NAME,
+            Key: coverpicFile?.originalname,
+            Body: resizedCoverpicBuffer,
+            ContentType: coverpicFile?.mimetype,
+          };
+
+          const covercommand = new PutObjectCommand(coverpicUploadParams);
+          await s3.send(covercommand);
+
+          const covercommand2 = new GetObjectCommand({
+            Bucket: process.env.BUCKET_NAME!,
+            Key: coverpicFile?.originalname,
+          });
+
+          coverpicUrl = await getSignedUrl(s3, covercommand2, {
+            expiresIn: 86400 * 3,
+          });
+
         }
 
         if (
@@ -458,57 +483,36 @@ class VendorController {
           Array.isArray(req.files["logo"])
         ) {
           logoFile = req.files["logo"][0];
+
+          const logoUploadParams = {
+            Bucket: process.env.BUCKET_NAME,
+            Key: logoFile?.originalname,
+            Body: logoFile?.buffer,
+            ContentType: logoFile?.mimetype,
+          };
+  
+          const logocommand = new PutObjectCommand(logoUploadParams);
+          await s3.send(logocommand);
+  
+          const logocommand2 = new GetObjectCommand({
+            Bucket: process.env.BUCKET_NAME!,
+            Key: logoFile?.originalname,
+          });
+          logoUrl = await getSignedUrl(s3, logocommand2, {
+            expiresIn: 86400 * 3,
+          });
+        }
         }
 
-        const resizedCoverpicBuffer = await sharp(coverpicFile?.buffer)
-          .resize({ width: 1920, height: 1080, fit: "cover" })
-          .toBuffer();
-
-        const coverpicUploadParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: coverpicFile?.originalname,
-          Body: resizedCoverpicBuffer,
-          ContentType: coverpicFile?.mimetype,
-        };
-
-        const covercommand = new PutObjectCommand(coverpicUploadParams);
-        await s3.send(covercommand);
-
-        const covercommand2 = new GetObjectCommand({
-          Bucket: process.env.BUCKET_NAME!,
-          Key: coverpicFile?.originalname,
-        });
-        coverpicUrl = await getSignedUrl(s3, covercommand2, {
-          expiresIn: 86400 * 3,
-        });
-
-        // Upload logo to S3
-        const logoUploadParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: logoFile?.originalname,
-          Body: logoFile?.buffer,
-          ContentType: logoFile?.mimetype,
-        };
-
-        const logocommand = new PutObjectCommand(logoUploadParams);
-        await s3.send(logocommand);
-
-        const logocommand2 = new GetObjectCommand({
-          Bucket: process.env.BUCKET_NAME!,
-          Key: logoFile?.originalname,
-        });
-        logoUrl = await getSignedUrl(s3, logocommand2, {
-          expiresIn: 86400 * 3,
-        });
-      }
+      const ExistingVendor = await getSingleVendor(vendorId);
 
       const updatedVendor = await updateVendorprof(
         vendorId,
         formData,
-        coverpicUrl,
-        logoUrl,
-        logoFile?.originalname,
-        coverpicFile?.originalname
+        coverpicUrl ? coverpicUrl : ExistingVendor.coverpicUrl,
+        logoUrl ? logoUrl : ExistingVendor.logoUrl,
+        logoFile?.originalname ? logoFile?.originalname : ExistingVendor.logo,
+        coverpicFile?.originalname ?  coverpicFile?.originalname : ExistingVendor.coverpic 
       );
       res.status(200).json(updatedVendor);
     } catch (error) {
@@ -658,6 +662,18 @@ class VendorController {
     }
   }
   
+
+  async getReviewStatistics(req: Request, res: Response): Promise<void> {
+    const { vendorId } = req.query as {vendorId:string}; 
+    try {
+      const percentages = await getStatics(
+        vendorId
+      );
+      res.status(200).json({ percentages }); 
+    } catch (error) {
+      handleError(res, error, "getReviewStatistics");
+    }
+  }
 
 
 

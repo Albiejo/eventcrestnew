@@ -162,6 +162,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </li>
             </Link>
 
+            <Link to={ADMINROUTES.ADMIN_ADDADMIN}>
+              <li
+                className={`${path.pathname == ADMINROUTES.ADMIN_ADDADMIN ? "bg-gray-300 text-gray-800" : "text-gray-900"} flex  rounded-md p-2 cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 
+              mt-2
+              `}
+              >
+                <i className="fa-solid fa-edit"></i>
+                <span
+                  className={`${!open && "hidden"} origin-left duration-200`}
+                >
+                  Add Admin
+                </span>
+              </li>
+            </Link>
+
             <button
               className={`text-gray-300 bg-blue-700 flex  rounded-md px-4 py-2 cursor-pointer hover:bg-light-red text-sm items-center gap-x-4 
               mt-6

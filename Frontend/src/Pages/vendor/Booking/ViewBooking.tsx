@@ -269,12 +269,13 @@ const ViewBooking = () => {
             </div>
           </CardBody>
         </Card>
-        
+        {bookings?.status=="Pending" && 
         <UpdateStatus
           bookingId={bookings._id}
           onStatusChange={handleStatusChange}
           vendorid={vid ?? ""} 
         />
+        }
       </div>
 
       <Card

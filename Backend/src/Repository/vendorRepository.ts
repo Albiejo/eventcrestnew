@@ -245,3 +245,24 @@ export const clearNotification = async(vendorid :string) => {
   }
   }
 
+
+  export const ReviewStaticsData = async (vendorid:string)=>{
+    try {
+      
+      const vendor = await Vendor.findById(vendorid);
+      const reviews = vendor?.reviews;
+      const ratingCounts = [0, 0, 0, 0, 0];
+      reviews?.forEach((review: Review) => {
+        if (review.rating >= 1 && review.rating <= 5) {
+          ratingCounts[review.rating - 1] += 1;
+        }
+      });
+      const totalReviews = reviews?.length;
+      const ratingPercentages = ratingCounts.map((count) =>
+        totalReviews! > 0 ? (count / totalReviews!) * 100 : 0
+      );
+      return ratingPercentages;
+    } catch (error) {
+      throw error;
+    }
+  }

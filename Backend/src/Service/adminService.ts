@@ -181,6 +181,17 @@ interface LoginResponse {
   }
 
 
+  async GetAllAdminDetails(){
+    try {
+      const adminDetails =  admin.find();
+      return adminDetails;
+    } catch (error) {
+      console.error("Error fetching all admin details", error);
+      throw error;
+    }
+  }
+
+
 
 
 }

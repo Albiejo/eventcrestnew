@@ -58,6 +58,6 @@ router.patch('/ClearAll' ,authenticate ,VendorController.clearAllNotifications)
 
 
 router.get("/revenue", VendorController.getRevenue);
-
+router.get("/reviews/statistics",vendorController.getReviewStatistics);
 
 export default router;
