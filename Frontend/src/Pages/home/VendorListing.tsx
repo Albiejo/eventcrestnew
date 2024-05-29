@@ -3,7 +3,7 @@ import { Card, CardBody, Typography } from '@material-tailwind/react';
 import VendorFilters from '../../Components/Home/VendorFilter';
 import VendorSort from '../../Components/Home/VendorSort';
 import Footer from '../../Components/Home/Footer';
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { axiosInstance } from '../../Api/axiosinstance';
 import LoadingSpinner from '../../Components/Common/LoadingSpinner';
 const VendorCard = lazy(() => import('../../Components/Home/VendorListingCard'));
@@ -39,7 +39,7 @@ const VendorsListing = () => {
   const location = useLocation();
   const [vendorTypeData, setVendorTypeData] = useState([]);
   const [category, setCategory] = useState<string[]>([]);
-  
+  const topRef = useRef<HTMLDivElement | null>(null);
 
    
 
@@ -47,8 +47,10 @@ const VendorsListing = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchParam = queryParams.get("search");
+   
     memoizedFetchVendors(currentPage, searchParam);
     fetchVendorTypes();
+   
   }, [currentPage , search , location.search , sortBy ,category ]);
 
 
@@ -68,7 +70,9 @@ const VendorsListing = () => {
         console.error("Error fetching vendors:", error);
       }
     };
-  }, [search, sortBy, category ]); 
+  }, [search, sortBy, category 
+
+  ]); 
 
 
 
@@ -104,12 +108,17 @@ const handleSortChange = (value: string) => {
 // implemented debouncing
 const debouncedFetchVendors = debounce(memoizedFetchVendors, 300);
 
-
+useEffect(() => {
+      
+  if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+}, []);
 
   return (
 
 <>
-<div className="relative min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/imgs/church.jpg')" }}>
+<div className="relative min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/imgs/church.jpg')" }}  ref={topRef}>
   <div className="absolute inset-0 " />
   <div className="max-w-md mx-auto">
     <Card className="mt-6 bg-gray-300" placeholder={undefined}>

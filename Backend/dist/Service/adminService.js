@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const Admin_1 = __importDefault(require("../Model/Admin"));
 const CustomError_1 = require("../Error/CustomError");
 const adminRepository_1 = require("../Repository/adminRepository");
 class AdminService {
@@ -33,7 +34,7 @@ class AdminService {
                 }
                 let refreshToken = existingAdmin.refreshToken;
                 if (!refreshToken) {
-                    refreshToken = jsonwebtoken_1.default.sign({ _id: existingAdmin._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+                    refreshToken = jsonwebtoken_1.default.sign({ _id: existingAdmin._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "10d" });
                 }
                 existingAdmin.refreshToken = refreshToken;
                 yield existingAdmin.save();
@@ -47,7 +48,7 @@ class AdminService {
             }
             catch (error) {
                 console.error("Error fetching login", error);
-                throw new CustomError_1.CustomError("Unable to fetch login", 500);
+                throw error;
             }
         });
     }
@@ -57,14 +58,15 @@ class AdminService {
                 const decoded = jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
                 const Admin = yield this.adminRepository.getById(decoded._id);
                 if (!Admin || Admin.refreshToken !== refreshToken) {
-                    throw new Error("Invalid refresh token");
+                    throw new Error("some token issue occured ,  please login again");
                 }
-                const accessToken = jsonwebtoken_1.default.sign({ _id: Admin._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+                const accessToken = jsonwebtoken_1.default.sign({ _id: Admin._id }, process.env.JWT_SECRET, { expiresIn: '1m' });
+                console.log("new access token created :", accessToken);
                 return accessToken;
             }
             catch (error) {
-                console.error("Error fetching createRefreshTokenAdmin", error);
-                throw new CustomError_1.CustomError("Unable to fetch createRefreshTokenAdmin", 500);
+                console.error("Error fetching RefreshTokenAdmin", error);
+                throw error;
             }
         });
     }
@@ -75,8 +77,8 @@ class AdminService {
                 return result;
             }
             catch (error) {
-                console.error("Error fetching getDatas", error);
-                throw new CustomError_1.CustomError("Unable to fetch getDatas", 500);
+                console.error("Error fetching admindata", error);
+                throw new CustomError_1.CustomError("Unable to fetch admindata , please login again.", 500);
             }
         });
     }
@@ -99,7 +101,7 @@ class AdminService {
             }
             catch (error) {
                 console.error("Error fetching updateNotification", error);
-                throw new CustomError_1.CustomError("Unable to fetch updateNotification", 500);
+                throw error;
             }
         });
     }
@@ -115,7 +117,60 @@ class AdminService {
             }
             catch (error) {
                 console.error("Error fetching countNotification", error);
-                throw new CustomError_1.CustomError("Unable to fetch countNotification", 500);
+                throw error;
+            }
+        });
+    }
+    clearalldata(adminId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let adminData = yield Admin_1.default.findById(adminId);
+                if (!adminData) {
+                    throw new Error('Admin not found');
+                }
+                adminData.notifications = [];
+                yield adminData.save();
+                adminData = yield Admin_1.default.findById(adminId);
+                return { adminData: adminData };
+            }
+            catch (error) {
+                console.error("Error fetching admin clearall notifications", error);
+                throw error;
+            }
+        });
+    }
+    createAnotherAdmin(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const existingAdmin = yield this.adminRepository.findByEmail(email);
+                if (existingAdmin) {
+                    throw new CustomError_1.CustomError("oops , this admin already exists !!", 400);
+                }
+                const salt = yield bcrypt_1.default.genSalt(10);
+                const hashedPassword = yield bcrypt_1.default.hash(password, salt);
+                const isAdmin = true;
+                const Wallet = 0;
+                const newAdmin = this.adminRepository.create({ email, password: hashedPassword, isAdmin, Wallet });
+                if (!newAdmin) {
+                    throw new CustomError_1.CustomError("some issue at creating admin , try after some time", 400);
+                }
+                return newAdmin;
+            }
+            catch (error) {
+                console.error("error creating admin by admin itself : ", error);
+                throw error;
+            }
+        });
+    }
+    GetAllAdminDetails() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminDetails = Admin_1.default.find();
+                return adminDetails;
+            }
+            catch (error) {
+                console.error("Error fetching all admin details", error);
+                throw error;
             }
         });
     }

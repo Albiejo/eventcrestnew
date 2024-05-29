@@ -79,10 +79,11 @@ import Footer from '../../Components/Home/Footer';
 
     const handleFavourite=async()=>{
       try {
-        if(!user){
-          toast.error("Please login first..")
-          return;
-        }
+
+          if(!user){
+            toast.error("Please login first..")
+            return;
+          }
         axiosInstance
         .post(`/add-Favorite-Vendor?vendorId=${id}&userId=${user?._id}`, { withCredentials: true })
         .then((response) => {

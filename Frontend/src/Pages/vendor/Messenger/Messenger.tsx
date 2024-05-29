@@ -13,7 +13,6 @@ import {
     S3Client,
     PutObjectCommand,
     GetObjectCommand,
-    StorageClassAnalysisSchemaVersion,
   } from "@aws-sdk/client-s3";
   import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
   import { v4 as uuidv4 } from "uuid";
@@ -360,21 +359,33 @@ const Messenger = () => {
                         {!filemodal ? (
                         <div className="chatbox">
                             <div className="chatboxWrapper">
-                                 {currentchat &&  <div className="chatboxHeader">
-                                      <div className="headerUserInfo">
-                                          <img src={receiverdata?.imageUrl ? receiverdata?.imageUrl : '/imgs/head.png' } alt="User Avatar" className="avatar" />
-                                          <span className="username">{receiverdata?.name}</span>
-                                          {notActive ? <span className="ml-2">Offline</span> : (
-                                    Active ? (
-                                        <>
-                                            <span className="ml-2">Active now</span>
-                                            <div className="inline-block w-3 h-3 ml-2  bg-green-500 rounded-full"></div>
-                                        </>
-                                    ) : `Last seen at ${lastseen}`
-                                )}
-                                      </div>
-                                      
-                                  </div> }
+                            {currentchat && (
+  <div className="chatboxHeader">
+    <div className="headerUserInfo flex items-center space-x-4">
+      <img 
+        src={receiverdata?.imageUrl ? receiverdata?.imageUrl : '/imgs/head.png'} 
+        alt="User Avatar" 
+        className="avatar" 
+      />
+      <div className="flex flex-col">
+        <span className="username">{receiverdata?.name}</span>
+        {notActive ? (
+          <span className="ml-2">Offline</span>
+        ) : (
+          Active ? (
+            <div className="flex items-center">
+              <span className="ml-2">Active now</span>
+              <div className="inline-block w-3 h-3 ml-2 bg-green-500 rounded-full"></div>
+            </div>
+          ) : (
+            <span >Last seen at {lastseen}</span>
+          )
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
 
                           
                                 {

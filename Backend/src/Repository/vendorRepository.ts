@@ -31,9 +31,6 @@ export const findAllVendors = async (page: number, pageSize: number , search:str
       query.vendor_type = { $in: categories };
     }
 
-   
-
-
     if (search && search.trim()) {
       query = {
         $or: [

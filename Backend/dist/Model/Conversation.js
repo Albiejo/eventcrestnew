@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const ConversationSchema = new mongoose_1.Schema({
     members: [String],
-    latestMessageTimestamp: Date
+    latestMessage: String
 }, {
     timestamps: true
 });

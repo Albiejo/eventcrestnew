@@ -15,7 +15,9 @@ class LiveController {
     getLive(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("live function called:");
                 const data = yield (0, liveService_1.getAllLive)();
+                console.log("live data :", data);
                 return res.status(200).json({ data: data });
             }
             catch (error) {

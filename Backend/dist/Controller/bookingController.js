@@ -20,7 +20,7 @@ class BookingController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { vendorId, userId } = req.query;
-                const { eventName, name, city } = req.body;
+                const { eventName, name, venue } = req.body;
                 const date = (0, moment_1.default)(req.body.date).format('DD-MM-YYYY');
                 const pin = parseInt(req.body.pin);
                 const mobile = parseInt(req.body.mobile);
@@ -31,7 +31,7 @@ class BookingController {
                 else {
                     try {
                         yield bookingService_1.default.acquireLockForDate(vendorId, date);
-                        const booking = yield bookingService_1.default.addABooking(eventName, name, city, date, pin, mobile, vendorId, userId);
+                        const booking = yield bookingService_1.default.addABooking(eventName, name, venue, date, pin, mobile, vendorId, userId);
                         yield bookingService_1.default.releaseLockForDate(vendorId, date);
                         return res.status(201).json({ booking: booking, message: "Booking done Successfully" });
                     }
@@ -51,7 +51,7 @@ class BookingController {
             try {
                 const userId = req.query.userId;
                 const page = parseInt(req.query.page) || 1;
-                const pageSize = parseInt(req.query.pageSize) || 10;
+                const pageSize = parseInt(req.query.pageSize) || 5;
                 const skip = (page - 1) * pageSize;
                 const totalBookings = yield bookingService_1.default.countTotalBookingsByUser(userId);
                 const totalPages = Math.ceil(totalBookings / pageSize);

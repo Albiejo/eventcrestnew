@@ -12,22 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminRepository = void 0;
-const Admin_1 = __importDefault(require("../Model/Admin"));
+const MessageModel_1 = __importDefault(require("../Model/MessageModel"));
 const baseRepository_1 = require("./baseRepository");
-class AdminRepository extends baseRepository_1.BaseRepository {
+class MessageRepository extends baseRepository_1.BaseRepository {
     constructor() {
-        super(Admin_1.default);
+        super(MessageModel_1.default);
     }
-    findByEmail(email) {
+    updateReadStatus(chatId, senderId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Admin_1.default.findOne({ email });
-        });
-    }
-    findById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Admin_1.default.findById(id);
+            return MessageModel_1.default.updateMany({ conversationId: chatId, senderId: senderId }, { $set: { isRead: true } });
         });
     }
 }
-exports.AdminRepository = AdminRepository;
+exports.default = new MessageRepository();

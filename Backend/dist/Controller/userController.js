@@ -35,7 +35,6 @@ const s3 = new client_s3_1.S3Client({
     region: process.env.BUCKET_REGION,
 });
 const randomImage = (bytes = 32) => crypto_1.default.randomBytes(bytes).toString("hex");
-var userObject;
 class UserController {
     UserSignup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -43,7 +42,7 @@ class UserController {
                 const { email, password, name, phone } = req.body;
                 const otpCode = yield (0, generateOtp_1.default)(email);
                 if (otpCode !== undefined) {
-                    userObject = {
+                    req.session.user = {
                         email: email,
                         password: password,
                         name: name,
@@ -51,7 +50,6 @@ class UserController {
                         otpCode: otpCode,
                         otpSetTimestamp: Date.now(),
                     };
-                    console.log("signup", userObject);
                     return res.status(200).json({ message: "OTP send to email for verification..", email: email });
                 }
                 else {
@@ -72,8 +70,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const otp = req.body.otp;
-                console.log("verify session data", userObject);
-                const userData = userObject;
+                const userData = req.session.user;
                 if (!userData) {
                     res.status(400).json({ error: "Session data not found. Please start the signup process again." });
                     return;
@@ -190,7 +187,7 @@ class UserController {
                 }
                 yield (0, userService_1.toggleUserBlock)(userId);
                 const User = yield User_1.default.findById(userId);
-                return res.status(200).json({ message: "User block status updated." });
+                return res.status(200).json({ message: "User block status updated.", User: User });
             }
             catch (error) {
                 (0, handleError_1.handleError)(res, error, "Toggleblock user block");

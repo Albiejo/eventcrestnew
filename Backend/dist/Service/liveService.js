@@ -18,8 +18,8 @@ const addNewLive = (url) => __awaiter(void 0, void 0, void 0, function* () {
         return data;
     }
     catch (error) {
-        console.error("Error fetching addNewLive", error);
-        throw new CustomError_1.CustomError("Unable to fetch addNewLive", 500);
+        console.error("Error fetching add New Live to database", error);
+        throw new CustomError_1.CustomError("unable to share stream link now , try after some time", 400);
     }
 });
 exports.addNewLive = addNewLive;
@@ -29,8 +29,8 @@ const changeStatus = (url) => __awaiter(void 0, void 0, void 0, function* () {
         return data;
     }
     catch (error) {
-        console.error("Error fetching changeStatus in live", error);
-        throw new CustomError_1.CustomError("Unable to fetch changeStatus in live", 500);
+        console.error("Error fetching change Status in live", error);
+        throw error;
     }
 });
 exports.changeStatus = changeStatus;
@@ -40,8 +40,8 @@ const getAllLive = () => __awaiter(void 0, void 0, void 0, function* () {
         return data;
     }
     catch (error) {
-        console.error("Error fetching getAllLive", error);
-        throw new CustomError_1.CustomError("Unable to fetch getAllLive", 500);
+        console.error("Error fetching get All Live stream links from DB", error);
+        throw new CustomError_1.CustomError("unable to retrieve stream links now, try after some time", 400);
     }
 });
 exports.getAllLive = getAllLive;

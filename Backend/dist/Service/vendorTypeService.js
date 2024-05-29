@@ -16,14 +16,14 @@ const addType = (type, status) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const existingType = yield (0, vendorTypeRepository_1.findVerndorTypeByName)(type);
         if (existingType) {
-            throw new Error("Type already exist!");
+            throw new CustomError_1.CustomError("Type already exist!", 400);
         }
         const new_type = yield (0, vendorTypeRepository_1.createVendorType)({ type, status: status === "Active" });
         return { message: "New Type added...", new_type };
     }
     catch (error) {
         console.error("Error fetching addType", error);
-        throw new CustomError_1.CustomError("Unable to fetch addType", 500);
+        throw error;
     }
 });
 exports.addType = addType;
@@ -34,13 +34,12 @@ const getTypes = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.error("Error fetching getTypes", error);
-        throw new CustomError_1.CustomError("Unable to fetch getTypes", 500);
+        throw new CustomError_1.CustomError("Unable to process get Types now , try after some time", 500);
     }
 });
 exports.getTypes = getTypes;
 const deleteVendorType = (vendorId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("service", vendorId, typeof vendorId);
         const deletedVendor = yield (0, vendorTypeRepository_1.VendorfindByIdAndDelete)(vendorId);
         if (!deletedVendor) {
             throw new Error('Vendor not found');
@@ -48,7 +47,7 @@ const deleteVendorType = (vendorId) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         console.error("Error fetching deleteVendorType", error);
-        throw new CustomError_1.CustomError("Unable to fetch deleteVendorType", 500);
+        throw error;
     }
 });
 exports.deleteVendorType = deleteVendorType;
@@ -58,7 +57,7 @@ const getSingleVendordata = (vendorId) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         console.error("Error fetching getSingleVendordata", error);
-        throw new CustomError_1.CustomError("Unable to fetch getSingleVendordata", 500);
+        throw error;
     }
 });
 exports.getSingleVendordata = getSingleVendordata;
@@ -69,7 +68,7 @@ const updateVendorType = (vendorTypeId, type, status) => __awaiter(void 0, void 
     }
     catch (error) {
         console.error("Error fetching updateVendorType", error);
-        throw new CustomError_1.CustomError("Unable to fetch updateVendorType", 500);
+        throw error;
     }
 });
 exports.updateVendorType = updateVendorType;

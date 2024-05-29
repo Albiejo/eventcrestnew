@@ -25,8 +25,8 @@ const addNewPayment = (amount, userId, vendorId, bookingId) => __awaiter(void 0,
         return booking;
     }
     catch (error) {
-        console.error("Error fetching addNewPayment", error);
-        throw new CustomError_1.CustomError("Unable to fetch addNewPayment", 500);
+        console.error("Error fetching add New Payment", error);
+        throw new CustomError_1.CustomError("unable to process payment now, try after some time", 400);
     }
 });
 exports.addNewPayment = addNewPayment;
@@ -36,8 +36,8 @@ const getPayments = (skip, limit) => __awaiter(void 0, void 0, void 0, function*
         return payment;
     }
     catch (error) {
-        console.error("Error fetching getPayments", error);
-        throw new CustomError_1.CustomError("Unable to fetch getPayments", 500);
+        console.error("Error fetching get Payments from DB", error);
+        throw new CustomError_1.CustomError("unable to get payments now , try after some time", 400);
     }
 });
 exports.getPayments = getPayments;
@@ -46,9 +46,8 @@ const updateAdminWallet = (amount) => __awaiter(void 0, void 0, void 0, function
         yield (0, paymentRepository_1.updateAdminWalletAmount)(amount);
     }
     catch (error) {
-        console.log(error);
-        console.error("Error fetching updateAdminWallet", error);
-        throw new CustomError_1.CustomError("Unable to fetch updateAdminWallet", 500);
+        console.error("Error fetching update Admin Wallet", error);
+        throw new CustomError_1.CustomError("unable to update wallet now , try after some time", 400);
     }
 });
 exports.updateAdminWallet = updateAdminWallet;
@@ -58,8 +57,8 @@ const CountTotalPayments = () => __awaiter(void 0, void 0, void 0, function* () 
         return count;
     }
     catch (error) {
-        console.error("Error fetching CountTotalPayments", error);
-        throw new CustomError_1.CustomError("Unable to fetch CountTotalPayments", 500);
+        console.error("Error fetching Count Total Payments", error);
+        throw error;
     }
 });
 exports.CountTotalPayments = CountTotalPayments;

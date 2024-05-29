@@ -200,13 +200,14 @@ const updateNotificationstatus = (userid, notifiID) => __awaiter(void 0, void 0,
 exports.updateNotificationstatus = updateNotificationstatus;
 const clearNotification = (userid) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userdata = yield User_1.default.findById(userid);
+        let userdata = yield User_1.default.findById(userid);
         if (!userdata) {
             throw new Error('User not found');
         }
         userdata.notifications = [];
         yield userdata.save();
-        return true;
+        userdata = yield User_1.default.findById(userid);
+        return { userdata: userdata };
     }
     catch (error) {
         throw error;

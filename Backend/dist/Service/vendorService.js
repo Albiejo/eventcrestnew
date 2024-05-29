@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearalldata = exports.updateNotification = exports.changeVerifyStatus = exports.verificationRequest = exports.addReviewReplyController = exports.updateVendorprof = exports.UpdateVendorPasswordService = exports.checkVendorCurrentPassword = exports.PushVendorReview = exports.ResetVendorPasswordService = exports.getSingleVendor = exports.toggleVendorBlock = exports.getVendors = exports.createRefreshToken = exports.CheckExistingVendor = exports.login = exports.signup = void 0;
+exports.getStatics = exports.clearalldata = exports.updateNotification = exports.changeVerifyStatus = exports.verificationRequest = exports.addReviewReplyController = exports.updateVendorprof = exports.UpdateVendorPasswordService = exports.checkVendorCurrentPassword = exports.PushVendorReview = exports.ResetVendorPasswordService = exports.getSingleVendor = exports.toggleVendorBlock = exports.getVendors = exports.createRefreshToken = exports.CheckExistingVendor = exports.login = exports.signup = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const vendorRepository_1 = require("../Repository/vendorRepository");
@@ -25,7 +25,7 @@ const signup = (email, password, name, phone, city, vendor_type) => __awaiter(vo
     try {
         const existingVendor = yield (0, vendorRepository_1.findvendorByEmail)(email);
         if (existingVendor) {
-            throw new Error('vendor already exists');
+            throw new CustomError_1.CustomError('vendor already exists', 400);
         }
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
@@ -39,7 +39,7 @@ const signup = (email, password, name, phone, city, vendor_type) => __awaiter(vo
     }
     catch (error) {
         console.error("Error fetching signup", error);
-        throw new CustomError_1.CustomError("Unable to fetch signup", 500);
+        throw error;
     }
 });
 exports.signup = signup;
@@ -69,7 +69,7 @@ const login = (email, password) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (error) {
         console.error("Error fetching login", error);
-        throw new CustomError_1.CustomError("Unable to fetch login", 500);
+        throw error;
     }
 });
 exports.login = login;
@@ -80,7 +80,7 @@ const CheckExistingVendor = (email) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         console.error("Error fetching CheckExistingVendor", error);
-        throw new CustomError_1.CustomError("Unable to fetch CheckExistingVendor", 500);
+        throw error;
     }
 });
 exports.CheckExistingVendor = CheckExistingVendor;
@@ -96,7 +96,7 @@ const createRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0, f
     }
     catch (error) {
         console.error("Error fetching createRefreshToken", error);
-        throw new CustomError_1.CustomError("Unable to fetch createRefreshToken", 500);
+        throw new CustomError_1.CustomError("Unable to process , please login again", 500);
     }
 });
 exports.createRefreshToken = createRefreshToken;
@@ -108,7 +108,7 @@ const getVendors = (page, pageSize, search, sortBy, category) => __awaiter(void 
     }
     catch (error) {
         console.error("Error fetching getVendors", error);
-        throw new CustomError_1.CustomError("Unable to fetch getVendors", 500);
+        throw error;
     }
 });
 exports.getVendors = getVendors;
@@ -116,7 +116,7 @@ const toggleVendorBlock = (vendorId) => __awaiter(void 0, void 0, void 0, functi
     try {
         const Vendor = yield Vendor_1.default.findById(vendorId);
         if (!Vendor) {
-            throw new Error('Vendor not found');
+            throw new CustomError_1.CustomError('Vendor not found', 400);
         }
         Vendor.isActive = !Vendor.isActive;
         yield Vendor.save();
@@ -132,7 +132,7 @@ const toggleVendorBlock = (vendorId) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (error) {
         console.error("Error fetching toggleVendorBlock", error);
-        throw new CustomError_1.CustomError("Unable to fetch toggleVendorBlock", 500);
+        throw error;
     }
 });
 exports.toggleVendorBlock = toggleVendorBlock;
@@ -146,7 +146,7 @@ const getSingleVendor = (vendorId) => __awaiter(void 0, void 0, void 0, function
     }
     catch (error) {
         console.error("Error fetching getSingleVendor", error);
-        throw new CustomError_1.CustomError("Unable to fetch getSingleVendor", 500);
+        throw error;
     }
 });
 exports.getSingleVendor = getSingleVendor;
@@ -161,7 +161,7 @@ const ResetVendorPasswordService = (password, email) => __awaiter(void 0, void 0
     }
     catch (error) {
         console.error("Error fetching ResetVendorPasswordService", error);
-        throw new CustomError_1.CustomError("Unable to fetch ResetVendorPasswordService", 500);
+        throw error;
     }
 });
 exports.ResetVendorPasswordService = ResetVendorPasswordService;
@@ -172,7 +172,7 @@ const PushVendorReview = (content, rating, username, vendorid) => __awaiter(void
     }
     catch (error) {
         console.error("Error fetching PushVendorReview", error);
-        throw new CustomError_1.CustomError("Unable to fetch PushVendorReview", 500);
+        throw new CustomError_1.CustomError("Unable to process Vendor Review now , try again after some time", 500);
     }
 });
 exports.PushVendorReview = PushVendorReview;
@@ -190,7 +190,7 @@ const checkVendorCurrentPassword = (Currentpassword, vendorid) => __awaiter(void
     }
     catch (error) {
         console.error("Error fetching checkVendorCurrentPassword", error);
-        throw new CustomError_1.CustomError("Unable to fetch checkVendorCurrentPassword", 500);
+        throw error;
     }
 });
 exports.checkVendorCurrentPassword = checkVendorCurrentPassword;
@@ -211,20 +211,19 @@ const UpdateVendorPasswordService = (newPassword, vendorid) => __awaiter(void 0,
     }
     catch (error) {
         console.error("Error fetching UpdateVendorPasswordService", error);
-        throw new CustomError_1.CustomError("Unable to fetch UpdateVendorPasswordService", 500);
+        throw error;
     }
 });
 exports.UpdateVendorPasswordService = UpdateVendorPasswordService;
 const updateVendorprof = (vendorId, formData, coverpicUrl, logoUrl, logo, coverpic) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("inside update service");
         yield (0, vendorRepository_1.updateVendorprofData)(vendorId, formData, coverpicUrl, logoUrl, logo, coverpic);
         const updatedVendor = yield (0, vendorRepository_1.findVerndorId)(vendorId);
         return updatedVendor;
     }
     catch (error) {
         console.error("Error fetching updateVendorprof", error);
-        throw new CustomError_1.CustomError("Unable to fetch updateVendorprof", 500);
+        throw new CustomError_1.CustomError("Unable to update Vendor profile  now , try again after some time", 500);
     }
 });
 exports.updateVendorprof = updateVendorprof;
@@ -235,7 +234,7 @@ const addReviewReplyController = (vendorId, content, reviewId) => __awaiter(void
     }
     catch (error) {
         console.error("Error fetching addReviewReplyController", error);
-        throw new CustomError_1.CustomError("Unable to fetch addReviewReplyController", 500);
+        throw new CustomError_1.CustomError("Unable to process  Review Reply now .", 500);
     }
 });
 exports.addReviewReplyController = addReviewReplyController;
@@ -246,7 +245,7 @@ const verificationRequest = (vendorId) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         console.error("Error fetching verificationRequest", error);
-        throw new CustomError_1.CustomError("Unable to fetch verificationRequest", 500);
+        throw new CustomError_1.CustomError("Unable to process verification Request now !", 500);
     }
 });
 exports.verificationRequest = verificationRequest;
@@ -258,7 +257,7 @@ function changeVerifyStatus(vendorId, status) {
         }
         catch (error) {
             console.error("Error fetching changeVerifyStatus", error);
-            throw new CustomError_1.CustomError("Unable to fetch changeVerifyStatus", 500);
+            throw error;
         }
     });
 }
@@ -270,7 +269,7 @@ const updateNotification = (vendorid, notifiId) => __awaiter(void 0, void 0, voi
     }
     catch (error) {
         console.error("Error fetching updateNotification", error);
-        throw new CustomError_1.CustomError("Unable to fetch updateNotification", 500);
+        throw new CustomError_1.CustomError("Unable to update Notification now , try after some time", 500);
     }
 });
 exports.updateNotification = updateNotification;
@@ -281,7 +280,18 @@ const clearalldata = (vendorid) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (error) {
         console.error("Error fetching clearalldata", error);
-        throw new CustomError_1.CustomError("Unable to fetch clearalldata", 500);
+        throw new CustomError_1.CustomError("Unable to clear all notifications now, try after some time.", 500);
     }
 });
 exports.clearalldata = clearalldata;
+const getStatics = (vendorid) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = yield (0, vendorRepository_1.ReviewStaticsData)(vendorid);
+        return data;
+    }
+    catch (error) {
+        console.error("Error fetching review statics ", error);
+        throw new CustomError_1.CustomError("Unable to find review staticics, try after some time.", 500);
+    }
+});
+exports.getStatics = getStatics;

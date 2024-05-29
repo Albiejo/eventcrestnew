@@ -23,8 +23,8 @@ const createPost = (caption, imageName, vendor_id) => __awaiter(void 0, void 0, 
         return { post: add };
     }
     catch (error) {
-        console.error("Error fetching createPost", error);
-        throw new CustomError_1.CustomError("Unable to fetch createPost", 500);
+        console.error("Error processing create Post", error);
+        throw new CustomError_1.CustomError("unable to create a post now , try after some time", 400);
     }
 });
 exports.createPost = createPost;
@@ -34,8 +34,8 @@ const getAllPosts = (vendor_id) => __awaiter(void 0, void 0, void 0, function* (
         return posts;
     }
     catch (error) {
-        console.error("Error fetching getAllPosts", error);
-        throw new CustomError_1.CustomError("Unable to fetch getAllPosts", 500);
+        console.error("Error fetching get All Posts from DB", error);
+        throw new CustomError_1.CustomError("unable to get posts now , try after some time", 400);
     }
 });
 exports.getAllPosts = getAllPosts;
@@ -45,8 +45,8 @@ const getPostById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
         return post;
     }
     catch (error) {
-        console.error("Error fetching getPostById", error);
-        throw new CustomError_1.CustomError("Unable to fetch getPostById", 500);
+        console.error("Error fetching get Post By Id from DB", error);
+        throw new CustomError_1.CustomError("unable to get posts now , try after some time", 400);
     }
 });
 exports.getPostById = getPostById;
@@ -56,8 +56,8 @@ const deletePost = (_id) => __awaiter(void 0, void 0, void 0, function* () {
         return post;
     }
     catch (error) {
-        console.error("Error fetching deletePost", error);
-        throw new CustomError_1.CustomError("Unable to fetch deletePost", 500);
+        console.error("Error processing delete Post", error);
+        throw new CustomError_1.CustomError("unable to delete posts now , try after some time", 400);
     }
 });
 exports.deletePost = deletePost;

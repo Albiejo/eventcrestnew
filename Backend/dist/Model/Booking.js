@@ -14,7 +14,7 @@ const bookingSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    city: {
+    venue: {
         type: String,
         required: true
     },

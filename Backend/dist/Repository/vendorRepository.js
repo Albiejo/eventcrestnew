@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearNotification = exports.updateNotificationstatus = exports.updateVerificationStatus = exports.requestForVerification = exports.addReviewReplyById = exports.updateVendorprofData = exports.findVerndorId = exports.AddVendorReview = exports.UpdateVendorPassword = exports.getTotalVendorsCount = exports.findAllVendors = exports.findvendorByEmail = exports.createVendor = void 0;
+exports.ReviewStaticsData = exports.clearNotification = exports.updateNotificationstatus = exports.updateVerificationStatus = exports.requestForVerification = exports.addReviewReplyById = exports.updateVendorprofData = exports.findVerndorId = exports.AddVendorReview = exports.UpdateVendorPassword = exports.getTotalVendorsCount = exports.findAllVendors = exports.findvendorByEmail = exports.createVendor = void 0;
 const Vendor_1 = __importDefault(require("../Model/Vendor"));
 const CustomError_1 = require("../Error/CustomError");
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -219,16 +219,36 @@ const updateNotificationstatus = (vendorid, notifid) => __awaiter(void 0, void 0
 exports.updateNotificationstatus = updateNotificationstatus;
 const clearNotification = (vendorid) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const vendorData = yield Vendor_1.default.findById(vendorid);
+        let vendorData = yield Vendor_1.default.findById(vendorid);
         if (!vendorData) {
             throw new Error('vendor not found');
         }
         vendorData.notifications = [];
         yield vendorData.save();
-        return true;
+        vendorData = yield Vendor_1.default.findById(vendorid);
+        return { vendorData: vendorData };
     }
     catch (error) {
         throw error;
     }
 });
 exports.clearNotification = clearNotification;
+const ReviewStaticsData = (vendorid) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const vendor = yield Vendor_1.default.findById(vendorid);
+        const reviews = vendor === null || vendor === void 0 ? void 0 : vendor.reviews;
+        const ratingCounts = [0, 0, 0, 0, 0];
+        reviews === null || reviews === void 0 ? void 0 : reviews.forEach((review) => {
+            if (review.rating >= 1 && review.rating <= 5) {
+                ratingCounts[review.rating - 1] += 1;
+            }
+        });
+        const totalReviews = reviews === null || reviews === void 0 ? void 0 : reviews.length;
+        const ratingPercentages = ratingCounts.map((count) => totalReviews > 0 ? (count / totalReviews) * 100 : 0);
+        return ratingPercentages;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.ReviewStaticsData = ReviewStaticsData;

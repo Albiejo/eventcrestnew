@@ -43,8 +43,8 @@ const signup = (email, password, name, phone) => __awaiter(void 0, void 0, void 
         return { user: newUser };
     }
     catch (error) {
-        console.error("Error fetching signup", error);
-        throw new CustomError_1.CustomError("Unable to fetch signup", 500);
+        console.error("Error processing user  signup", error);
+        throw error;
     }
 });
 exports.signup = signup;
@@ -53,14 +53,14 @@ const createRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0, f
         const decoded = jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
         const user = yield User_1.default.findById(decoded._id);
         if (!user || user.refreshToken !== refreshToken) {
-            throw new Error('Invalid refresh token');
+            throw new Error('Invalid refresh token , please login again.');
         }
         const accessToken = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         return accessToken;
     }
     catch (error) {
         console.error("Error fetching user createRefreshToken", error);
-        throw new CustomError_1.CustomError("Unable to fetch createRefreshToken", 500);
+        throw error;
     }
 });
 exports.createRefreshToken = createRefreshToken;
@@ -89,8 +89,8 @@ const login = (email, password) => __awaiter(void 0, void 0, void 0, function* (
         };
     }
     catch (error) {
-        console.error("Error fetching login", error);
-        throw new CustomError_1.CustomError("Unable to fetch login", 500);
+        console.error("Error processing  login", error);
+        throw error;
     }
 });
 exports.login = login;
@@ -100,8 +100,8 @@ const getUsers = (page, limit, search) => __awaiter(void 0, void 0, void 0, func
         return users;
     }
     catch (error) {
-        console.error("Error fetching getUsers", error);
-        throw new CustomError_1.CustomError("Unable to fetch getUsers", 500);
+        console.error("Error fetching get Users", error);
+        throw error;
     }
 });
 exports.getUsers = getUsers;
@@ -109,7 +109,7 @@ const toggleUserBlock = (userId) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const user = yield User_1.default.findById(userId);
         if (!user) {
-            throw new Error("User not found");
+            throw new CustomError_1.CustomError("User not found", 400);
         }
         user.isActive = !user.isActive; // Toggle the isActive field
         yield user.save();
@@ -121,11 +121,10 @@ const toggleUserBlock = (userId) => __awaiter(void 0, void 0, void 0, function* 
             timestamp: new Date()
         });
         yield Admin.save();
-        console.log("notifi pushed", Admin);
     }
     catch (error) {
-        console.error("Error fetching toggleUserBlock", error);
-        throw new CustomError_1.CustomError("Unable to fetch toggleUserBlock", 500);
+        console.error("Error fetching toggle User Block", error);
+        throw error;
     }
 });
 exports.toggleUserBlock = toggleUserBlock;
@@ -135,8 +134,8 @@ const findUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         return user;
     }
     catch (error) {
-        console.error("Error fetching findUser", error);
-        throw new CustomError_1.CustomError("Unable to fetch findUser", 500);
+        console.error("Error fetching find User", error);
+        throw error;
     }
 });
 exports.findUser = findUser;
@@ -148,12 +147,12 @@ const generateOtpForPassword = (email) => __awaiter(void 0, void 0, void 0, func
         }
         else {
             console.log("error on generating otp , please fix ..");
-            throw new Error(`couldn't generate otp, error occcured ,please fix !!`);
+            throw new Error(`couldn't generate otp, error occcured ,please try after some time !!`);
         }
     }
     catch (error) {
         console.error("Error fetching generateOtpForPassword", error);
-        throw new CustomError_1.CustomError("Unable to fetch generateOtpForPassword", 500);
+        throw new CustomError_1.CustomError("Unable to generate otp now , try after some time", 500);
     }
 });
 exports.generateOtpForPassword = generateOtpForPassword;
@@ -168,7 +167,7 @@ const ResetPassword = (password, email) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (error) {
         console.error("Error fetching ResetPassword", error);
-        throw new CustomError_1.CustomError("Unable to fetch ResetPassword", 500);
+        throw new CustomError_1.CustomError("Unable to update password  now , try after some time", 500);
     }
 });
 exports.ResetPassword = ResetPassword;
@@ -178,8 +177,8 @@ const CheckExistingUSer = (email) => __awaiter(void 0, void 0, void 0, function*
         return existingUser;
     }
     catch (error) {
-        console.error("Error fetching CheckExistingUSer", error);
-        throw new CustomError_1.CustomError("Unable to fetch CheckExistingUSer", 500);
+        console.error("Error fetching Check Existing USer", error);
+        throw error;
     }
 });
 exports.CheckExistingUSer = CheckExistingUSer;
@@ -207,7 +206,7 @@ const gLogin = (email, password) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         console.error("Error fetching gLogin", error);
-        throw new CustomError_1.CustomError("Unable to fetch gLogin", 500);
+        throw error;
     }
 });
 exports.gLogin = gLogin;
@@ -224,7 +223,7 @@ const googleSignup = (email, password, name) => __awaiter(void 0, void 0, void 0
     }
     catch (error) {
         console.error("Error fetching googleSignup", error);
-        throw new CustomError_1.CustomError("Unable to fetch googleSignup", 500);
+        throw error;
     }
 });
 exports.googleSignup = googleSignup;
@@ -268,15 +267,13 @@ const FavoriteVendor = (vendorId, userId) => __awaiter(void 0, void 0, void 0, f
     }
     catch (error) {
         console.error("Error fetching FavoriteVendor", error);
-        throw new CustomError_1.CustomError("Unable to fetch FavoriteVendor", 500);
+        throw new CustomError_1.CustomError("Unable to favorite vendor  now , try after some time", 500);
     }
 });
 exports.FavoriteVendor = FavoriteVendor;
 const checkCurrentPassword = (currentpassword, userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const existingUser = yield (0, userRepository_1.findUserById)(userId);
-        console.log("existingUser is", existingUser);
-        console.log("current password in service is:", currentpassword);
         if (!existingUser) {
             throw new Error("user not found");
         }
@@ -288,7 +285,7 @@ const checkCurrentPassword = (currentpassword, userId) => __awaiter(void 0, void
     }
     catch (error) {
         console.error("Error fetching checkCurrentPassword", error);
-        throw new CustomError_1.CustomError("Unable to fetch checkCurrentPassword", 500);
+        throw new CustomError_1.CustomError("Unable to check current  password  now , try after some time", 500);
     }
 });
 exports.checkCurrentPassword = checkCurrentPassword;
@@ -316,7 +313,7 @@ const UpdatePasswordService = (newPassword, userId) => __awaiter(void 0, void 0,
     }
     catch (error) {
         console.error("Error fetching UpdatePasswordService", error);
-        throw new CustomError_1.CustomError("Unable to fetch UpdatePasswordService", 500);
+        throw new CustomError_1.CustomError("Unable to update password now , try after some time", 500);
     }
 });
 exports.UpdatePasswordService = UpdatePasswordService;
@@ -330,7 +327,7 @@ const UpdateUserProfile = (userId, name, phone, image, imageUrl) => __awaiter(vo
     }
     catch (error) {
         console.error("Error fetching UpdateUserProfile", error);
-        throw new CustomError_1.CustomError("Unable to fetch UpdateUserProfile", 500);
+        throw new CustomError_1.CustomError("Unable to update profile now , try after some time", 500);
     }
 });
 exports.UpdateUserProfile = UpdateUserProfile;
@@ -341,7 +338,7 @@ const FavoriteVendors = (userid, page, pageSize) => __awaiter(void 0, void 0, vo
     }
     catch (error) {
         console.error("Error fetching FavoriteVendors", error);
-        throw new CustomError_1.CustomError("Unable to fetch FavoriteVendors", 500);
+        throw new CustomError_1.CustomError("Unable to fetch Favorite Vendors now , try after some time", 500);
     }
 });
 exports.FavoriteVendors = FavoriteVendors;
@@ -352,7 +349,7 @@ const updateNotification = (userid, notifiID) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         console.error("Error fetching updateNotification", error);
-        throw new CustomError_1.CustomError("Unable to fetch updateNotification", 500);
+        throw new CustomError_1.CustomError("Unable to update Notification , try after some time", 500);
     }
 });
 exports.updateNotification = updateNotification;
@@ -363,7 +360,7 @@ const clearalldata = (userid) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         console.error("Error fetching clearalldata", error);
-        throw new CustomError_1.CustomError("Unable to fetch clearalldata", 500);
+        throw new CustomError_1.CustomError("Unable to clear all notification , try after some time. ", 500);
     }
 });
 exports.clearalldata = clearalldata;

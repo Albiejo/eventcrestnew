@@ -42,7 +42,7 @@ router.post('/add-payment', UserAuth_1.default, paymentController_1.default.addP
 router.get('/single-booking', UserAuth_1.default, bookingController_1.default.getBookingsById);
 router.patch('/MarkAsRead', UserAuth_1.default, userController_1.default.MarkRead);
 router.patch('/markCancel', UserAuth_1.default, bookingController_1.default.cancelBooking);
-router.get('/getVendorTypes', UserAuth_1.default, vendorTypeController_1.default.getVendorTypes);
+router.get('/getVendorTypes', vendorTypeController_1.default.getVendorTypes);
 router.post('/subscribe', userController_1.default.subscribe);
 router.get('/get-live', UserAuth_1.default, livecontroller_1.default.getLive);
 router.post('/add-live', UserAuth_1.default, livecontroller_1.default.addLive);

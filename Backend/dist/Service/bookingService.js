@@ -30,16 +30,16 @@ class bookingService {
             }
             catch (error) {
                 console.error("Error fetching checkIfDatePresent", error);
-                throw new CustomError_1.CustomError("Unable to fetch checkIfDatePresent", 500);
+                throw new CustomError_1.CustomError("unable to check Booking dates  now , try after some time", 400);
             }
         });
     }
-    addABooking(eventName, name, city, date, pin, mobile, vendorId, userId) {
+    addABooking(eventName, name, venue, date, pin, mobile, vendorId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const vendorIdObjectId = new mongoose_1.default.Types.ObjectId(vendorId);
                 const userIdObjectId = new mongoose_1.default.Types.ObjectId(userId);
-                const booking = yield bookingRepository_1.default.create({ eventName, name, city, date, pin, mobile, vendorId: vendorIdObjectId, userId: userIdObjectId });
+                const booking = yield bookingRepository_1.default.create({ eventName, name, venue, date, pin, mobile, vendorId: vendorIdObjectId, userId: userIdObjectId });
                 yield Vendor_1.default.findByIdAndUpdate(vendorId, {
                     $push: { bookedDates: date },
                 });
@@ -57,8 +57,8 @@ class bookingService {
                 return booking;
             }
             catch (error) {
-                console.error("Error fetching addABooking", error);
-                throw new CustomError_1.CustomError("Unable to fetch addABooking", 500);
+                console.error("Error fetching add Booking", error);
+                throw new CustomError_1.CustomError("unable to process Booking now , try after some time", 400);
             }
         });
     }
@@ -69,8 +69,8 @@ class bookingService {
                 return bookings;
             }
             catch (error) {
-                console.error("Error fetching getAllBookingsByUser", error);
-                throw new CustomError_1.CustomError("Unable to fetch getAllBookingsByUser", 500);
+                console.error("Error fetching get All Bookings By User", error);
+                throw new CustomError_1.CustomError("unable to get Bookings now , try after some time", 400);
             }
         });
     }
@@ -92,8 +92,8 @@ class bookingService {
                 yield vendorData.save();
             }
             catch (error) {
-                console.error("Error fetching acquireLockForDate", error);
-                throw new CustomError_1.CustomError("Unable to fetch acquireLockForDate", 500);
+                console.error("Error fetching acquire Lock For Date in booking", error);
+                throw new CustomError_1.CustomError("unable to process Booking now , try after some time", 400);
             }
         });
     }
@@ -111,8 +111,8 @@ class bookingService {
                 }
             }
             catch (error) {
-                console.error("Error fetching releaseLockForDate", error);
-                throw new CustomError_1.CustomError("Unable to fetch releaseLockForDate", 500);
+                console.error("Error fetching release Lock For Date in booking", error);
+                throw new CustomError_1.CustomError("unable to process Booking now , try after some time", 400);
             }
         });
     }
@@ -123,8 +123,8 @@ class bookingService {
                 return bookings;
             }
             catch (error) {
-                console.error("Error fetching getAllBookingsByVendor", error);
-                throw new CustomError_1.CustomError("Unable to fetch getAllBookingsByVendor", 500);
+                console.error("Error fetching get All Bookings  By Vendor", error);
+                throw new CustomError_1.CustomError("unable to get Bookings now , try after some time", 400);
             }
         });
     }
@@ -135,8 +135,8 @@ class bookingService {
                 return bookings;
             }
             catch (error) {
-                console.error("Error fetching getAllBookingsById", error);
-                throw new CustomError_1.CustomError("Unable to fetch getAllBookingsById", 500);
+                console.error("Error fetching get All Bookings By Id", error);
+                throw new CustomError_1.CustomError("unable to get Bookings now , try after some time", 400);
             }
         });
     }
@@ -147,8 +147,8 @@ class bookingService {
                 return bookings;
             }
             catch (error) {
-                console.error("Error fetching updateStatusById", error);
-                throw new CustomError_1.CustomError("Unable to fetch updateStatusById", 500);
+                console.error("Error fetching update booking Status By Id", error);
+                throw new CustomError_1.CustomError("unable to update Booking now , try after some time", 400);
             }
         });
     }
@@ -159,8 +159,8 @@ class bookingService {
                 return totalBookings;
             }
             catch (error) {
-                console.error("Error fetching countTotalBookingsByUser", error);
-                throw new CustomError_1.CustomError("Unable to fetch countTotalBookingsByUser", 500);
+                console.error("Error fetching count Total bookings By User", error);
+                throw new CustomError_1.CustomError("unable to count Bookings now , try after some time", 400);
             }
         });
     }
@@ -171,8 +171,8 @@ class bookingService {
                 return result;
             }
             catch (error) {
-                console.error("Error fetching MarkBookingCancel", error);
-                throw new CustomError_1.CustomError("Unable to fetch MarkBookingCancel", 500);
+                console.error("Error procesing booking cancellation", error);
+                throw new CustomError_1.CustomError("unable to update Booking now , try after some time", 400);
             }
         });
     }
@@ -184,7 +184,7 @@ class bookingService {
             }
             catch (error) {
                 console.error("Error fetching getAllBookings", error);
-                throw new CustomError_1.CustomError("Unable to fetch getAllBookings", 500);
+                throw new CustomError_1.CustomError("unable to get Bookings now , try after some time", 400);
             }
         });
     }

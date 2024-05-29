@@ -260,11 +260,7 @@ class VendorController {
       const pageSize: number = parseInt(req.query.pageSize as string) || 8;
       let sortCriteria: string | null = null;
       const category: string = req.query.category as string;
-      
-      
-
-      
-
+  
       switch (sortBy) {
         case "rating":
           sortCriteria = "OverallRating";
@@ -445,6 +441,7 @@ class VendorController {
       let logoFile, logoUrl="";
 
       if (req.files) {
+        
         if (
           typeof req.files === "object" &&
           "coverpic" in req.files &&

@@ -10,6 +10,7 @@ const postController_1 = __importDefault(require("../Controller/postController")
 const multer_1 = __importDefault(require("multer"));
 const bookingController_1 = __importDefault(require("../Controller/bookingController"));
 const VendorAuth_1 = __importDefault(require("../Middleware/VendorAuth"));
+const vendorController_2 = __importDefault(require("../Controller/vendorController"));
 const router = express_1.default.Router();
 const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage: storage });
@@ -39,4 +40,5 @@ router.post('/verification-request', VendorAuth_1.default, vendorController_1.de
 router.patch('/MarkAsRead', VendorAuth_1.default, vendorController_1.default.MarkasRead);
 router.patch('/ClearAll', VendorAuth_1.default, vendorController_1.default.clearAllNotifications);
 router.get("/revenue", vendorController_1.default.getRevenue);
+router.get("/reviews/statistics", vendorController_2.default.getReviewStatistics);
 exports.default = router;

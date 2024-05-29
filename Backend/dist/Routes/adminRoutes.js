@@ -15,6 +15,7 @@ const bookingController_1 = __importDefault(require("../Controller/bookingContro
 const router = express_1.default.Router();
 router.post('/login', adminController_1.default.Adminlogin);
 router.get('/logout', adminController_1.default.Adminlogout);
+router.get('/getAllAdmins', adminController_2.default.getAllAdminData);
 router.get('/users', userController_1.default.allUsers);
 router.patch('/block-unblock', AdminAuth_1.default, userController_1.default.Toggleblock);
 router.post('/refresh-token', adminController_1.default.createRefreshToken);
@@ -35,4 +36,6 @@ router.get('/getall-payment-details', AdminAuth_1.default, paymentController_1.d
 router.get('/getallBookings', AdminAuth_1.default, bookingController_1.default.getallBookings);
 router.get('/revenue', AdminAuth_1.default, adminController_2.default.getRevenue);
 router.get('/notificationCount', AdminAuth_1.default, adminController_2.default.countNotifications);
+router.patch('/ClearAll', AdminAuth_1.default, adminController_2.default.clearAllNotification);
+router.post('/createAdmin', adminController_2.default.AdmincreateAdmin);
 exports.default = router;

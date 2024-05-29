@@ -12,19 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Conversation_1 = __importDefault(require("../Model/Conversation"));
 const handleError_1 = require("../Util/handleError");
+const conversationService_1 = __importDefault(require("../Service/conversationService"));
 class conversationController {
     createChat(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { senderId, receiverId } = req.body;
             try {
-                let chat = yield Conversation_1.default.findOne({ members: [senderId, receiverId] });
-                if (!chat) {
-                    const newChat = new Conversation_1.default({ members: [senderId, receiverId] });
-                    chat = yield newChat.save();
-                }
-                return res.status(200).json(chat);
+                const { senderId, receiverId } = req.body;
+                const chat = yield conversationService_1.default.createConversation(senderId, receiverId);
+                res.status(200).json(chat);
             }
             catch (error) {
                 (0, handleError_1.handleError)(res, error, "createChat");
@@ -33,11 +29,10 @@ class conversationController {
     }
     findUserchats(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { userId } = req.query;
             try {
-                const chats = yield Conversation_1.default.find({ members: { $in: [userId] } });
-                chats.sort((a, b) => (b.latestMessageTimestamp || new Date()).getTime() - (a.latestMessageTimestamp || new Date()).getTime());
-                return res.status(200).json(chats);
+                const userId = req.query.userId;
+                const chats = yield conversationService_1.default.findChat(userId);
+                res.status(200).json(chats);
             }
             catch (error) {
                 (0, handleError_1.handleError)(res, error, "findUserchats");

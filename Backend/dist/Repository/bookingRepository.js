@@ -35,7 +35,7 @@ class BookingRepository extends baseRepository_1.BaseRepository {
     findBookingsByUserId(userId, skip, limit) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield Booking_1.default.find({ userId: userId }).populate('vendorId').skip(skip).limit(limit);
+                const result = yield Booking_1.default.find({ userId: userId }).populate('vendorId').skip(skip).limit(limit).sort({ createdAt: -1 });
                 return result;
             }
             catch (error) {

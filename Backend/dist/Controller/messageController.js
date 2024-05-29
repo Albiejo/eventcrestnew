@@ -12,23 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const MessageModel_1 = __importDefault(require("../Model/MessageModel"));
-const Conversation_1 = __importDefault(require("../Model/Conversation"));
+const messageService_1 = __importDefault(require("../Service/messageService"));
 const handleError_1 = require("../Util/handleError");
+const conversationService_1 = __importDefault(require("../Service/conversationService"));
 class messageController {
     createMessage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { conversationId, senderId, text, imageName, imageUrl } = req.body;
-            const message = new MessageModel_1.default({
-                conversationId,
-                senderId,
-                text,
-                imageName,
-                imageUrl
-            });
             try {
-                const response = yield message.save();
-                yield Conversation_1.default.findByIdAndUpdate(conversationId, { latestMessageTimestamp: new Date() }, { new: true });
+                const { conversationId, senderId, text, imageName, imageUrl } = req.body;
+                const response = yield messageService_1.default.createMessage(conversationId, senderId, text, imageName, imageUrl);
+                yield conversationService_1.default.updateConversation(conversationId, text);
                 res.status(200).json(response);
             }
             catch (error) {
@@ -40,11 +33,23 @@ class messageController {
         return __awaiter(this, void 0, void 0, function* () {
             const conversationId = req.query.conversationId;
             try {
-                const messages = yield MessageModel_1.default.find({ conversationId: conversationId });
-                return res.status(200).json(messages);
+                const messages = yield messageService_1.default.findMessages(conversationId);
+                res.status(200).json(messages);
             }
             catch (error) {
                 (0, handleError_1.handleError)(res, error, "getMessages");
+            }
+        });
+    }
+    changeRead(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { chatId, senderId } = req.body;
+                const messages = yield messageService_1.default.changeReadStatus(chatId, senderId);
+                res.status(200).json({ messages });
+            }
+            catch (error) {
+                (0, handleError_1.handleError)(res, error, "changeRead");
             }
         });
     }

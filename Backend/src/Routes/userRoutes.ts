@@ -59,7 +59,7 @@ router.get('/single-booking', authenticate ,BookingController.getBookingsById);
 router.patch('/MarkAsRead' ,authenticate, UserController.MarkRead)
 router.patch('/markCancel' , authenticate,BookingController.cancelBooking)
 
-router.get('/getVendorTypes'   ,vendorTypeController.getVendorTypes);
+router.get('/getVendorTypes' ,vendorTypeController.getVendorTypes);
 
 router.post('/subscribe',UserController.subscribe)
 

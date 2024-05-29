@@ -41,7 +41,6 @@ class AdminController {
                 const { email, password } = req.body;
                 const { refreshToken, token, adminData, message } = yield adminService_1.default.login(email, password);
                 res.cookie('jwtToken', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-                console.log("testing");
                 return res.status(200).json({ token, refreshToken, adminData, message });
             }
             catch (error) {
@@ -182,6 +181,42 @@ class AdminController {
             }
             catch (error) {
                 (0, handleError_1.handleError)(res, error, "getRevenue");
+            }
+        });
+    }
+    clearAllNotification(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminId = req.query.userId;
+                const data = yield adminService_1.default.clearalldata(adminId);
+                res.status(200).json(data);
+            }
+            catch (error) {
+                (0, handleError_1.handleError)(res, error, "clearAllNotifications");
+            }
+        });
+    }
+    AdmincreateAdmin(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { email, password } = req.body;
+                const data = yield adminService_1.default.createAnotherAdmin(email, password);
+                return res.status(200).json(data);
+            }
+            catch (error) {
+                (0, handleError_1.handleError)(res, error, "AdmincreateAnotherAdmin");
+            }
+        });
+    }
+    getAllAdminData(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminData = yield adminService_1.default.GetAllAdminDetails();
+                const adminEmails = adminData.map(admin => admin.email);
+                return res.status(200).json(adminEmails);
+            }
+            catch (error) {
+                (0, handleError_1.handleError)(res, error, "getAllAdminData");
             }
         });
     }
