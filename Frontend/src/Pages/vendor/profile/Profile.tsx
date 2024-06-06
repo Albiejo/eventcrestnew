@@ -171,8 +171,8 @@ const Profile = () => {
             </div>
            
 
-            <p className="font-medium mt-5 mb-5">{vendor?.city}</p>
-            <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
+            <p className="font-bold mt-5 mb-5 ">{vendor?.city}</p>
+            <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F] bg-gray-400">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">
                   {vendor?.totalBooking}
@@ -197,7 +197,7 @@ const Profile = () => {
               <h4 className="font-semibold text-black dark:text-white">
                 About
               </h4>
-              <p className="mt-4.5">{vendor?.about}</p>
+              <p className="mt-4.5 bg-gray-400">{vendor?.about}</p>
             </div>
 
            

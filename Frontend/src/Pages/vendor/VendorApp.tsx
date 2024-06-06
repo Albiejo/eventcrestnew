@@ -45,7 +45,7 @@ const VendorApp = () => {
             path="/vendor"
             element={
               <>
-                <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="eCommerce Dashboard " />
                 <Dashboard />
               </>
             }

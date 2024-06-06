@@ -65,7 +65,7 @@ app.use('/api/vendor',vendorRoutes)
 app.use('/api/conversation' , chatRoute)
 app.use('/api/messages', messageRoute)
 
-// initializeSocket(server);
+initializeSocket(server);
 
 app.get('*',(req:Request,res:Response) =>{
   res.sendFile(path.join(__dirname,'../../Frontend/dist/index.html'))
