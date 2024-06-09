@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import VendorRootState from '../../Redux/rootstate/VendorState'
 import { useEffect, useState } from 'react'
 import { axiosInstanceAdmin, axiosInstanceVendor } from '../../Api/axiosinstance'
-import { Button, Card, Typography } from '@material-tailwind/react'
+import {  Typography } from '@material-tailwind/react'
 import Pagination from '../../Components/Common/Pagination';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify'

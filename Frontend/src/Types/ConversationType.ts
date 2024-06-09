@@ -4,6 +4,7 @@ export interface conversation{
   latestMessageTimestamp:Date;
   latestMessage:string;
   timestamps: Date;
+  updatedAt: Date;
 }
 
 export interface conversationType{
@@ -12,4 +13,5 @@ export interface conversationType{
   latestMessageTimestamp:Date;
   latestMessage:string;
   timestamps: Date;
+  updatedAt: Date;
 }

@@ -1,3 +1,5 @@
+import { Review } from "./reviewType";
+
 export interface VendorData{
     _id:string;
     email : string;
@@ -17,6 +19,7 @@ export interface VendorData{
     OverallRating:number;
     notifications:Array<object>;
     locks:Array<object>;
+    reviews:Array<Review>
 }
 
 export interface Post {

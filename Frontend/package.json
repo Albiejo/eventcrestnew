@@ -59,6 +59,7 @@
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "sort-by": "^1.2.0",
+    "sweetalert": "^2.1.2",
     "sweetalert2": "^11.10.7",
     "timeago.js": "^4.0.2",
     "ts-node": "^10.9.2",

@@ -8,7 +8,6 @@ import {
   LockClosedIcon,
   PowerIcon,
   UserCircleIcon,
-  HomeIcon
 } from "@heroicons/react/24/outline";
 import { axiosInstance } from "../Api/axiosinstance";
 import { useDispatch } from "react-redux";

@@ -1,5 +1,4 @@
 import {
-    Avatar,
   Button,
   Card,
   CardBody,
@@ -7,17 +6,48 @@ import {
   Input,
   List,
   ListItem,
-  ListItemPrefix,
   Typography,
 } from "@material-tailwind/react";
 import { useState ,ChangeEvent, FormEvent, useEffect } from "react";
-
+import swal from 'sweetalert';
 import { axiosInstanceAdmin } from "../../Api/axiosinstance";
 import { toast } from "react-toastify";
 
 
 
 const AdminAddAdmin = () => {
+
+  const confirmDelete = (email:string) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this admin!",
+      icon: "warning",
+      buttons: {
+        cancel: true,
+        confirm: {
+          text: "Delete",
+          value: true,
+          visible: true,
+          className: "btn-danger",
+          closeModal: true,
+        },
+      },
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        handleDelete(email);
+        swal("Poof! Admin has been deleted!", {
+          icon: "success",
+        });
+      } else {
+        swal("Admin is safe!");
+      }
+    });
+  };
+
+  const handleDelete = (emailToDelete:string) => {
+    setAdminList(adminList.filter(email => email !== emailToDelete));
+  };
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -87,28 +117,27 @@ const AdminAddAdmin = () => {
         }).catch((error)=>{
           console.log(error)
         })
-      },[adminList])
+      },[])
 
     return (
 
-        <div className="flex flex-col md:flex-row items-start mt-8">
-       
-        <div className="md:w-1/3 mb-8 md:mb-0 md:mr-">
-        <Card className="w-96" placeholder={undefined}>
-          <List placeholder={undefined}>
-            {adminList.map((email, index) => (
-              <ListItem key={index} placeholder={undefined}>
-                <div>
-                  <Typography variant="h6" color="red" placeholder={undefined}>
-                   {index+1 } :  {email}
-                  </Typography>
-                </div>
-              </ListItem>
-            ))}
-          </List>
-        </Card>
-
-        </div>
+      <div className="flex flex-col md:flex-row items-start mt-8">
+          <div className="md:w-1/2 mb-8 md:mb-0 md:mr-4">
+            <Card className="w-96" placeholder={undefined}>
+              <List  placeholder={undefined}>
+                {adminList.map((email, index) => (
+                  <ListItem key={index} className="flex justify-between items-center"  placeholder={undefined}>
+                    <Typography variant="h6" color="black"  placeholder={undefined}>
+                      {index + 1} : {email}
+                    </Typography>
+                    <Button color="blue"  placeholder={undefined} onClick={() => confirmDelete(email)}>
+                      Delete
+                    </Button>
+                  </ListItem>
+                ))}
+              </List>
+            </Card>
+          </div>
   
         <div className="md:w-1/2">
             <div className="bg-white p-8 rounded-lg shadow-md border-2">
