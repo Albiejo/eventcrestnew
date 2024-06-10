@@ -7,8 +7,8 @@ function handleError(res, error, contextMessage) {
         res.status(error.statusCode).json({ message: error.message });
     }
     else {
-        console.error(`Unexpected error in ${contextMessage}:`, error);
-        res.status(500).json({ message: "Internal Server Error. Please try again later." });
+        console.error(`${contextMessage}:`, error);
+        res.status(500).json({ message: error.message });
     }
 }
 exports.handleError = handleError;

@@ -193,6 +193,7 @@ console.log(otpCode)
     try {
      
       const { refreshToken } = req.body;
+      console.log("refreshToken : " ,refreshToken)
       
       const token = await createRefreshToken(refreshToken);
     

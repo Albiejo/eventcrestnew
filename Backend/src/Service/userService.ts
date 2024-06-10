@@ -73,16 +73,14 @@ export const createRefreshToken = async (refreshToken:string)=>{
   
 
     if (!user || user.refreshToken !== refreshToken) {
-        throw new Error('Invalid refresh token , please login again.');
+        throw new Error('Token Expired ,Please login again..');
       }
 
     const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET!, { expiresIn: '24h' });
-    
     return accessToken;
 
 
   } catch (error) {
-    console.error("Error fetching user createRefreshToken", error);
     throw error;
   }
 }

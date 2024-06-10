@@ -53,13 +53,12 @@ const createRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0, f
         const decoded = jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
         const user = yield User_1.default.findById(decoded._id);
         if (!user || user.refreshToken !== refreshToken) {
-            throw new Error('Invalid refresh token , please login again.');
+            throw new Error('Token Expired ,Please login again..');
         }
         const accessToken = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         return accessToken;
     }
     catch (error) {
-        console.error("Error fetching user createRefreshToken", error);
         throw error;
     }
 });

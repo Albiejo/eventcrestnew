@@ -156,6 +156,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { refreshToken } = req.body;
+                console.log("refreshToken : ", refreshToken);
                 const token = yield (0, userService_1.createRefreshToken)(refreshToken);
                 return res.status(200).json({ token });
             }
