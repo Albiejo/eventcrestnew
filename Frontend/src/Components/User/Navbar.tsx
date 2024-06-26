@@ -27,8 +27,15 @@ interface Notification {
 }
 
 const MyNavbar=()=> {
- 
+  
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch= useDispatch();
+  const currentPath = location.pathname;
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const isSpecialPath = currentPath === '/chat/' || currentPath === '/bookevent';
+  const navbarColor = isSpecialPath ? 'bg-black' : (isScrolled ? 'bg-black' : 'bg-transparent shadow-none');
 
   const isActive = (path:string) => {
     return location.pathname === path ? 'active' : '';
@@ -41,7 +48,6 @@ const MyNavbar=()=> {
   const user  = useSelector((state:UserRootState)=>state.user.userdata)
 
   const notifications: Notification[] = (user?.notifications || []) as Notification[];
-
   const unreadNotificationsCount = notifications?.filter(notification => notification.Read === false);
 
   const notification1=  user?.notifications[user?.notifications.length-1] as Notification | undefined;
@@ -49,16 +55,30 @@ const MyNavbar=()=> {
   const formattedTimestamp1 =  notification1 ? format(notification1.timestamp, 'yyyy-MM-dd HH:mm:ss') : '';
   const formattedTimestamp2 = notification2 ? format(notification2.timestamp, 'yyyy-MM-dd HH:mm:ss') : '';
 
+
  useEffect(()=>{
     setunreadlength(unreadNotificationsCount?.length)
   },[user]) 
 
 
 
-  const navigate = useNavigate();
-  const dispatch= useDispatch();
+ useEffect(() => {
 
-  React.useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+
+  useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
@@ -87,10 +107,9 @@ const MyNavbar=()=> {
       <Typography
         as="li"
         variant="h6"
-        className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.USER_HOME) ? 'text-white' : 'text-gray-500'}`} placeholder={undefined} >
+        className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.USER_HOME) ? 'text-blue-200' : 'text-white'}`} placeholder={undefined} >
         <Link to={USERROUTES.USER_HOME}>
           Home
-         
         </Link>
       </Typography>
       
@@ -98,14 +117,14 @@ const MyNavbar=()=> {
       <Typography
         as="li"
         variant="h6"
-        className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.VENDORS) ? 'text-white' : 'text-gray-500'}`} placeholder={undefined}    >
+        className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.VENDORS) ? 'text-blue-200' : 'text-white'}`} placeholder={undefined}    >
           <Link to={USERROUTES.VENDORS}>
           Vendors
           </Link>
       </Typography>
       
       
-      <Typography as="li" variant="h6" color="white" className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.ABOUT) ? 'text-white' : 'text-gray-500'}`} placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+      <Typography as="li" variant="h6" color="white" className={`flex items-center gap-x-2 p-1 font-medium font-bold ${isActive(USERROUTES.ABOUT) ? 'text-blue-200' : 'text-white'}`} placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
           <Link to={USERROUTES.ABOUT}>
               About
           </Link>
@@ -120,13 +139,12 @@ const MyNavbar=()=> {
   return (
 
 
-    <Navbar className=" border-4 border-gray-600 lg:px-8 bg-dark lg:w-full fixed z-10 max-w-screen-3xl rounded-none" placeholder={undefined} style={{background:"#002D62"}}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} >
+    <Navbar className={`lg:px-8 lg:w-full fixed z-10 max-w-screen-3xl rounded-none ${navbarColor}`} color="transparent" placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} >
       
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-      
-      
+
         <Typography
-          className="cursor-pointer py-1.5 font-medium font-bold" color="white" placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}        >
+          className="cursor-pointer font-medium font-bold" color="white" placeholder={undefined}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}        >
          <Link to={USERROUTES.USER_HOME}>
           <img src="/imgs/log.jpeg" alt="" width={100}/>
           </Link>

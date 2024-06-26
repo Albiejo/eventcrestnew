@@ -53,8 +53,8 @@ class PostController {
       const command = new PutObjectCommand(params);
 
       await s3.send(command);
-
-      const post = await createPost(caption, imageName, vendor_id);
+      let imageUrl=`${process.env.IMAGE_URL}/${imageName}`;
+      const post = await createPost(caption, imageName, vendor_id , imageUrl);
       return res.status(201).json(post);
     } catch (error) {
       handleError(res, error, "addNewPost");

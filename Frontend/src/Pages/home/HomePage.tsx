@@ -8,14 +8,13 @@ const Hero3 = lazy(() => import('../../Components/Home/Hero3'));
 const Faq = lazy(() => import('../../Components/Home/Faq'));
 const Hero5 = lazy(()=> import('../../Components/Home/Hero5'))
 
-import LoadingSpinner from '../../Components/Common/LoadingSpinner';
-
+import LoaderSample from '../../Components/Common/LoaderSample';
 
 function Home() {
 
   return (
     <>
-      <Suspense fallback={<LoadingSpinner/>}>
+      <Suspense fallback={<LoaderSample/>}>
         <Hero />
         <VendorList />
         <Hero2 />

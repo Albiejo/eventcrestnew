@@ -21,6 +21,7 @@ import { MessageType } from '../../../Types/messageType';
 import  { MouseEvent } from 'react';
 import { ChangeEvent } from 'react';
 import { UserData } from '../../../Types/userType';
+import { conversationType  } from '../../../Types/ConversationType';
 
 
 
@@ -32,12 +33,12 @@ import { UserData } from '../../../Types/userType';
   const SECRET_ACCESS_KEY = import.meta.env.VITE_SECRET_ACCESS_KEY || "";
 
 
-  interface conversationType{
-    _id:string;
-    members: string[];
-    latestMessageTimestamp:Date;
-    timestamps: Date;
-  }
+  // interface conversationType{
+  //   _id:string;
+  //   members: string[];
+  //   latestMessageTimestamp:Date;
+  //   timestamps: Date;
+  // }
 
 
   interface FileState {
@@ -117,6 +118,14 @@ const Messenger = () => {
     },[typing , conversation , messages])
 
 
+    const handleDivClick = (conversation:conversationType) => {     
+      setcurrentchat(conversation)      
+      const receiverId = conversation?.members.find((member)=>member !== vendorData?._id)
+      checkUserActiveStatus(receiverId as string);
+      fetchreceiverdata(receiverId as string);
+  }
+
+
     useEffect(()=>{
         arrivalMessage && currentchat?.members.includes(arrivalMessage.senderId) &&
         setmessages((prev)=>[...prev , arrivalMessage])  
@@ -166,11 +175,7 @@ const Messenger = () => {
     
     const receiverId = currentchat?.members.find((member)=>member !== vendorData?._id)
 
-    const handleDivClick = (conversation:conversationType) => {     
-      setcurrentchat(conversation)      
-      checkUserActiveStatus(receiverId as string);
-      fetchreceiverdata(receiverId as string);
-  }
+
 
     const checkUserActiveStatus = (receiverId:string) => {
       socket.current.emit("checkUserActiveStatus", receiverId);
@@ -345,8 +350,8 @@ const Messenger = () => {
                             <div className="chatmenuWrapper" >
                                 
                               
-                               { conversation.map((c) => (
-                                    <div onClick={()=>handleDivClick(c)}>
+                               { conversation.map((c:conversationType) => (
+                                    <div key={c._id} onClick={()=>handleDivClick(c)} className={`cursor-pointer ${currentchat?._id === c._id ? "bg-gray-500 text-white" : "bg-white text-black"}`}>
                                     <Conversation  conversation={c} currentUser={{ _id: vendorData?._id || '' }}/>
                                     </div>
                                 ))  

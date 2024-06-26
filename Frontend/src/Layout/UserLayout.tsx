@@ -348,7 +348,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <img
               src="/imgs/log.jpeg"
               alt="EventCrest"
-              className="w-30 h-14 mr-2"
+              className="w-30 h-8 mr-2"
             />
           </Link>
 
@@ -372,13 +372,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
           
 
-          {/* Right-aligned icon */}
+          
           <button onClick={toggleSidebar} className="sm:hidden">
             {isSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </header>
 
-        {/* Content Area */}
+        
         <main className="flex-1 overflow-auto p-4 bg-white mt-16 sm:ml-64">
           {children}
         </main>

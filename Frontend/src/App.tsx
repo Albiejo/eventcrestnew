@@ -1,4 +1,4 @@
-// App.tsx
+
 
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css"
 import MyNavbar from './Components/User/Navbar';
 import Layout from './Layout/UserLayout';
 import { SnackbarProvider } from 'notistack';
-
+import ScrollToTopButton from './Components/Common/ScrollToTopButton';
 
 const App: React.FC = () => {
   
@@ -31,8 +31,10 @@ const App: React.FC = () => {
         </Layout>
       ) : ( 
         <div >
-           {!isAuthRoute && <MyNavbar />}
+           {!isAuthRoute && <MyNavbar/>}
           <Outlet/>
+          <ScrollToTopButton/>
+
         </div>
       )}
       </SnackbarProvider>

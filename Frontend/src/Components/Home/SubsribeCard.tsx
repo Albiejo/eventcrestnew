@@ -5,11 +5,7 @@ import { toast } from 'react-toastify';
 
 
 
-
-
-
-
-const SubsribeCard: React.FC = () => {
+const SubsribeCard: React.FC<{ toggleSubscribeCard: () => void }> = ({ toggleSubscribeCard }) => {
 
 
   const [email, setEmail] = useState('');
@@ -40,9 +36,7 @@ const SubsribeCard: React.FC = () => {
 }
 
 
-
   return (
-    <div className="pb-5 p-10">
       <div className="container items-center justify-center">
         <div className="relative flex w-full py-10 mb-5 md:mb-20 max-w-4xl mx-auto rounded-2xl p-5 bg-gray-900 bg-cover bg-center">
           <div className="absolute inset-0 bg-black opacity-30 rounded-2xl"></div>
@@ -67,13 +61,16 @@ const SubsribeCard: React.FC = () => {
               <Button size="md" className="w-full md:w-auto lg:w-32" fullWidth color="white" type="submit"  placeholder={undefined}>
                 Subscribe
               </Button>
+              <Button size="md" className="w-full md:w-auto lg:w-32" fullWidth color="green"  placeholder={undefined} onClick={toggleSubscribeCard}>
+                Done!
+              </Button>
+
             </form>
             {error && <Typography className="text-red-500"  placeholder={undefined}>{error}</Typography>}
             {subscribed && <Typography className="text-green-500"  placeholder={undefined}>Subscribed successfully!</Typography>}
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

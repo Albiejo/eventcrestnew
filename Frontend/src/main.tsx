@@ -76,6 +76,7 @@ const router = createBrowserRouter(
              
               <Route path="*" element={<NotFound role={"user"}/>}/>
            {/* User Private Routes */}
+           
           <Route path="" element={<UserPrivateRoute/>}>
               <Route path="/profile/*" element={<Profile/>}/>
               <Route path={USERROUTES.BOOKEVENT} element={<BookEventForm/>}/>

@@ -4,11 +4,11 @@ import Conversation from '../../../Components/User/conversations/Conversation';
 import { useSelector } from 'react-redux';
 import UserRootState from '../../../Redux/rootstate/UserState';
 import { useEffect, useRef, useState } from 'react';
-import { axiosInstanceAdmin, axiosInstanceChat, axiosInstanceMsg } from '../../../Api/axiosinstance';
+import { axiosInstanceChat, axiosInstanceMsg, axiosInstanceVendor } from '../../../Api/axiosinstance';
 import {io } from 'socket.io-client'
 import Message from '../../../Components/User/messages/Message';
 import Picker from '@emoji-mart/react'
-import { Button, IconButton } from '@material-tailwind/react';
+import { Avatar, Button, IconButton } from '@material-tailwind/react';
 import { v4 as uuidv4 } from "uuid";
 import { ChangeEvent } from 'react';
 import React from 'react';
@@ -20,7 +20,7 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { conversationType } from '../../../Types/ConversationType';
+import { conversationType  } from '../../../Types/ConversationType';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -34,10 +34,6 @@ interface FileState {
   filename: string;
   originalFile: File;
 }
-
-
-
-
 
 
 const Messenger = () => {
@@ -96,8 +92,7 @@ const Messenger = () => {
             });
         })
 
-        socket.current.on("typingsent" , (senderId)=>{  
-            console.log(senderId)
+        socket.current.on("typingsent" , ()=>{  
             settypingstatus(true)
         })
         socket.current.on("stopTypingsent" , (senderId)=>{
@@ -164,23 +159,22 @@ const Messenger = () => {
 
 
 
-    const receiverId = currentchat?.members.find((member)=>member !==user?._id)
-   
-   
+    
+    
     const handleDivClick = (conversation:conversationType) => {
-        setcurrentchat(conversation)
-        const receiverId = currentchat?.members.find((member)=>member !==user?._id)
-        checkUserActiveStatus(receiverId as string);
-        fetchreceiverdata();
-        
+      setcurrentchat(conversation)
+      const receiverId = conversation?.members.find((member)=>member !==user?._id)
+      checkUserActiveStatus(receiverId as string);
+      fetchreceiverdata(receiverId as string);   
     }
+    const receiverId = currentchat?.members.find((member)=>member !==user?._id)
 
     const checkUserActiveStatus = (receiverId:string) => {
         socket.current.emit("checkUserActiveStatus", receiverId);
     };
 
-    const fetchreceiverdata = async()=>{
-        await axiosInstanceAdmin.get(`/getVendor?Id=${receiverId}`,{withCredentials:true})
+    const fetchreceiverdata = async(receiverId:string)=>{
+        await axiosInstanceVendor.get(`/getVendor?Id=${receiverId}`,{withCredentials:true})
         .then((res)=>{
             setReceiverdata(res.data.data)
         })
@@ -334,20 +328,31 @@ const Messenger = () => {
   const handleClick =()=>{
     navigate('/vendors')
   }
+
+
+
+
+
+
+
+
+
+
+
+
    return (
    <>
    
    <div className='navbar'>
-
    </div>
 
    <div className="messenger">
     
             <div className="chatmenu w-50">
                 <div className="chatmenuWrapper" >
-                {conversation.map((c ) => (
+                {conversation.map((c: conversationType) => (
                     <>
-                        <div onClick={()=>handleDivClick(c)} >
+                        <div  key={c._id} onClick={()=>handleDivClick(c)} className={`cursor-pointer ${currentchat?._id === c._id ? "bg-gray-500 text-white" : "bg-white text-black"}`} >
                         <Conversation  conversation={c}  currentUser={{ _id: user?._id || '' }}/>
                         </div>
                        
@@ -355,6 +360,9 @@ const Messenger = () => {
                 ))}
                 </div>
             </div>
+
+
+
 
             {!filemodal ? (
 
@@ -450,7 +458,7 @@ const Messenger = () => {
                 <i className="fa-solid fa-xmark text-3xl"></i>
               </button>
 
-              
+          
               {file && (
                 <img
                   src={file?.filename}
@@ -487,44 +495,60 @@ const Messenger = () => {
             </div>
           </> )}
 
+
+
             <div className="w-1/4 bg-gray-200 border-l border-gray-300">
                 <div className="p-4 mt-6">
                     { currentchat ? (
                         <>
-                            
-                            <p className="font-bold text-gray-700">{receiverdata?.name}</p>
-                          
-                           
-                            <p className="mt-2 text-sm text-green-900 font-bold">
-                                {notActive ? <span className="mr-1">Offline</span> : (
-                                    Active ? (
-                                        <>
-                                            <span className="mr-1">Active now</span>
-                                            <div className="inline-block w-2 h-2  bg-green-500 rounded-full"></div>
-                                        </>
-                                    ) : `Last seen at ${lastseen}`
-                                )}
-                            </p>
                          
                             {receiverdata && (
                                 
                                 <>
                               
-                                <div className="mt-4">
+                                {/* <div className="mt-4">
                                     <img
                                         src={receiverdata.coverpicUrl}
                                         alt="image"
-                                        className="w-full h-full "
+                                        className="w-full h-full rounded"
                                     />
-                                </div>
-                                <div>
+                                </div> */}
+
+                      <div className="w-40 ml-20 border-4 border-gray-300 rounded-full p-1">
+                          <Avatar
+                            src={receiverdata?.logoUrl}
+                            alt="Profile picture"
+                            variant="circular"
+                            className="h-40 w-50 rounded-full"
+                            placeholder={undefined}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                          />
+                    </div>
+
+                    
+                                {/* <div>
                                     <h4 className='text-center mt-2 font-bold text-gray-700'>ABOUT</h4>    
                                     <p className='text-sm text-gray-700 mt-4'>{receiverdata?.about}</p>
-                                </div>  
+                                </div>   */}
 
                                 </>
                                 
                             )}
+
+                          <p className="font-bold text-black text-center mr-4 mt-6 text-xl">{receiverdata?.name}</p>
+                          
+                           
+                          <p className="mt-2 text-sm text-green-900 font-bold ">
+                              {notActive ? <span className="mr-1">Offline</span> : (
+                                  Active ? (
+                                      <>
+                                          <span className="mr-1">Active now</span>
+                                          <div className="inline-block w-2 h-2  bg-green-500 rounded-full"></div>
+                                      </>
+                                  ) : `Last seen at ${lastseen}`
+                              )}
+                          </p>
                           
                         </>
                     ) : 

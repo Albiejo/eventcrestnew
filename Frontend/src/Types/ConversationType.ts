@@ -15,3 +15,9 @@ export interface conversationType{
   timestamps: Date;
   updatedAt: Date;
 }
+
+
+export interface ConversationProps {
+  conversation: conversationType;
+  currentUser: { _id: string };
+}

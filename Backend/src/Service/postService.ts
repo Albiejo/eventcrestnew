@@ -6,10 +6,10 @@ import mongoose from "mongoose";
 
 
 
-export const createPost=async(caption:string,imageName:string,vendor_id:string): Promise<object>=>{
+export const createPost=async(caption:string,imageName:string,vendor_id:string,imageUrl: string): Promise<object>=>{
     try{
       const vendorIdObjectId =new mongoose.Types.ObjectId(vendor_id) as unknown as mongoose.Schema.Types.ObjectId;
-      const add= await createNewPost({caption , image:imageName, vendor_id:vendorIdObjectId});
+      const add= await createNewPost({caption , image:imageName, vendor_id:vendorIdObjectId , imageUrl});
       return {post:add};
     } catch (error) {
       console.error("Error processing create Post", error);

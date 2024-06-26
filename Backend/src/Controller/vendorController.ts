@@ -463,14 +463,15 @@ class VendorController {
           const covercommand = new PutObjectCommand(coverpicUploadParams);
           await s3.send(covercommand);
 
-          const covercommand2 = new GetObjectCommand({
-            Bucket: process.env.BUCKET_NAME!,
-            Key: coverpicFile?.originalname,
-          });
+          // const covercommand2 = new GetObjectCommand({
+          //   Bucket: process.env.BUCKET_NAME!,
+          //   Key: coverpicFile?.originalname,
+          // });
 
-          coverpicUrl = await getSignedUrl(s3, covercommand2, {
-            expiresIn: 86400 * 3,
-          });
+          // coverpicUrl = await getSignedUrl(s3, covercommand2, {
+          //   expiresIn: 86400 * 3,
+          // });
+           coverpicUrl=`${process.env.IMAGE_URL}/${coverpicFile?.originalname}`
 
         }
 
@@ -491,15 +492,16 @@ class VendorController {
           const logocommand = new PutObjectCommand(logoUploadParams);
           await s3.send(logocommand);
   
-          const logocommand2 = new GetObjectCommand({
-            Bucket: process.env.BUCKET_NAME!,
-            Key: logoFile?.originalname,
-          });
-          logoUrl = await getSignedUrl(s3, logocommand2, {
-            expiresIn: 86400 * 3,
-          });
+          // const logocommand2 = new GetObjectCommand({
+          //   Bucket: process.env.BUCKET_NAME!,
+          //   Key: logoFile?.originalname,
+          // });
+          // logoUrl = await getSignedUrl(s3, logocommand2, {
+          //   expiresIn: 86400 * 3,
+          // });
         }
         }
+        logoUrl=`${process.env.IMAGE_URL}/${logoFile?.originalname}`
 
       const ExistingVendor = await getSingleVendor(vendorId);
 

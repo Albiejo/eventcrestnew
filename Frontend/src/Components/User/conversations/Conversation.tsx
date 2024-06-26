@@ -37,7 +37,7 @@ const Conversation = ({conversation , currentUser }: { conversation: conversatio
 
 
   return (
-    <div className="flex items-center justify-between p-3 cursor-pointer mt-5 bg-white rounded-lg hover:bg-gray-300 ">
+    <div className="flex items-center justify-between p-3 cursor-pointer mt-5  rounded-lg hover:bg-gray-500 ">
     <div className="flex items-center">
         <img
             className="w-10 h-10 rounded-full object-cover mr-4"

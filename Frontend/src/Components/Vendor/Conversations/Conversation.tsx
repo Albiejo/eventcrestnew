@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './Conversation.css'
 import { axiosInstance } from '../../../Api/axiosinstance';
 import { conversation } from '../../../Types/ConversationType';
@@ -20,31 +20,29 @@ const Conversation = ({conversation , currentUser}: { conversation: conversation
   const latestMessageTime = format(new Date(conversation.updatedAt), 'h:mm a');
 
 
+  const friendId = useMemo(() => {
+    return conversation.members.find((m) => m !== currentUser._id);
+}, [conversation, currentUser._id]);
 
-  useEffect(()=>{
-    const friendId = conversation.members.find((m)=> m !== currentUser._id)
-   
-  
-    const getVendor = async ()=>{
-      try {
-        const res = await axiosInstance.get(`/getUser?userId=${friendId}`)
-        console.log(res.data)
-        setuser(res.data)
-      
-      } catch (error) {
-        console.log(error)
-      }
+
+  const getVendor = useCallback(async () => {
+    if (!friendId) return;
+    try {
+        const res = await axiosInstance.get(`/getUser?userId=${friendId}`);
+        setuser(res.data);
+    } catch (error) {
+        console.log(error);
     }
-    getVendor();
+}, [friendId]);
 
-  },[currentUser , conversation])
-
-
+useEffect(() => {
+  getVendor();
+}, [getVendor]);
 
 
 
   return (
-    <div className="flex items-center justify-between p-3 cursor-pointer mt-5 bg-white rounded-lg hover:bg-gray-300 ">
+    <div className="flex items-center justify-between p-3 cursor-pointer mt-5  rounded-lg hover:bg-gray-500 ">
     <div className="flex items-center">
         <img
             className="w-10 h-10 rounded-full object-cover mr-4"
