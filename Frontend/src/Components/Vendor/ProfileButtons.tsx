@@ -16,13 +16,9 @@ import axios, { AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
 import UserRootState from '../../Redux/rootstate/UserState';
 import { toast } from 'react-toastify';
+import { ProfileButtonsProps } from '../../Types/ProfileButtonTypes';
 
 
-interface ProfileButtonsProps {
-  vendorId: string | undefined; 
-  bookedDates:Array<string> | undefined;
-  userId:string | undefined; 
-}
 
 
 
@@ -32,7 +28,12 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
 
   const user  = useSelector((state:UserRootState)=>state.user.userdata)
+  const parseDate = (dateString: string): Date => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
 
+  const parsedBookedDates = bookedDates?.map(parseDate);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen((cur) => !cur);
@@ -73,10 +74,12 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
   
   return (
     <>
-      <div className="flex md:flex-row flex-col justify-start py-4 pt-8 lg:pt-4 bg-gray-600 rounded-lg mt-2">
-      <div className="mr-1 p-3 text-center">
+      <div className="flex md:flex-row flex-col justify-start py-4 pt-8 lg:pt-4  rounded-lg mt-2">
+       
+       
+        <div className="mr-1 p-3 text-center">
           <Button
-            className="w-fit bg-white text-black"
+            className="w-fit bg-red-700 text-white"
             onClick={handleOpen}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
@@ -85,11 +88,11 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
             Check Availability
           </Button>
         </div>
+
+
         <div className="mr-1 p-3 text-center">
-          
           <Button
-            className="w-fit"
-            style={{ backgroundColor: 'red', color: 'white' }}
+            className="w-fit bg-blue-800"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
@@ -97,12 +100,12 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
           >
             Book Now
           </Button>
-         
-        </div>
+         </div>
+
+
         <div className="mr-1 p-3 text-center">
           <Button
-            className="w-fit"
-            style={{ backgroundColor: 'green', color: 'white' }}
+            className="w-fit bg-green-800"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
@@ -180,7 +183,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
             onChange={() => {}}
             inline
             minDate={new Date()}
-            excludeDates={bookedDates?.map(date => new Date(date))}
+            excludeDates={parsedBookedDates}
             dayClassName={(date) => {
               const currentDate = new Date();
               const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
@@ -188,7 +191,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
               if (isPastDate) {
                 return 'text-gray-400'; 
               } else if (bookedDates?.includes(formattedDate)) {
-                return 'bg-red-500'; 
+                return 'bg-red-600'; 
               } else {
                 return 'bg-green-500';
               }

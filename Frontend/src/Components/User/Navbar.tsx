@@ -17,6 +17,7 @@ import { axiosInstance } from "../../Api/axiosinstance";
 import { logout } from "../../Redux/slices/UserSlice";
 import {format} from 'timeago.js'
 import { USERROUTES } from "../../Constants/constants";
+import { current } from "@reduxjs/toolkit";
 
 
 interface Notification {
@@ -34,7 +35,8 @@ const MyNavbar=()=> {
   const currentPath = location.pathname;
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const isSpecialPath = currentPath === '/chat/' || currentPath === '/bookevent';
+  const isSpecialPath = currentPath === '/chat/' || currentPath === '/bookevent' || currentPath==='/payment-success' || currentPath==='/room' || 
+  currentPath==='/live';
   const navbarColor = isSpecialPath ? 'bg-black' : (isScrolled ? 'bg-black' : 'bg-transparent shadow-none');
 
   const isActive = (path:string) => {

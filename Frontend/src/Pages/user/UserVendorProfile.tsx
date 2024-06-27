@@ -75,6 +75,7 @@ import Footer from '../../Components/Home/Footer';
 
 
   const bookedDates = vendor?.bookedDates;
+  console.log(bookedDates)
 
 
     const handleFavourite=async()=>{
