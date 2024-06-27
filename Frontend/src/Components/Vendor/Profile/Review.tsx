@@ -70,15 +70,15 @@ export  const Review: React.FC=() => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-8 p-8 bg-white rounded-md shadow-md border-2 border-gray-900" style={{background:"#313438" }}>
-      <h2 className="text-xl font-semibold mb-4 text-white">Leave a Review</h2>
+    <div className="max-w-2xl mx-auto mt-8 p-8 bg-gray-300 rounded-md shadow-md ">
+      <h2 className="text-xl font-semibold mb-4 text-black">Leave a Review</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="rating" className="block text-sm text-white font-medium text-gray-900">Rating</label>
+          <label htmlFor="rating" className="block text-sm text-black font-medium text-gray-900">Rating</label>
           <Rating value={rating} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
         </div>
         <div className="mb-4">
-          <label htmlFor="review" className="block text-sm font-medium text-gray-900 text-white">Review</label>
+          <label htmlFor="review" className="block text-sm font-medium text-gray-900 text-black">Review</label>
           <textarea id="review" name="review" rows={4} value={review} onChange={handleReviewChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 border-2"></textarea>
         </div>
         <div className="text-right ">

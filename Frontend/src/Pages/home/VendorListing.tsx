@@ -103,7 +103,7 @@ const VendorsListing = () => {
     <>
       <div
         className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/imgs/church.jpg')" }}
+        style={{ backgroundImage: "url('/imgs/sea.jpg')" }}
         ref={topRef}
       >
         <div className="absolute inset-0 " />

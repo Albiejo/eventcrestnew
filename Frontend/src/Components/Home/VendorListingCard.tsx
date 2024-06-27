@@ -7,7 +7,7 @@ import {
   Button,
  
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { useLocation,Link } from "react-router-dom";
 
 interface VendorCardProps {
   name: string;
@@ -22,10 +22,13 @@ interface VendorCardProps {
 const VendorCard:React.FC<VendorCardProps>=({name,city,_id,coverpicUrl,OverallRating}) =>{
 
   const roundedOverallRating = OverallRating.toFixed(1);
+  const location = useLocation();
 
 
   return (
-    <Card className="lg:w-full max-w-[20rem] shadow-lg border-2 border-gray-600 "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+    <Link to={`/viewVendor?vid=${_id}`}>
+    <Card className="lg:w-full max-w-[25rem] shadow-lg "  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+      
       <CardHeader floated={false} color="blue-gray"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
         <img
           src={coverpicUrl}
@@ -34,6 +37,8 @@ const VendorCard:React.FC<VendorCardProps>=({name,city,_id,coverpicUrl,OverallRa
         <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
        
       </CardHeader>
+
+
       <CardBody  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
         <div className="mb-3 flex items-center justify-between">
           <Typography variant="h5" color="blue-gray" className="font-medium"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
@@ -61,16 +66,19 @@ const VendorCard:React.FC<VendorCardProps>=({name,city,_id,coverpicUrl,OverallRa
           {city}
         </Typography>
       </CardBody>
+
+      {location.pathname !== '/' && (
       <CardFooter className="pt-3 -mt-5"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-        
       <Link to={`/viewVendor?vid=${_id}`}>
-        <Button size="md" fullWidth={true}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  className="bg-black hover:bg-red-500 text-white font-bold = rounded">
-          View Profile
+        <Button size="sm"   placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  className="bg-black hover:bg-blue-300 text-white  font-bold = rounded">
+          View 
         </Button>
       </Link>
       </CardFooter>
+       )}
+      
     </Card>
-
+    </Link>
    
   );
 }

@@ -2,9 +2,10 @@ import { axiosInstance } from "../../Api/axiosinstance";
 import {useState ,useEffect} from "react"
 
 import {
+  Button,
     Typography,
   } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import VendorCard from "./VendorListingCard";
 import LiveEvents from "./LiveEvents";
 
@@ -29,7 +30,7 @@ const VendorList=()=> {
     const [vendors,setVendors]=useState<Vendors[]>([])
     const [search, setSearch] = useState("");
     const [showlive , Setshowlive] = useState(false);
-  
+    const navigate = useNavigate()  
 
 
 
@@ -142,17 +143,22 @@ const VendorList=()=> {
                  TOP RATED VENDORS
             </Typography>
 
-        <div style={{ display: 'flex',flexWrap:"wrap"}}> 
+        <div style={{ display: 'flex',flexWrap:"wrap"}} className="justify-center"> 
         {vendors.map((vendor, index) => (
           <>    
           <Link key={index} to={`/viewVendor?vid=${vendor._id}`}>   
-          <div className="ml-4 mr-4 mb-4">
+          <div className="justify-center ml-2 mr-2 mb-4">
             <VendorCard {...vendor} key={index}/>
           </div> 
           </Link> 
           </>
         ))}
          </div>
+
+          <div className="flex items-center justify-center mt-4">
+            <Button placeholder={undefined} className="size-sm bg-blue-600" onClick={()=>navigate('/vendors')}>View More</Button>
+          </div>
+
         </div>
         </>
     );

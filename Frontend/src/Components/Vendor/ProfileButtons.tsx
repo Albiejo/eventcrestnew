@@ -42,7 +42,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
   const handleChat =async()=>{
     if(!user){
-      toast.error("Please login first to initiate a chat ");
+      toast.error("Please login first!");
       return;
     }
     const body ={
@@ -66,7 +66,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
   const handleredirection = ()=>{
     if(!user){
-      toast.error("Please login first to Book a vendor ");
+      toast.error("Please login first!");
       return;
     }
     navigate(`/bookevent?vid=${vendorId}`)
@@ -79,7 +79,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
        
         <div className="mr-1 p-3 text-center">
           <Button
-            className="w-fit bg-red-700 text-white"
+            className="w-fit bg-black text-white"
             onClick={handleOpen}
             placeholder={undefined}
             onPointerEnterCapture={undefined}
@@ -92,7 +92,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
         <div className="mr-1 p-3 text-center">
           <Button
-            className="w-fit bg-blue-800"
+            className="w-fit bg-black"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
@@ -105,7 +105,7 @@ const ProfileButtons: React.FC<ProfileButtonsProps> = ({ vendorId,bookedDates,us
 
         <div className="mr-1 p-3 text-center">
           <Button
-            className="w-fit bg-green-800"
+            className="w-fit bg-black"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}

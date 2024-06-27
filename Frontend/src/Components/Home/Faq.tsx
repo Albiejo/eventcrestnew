@@ -34,17 +34,17 @@ const HomePageFaq: React.FC = () => {
 
   return (
     <div className="flex flex-wrap items-start justify-center">
-      {/* FAQ Section */}
+      
       <div className="w-full md:w-1/2 px-16 pt-10">
         <div className="max-w-md">
-          <h1 className="text-3xl font-semibold mb-6" style={{ fontFamily: 'playfair display' }}>Frequently Asked Questions</h1>
+          <h1 className="text-3xl  mb-6"  style={{ fontFamily: "playfair display", fontSize: "30px" }}>Frequently Asked Questions</h1>
           {faqs.map((faq, index) => (
             <div key={index} className="mb-4 border rounded-lg" >
               <button
                 className="flex justify-between items-center w-full px-4 py-3 bg-gray-200 hover:bg-gray-300 focus:outline-none"
                 onClick={() => toggleAnswer(index)}
               >
-                <span className="font-medium text-lg"style={{ fontFamily: 'playfair display' }}>{faq.question}</span>
+                <span className="font-medium text-lg" style={{ fontFamily: 'playfair display' }}>{faq.question}</span>
                 <svg
                   className={`w-4 h-4 ${openIndex === index ? 'transform rotate-180' : ''}`}
                   fill="none"

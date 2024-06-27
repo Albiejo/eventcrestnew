@@ -75,14 +75,13 @@ import Footer from '../../Components/Home/Footer';
 
 
   const bookedDates = vendor?.bookedDates;
-  console.log(bookedDates)
 
 
     const handleFavourite=async()=>{
       try {
 
           if(!user){
-            toast.error("Please login first..")
+            toast.error("Please login first!")
             return;
           }
         axiosInstance
@@ -111,10 +110,12 @@ import Footer from '../../Components/Home/Footer';
     
     return (
       <>
-      <section className="relative block h-[100vh] overflow-hidden" ref={topRef}>
-        <div className="absolute top-0 left-0 w-full h-full bg-cover scale-105" style={{ backgroundImage: `url(${vendor?.coverpicUrl})` }} />
-        <div className="absolute top-0 h-full w-full bg-black/20 bg-cover bg-center" />
+      
+      <section className="relative block h-[80vh] lg:h-[100vh] overflow-hidden" ref={topRef}>
+        <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center scale-105" style={{ backgroundImage: `url(${vendor?.coverpicUrl})` }} />
+        <div className="absolute top-0 h-full w-full bg-black/30 bg-cover bg-center" />
       </section>
+
         <section className="relative bg-white py-10">
           <div className="relative -mt-40 flex w-full px-8 min-w-0 flex-col break-words bg-white px-15">
             <div className="container mx-auto">
@@ -257,12 +258,16 @@ import Footer from '../../Components/Home/Footer';
             </div>
           </div>
         </section>
+
+
         <section>
         <VendorTabs reviews={vendor?.reviews ?? []} />
         </section>
+
         <section className='mb-20'>
         <Review/>
-      </section>
+       </section>
+
         <div className="bg-white">
           <Footer />
         </div>
