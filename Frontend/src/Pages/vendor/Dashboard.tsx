@@ -52,10 +52,6 @@ const Dashboard: React.FC = () => {
   <ChartOne/>
 
 
-  
-
-
-
   </DefaultLayout>
   
   

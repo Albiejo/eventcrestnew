@@ -5,6 +5,7 @@ import { axiosInstanceVendor } from "../../../Api/axiosinstance";
 import { useSelector } from "react-redux";
 import VendorRootState from "../../../Redux/rootstate/VendorState";
 
+
 const getCategories = (date: string) => {
   if (date === "month") {
     return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -25,20 +26,16 @@ interface ChartOneState {
 }
 
 const ChartOne: React.FC = () => {
-
-
   const [monthlyData, setMonthlyData] = useState<number[]>([]);
   const [date, setDate] = useState<string>("month");
   const [chartOptions, setChartOptions] = useState<ApexOptions>({
- 
-    
-
+    // Corrected reference to `dateRange` in `xaxis`
     legend: {
       show: false,
       position: "top",
       horizontalAlign: "left",
     },
-    colors: ["#3C50E0", "#80CAEE"],
+    colors: ["blue", "#EC407A"],
     chart: {
       fontFamily: "Satoshi, sans-serif",
       height: 335,
@@ -96,8 +93,8 @@ const ChartOne: React.FC = () => {
     },
     markers: {
       size: 4,
-      colors: "#fff",
-      strokeColors: ["#3056D3", "#80CAEE"],
+      colors: "blue",
+      strokeColors: ["blue", "blue"],
       strokeWidth: 3,
       strokeOpacity: 0.9,
       strokeDashArray: 0,
@@ -145,6 +142,7 @@ const ChartOne: React.FC = () => {
     axiosInstanceVendor
       .get(`/revenue?vendorId=${vendor?._id}&date=${date}`)
       .then((res) => {
+        console.log(res.data.revenue);
         const revenueData = res.data.revenue;
         if (Array.isArray(revenueData)) {
           setMonthlyData(revenueData);
@@ -167,14 +165,13 @@ const ChartOne: React.FC = () => {
         ...prevOptions,
         xaxis: {
           ...prevOptions.xaxis,
-          categories: getCategories(date), 
+          categories: getCategories(date), // Ensure x-axis is updated
         },
       }));
   }, [date]);
 
   return (
-
-    <div className="mt-4 col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <div className="flex min-w-47.5">

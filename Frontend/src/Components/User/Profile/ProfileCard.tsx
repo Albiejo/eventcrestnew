@@ -38,8 +38,7 @@ const ProfileCard = () => {
   const dispatch=useDispatch()
 
   const user= useSelector((state: UserRootState) => state.user.userdata);
-
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>( user?.image||null);
   const [inputs, setInputs] = useState<FormInputs>({
     name: user?.name || "",
     phone: user?.phone || "",
@@ -137,8 +136,6 @@ const handleCancel = () => {
   };
 
 
-
-  
   return (
     <>
          
@@ -160,11 +157,18 @@ const handleCancel = () => {
          
    
           {previewUrl ? (
+          
+          <div onClick={() => {
+            const fileInput = document.getElementById('file-upload');
+            if (fileInput) fileInput.click();
+          }}>
+
             <img
               src={previewUrl}
               alt="Selected Profile"
               className="h-40 w-40 rounded-full"
             />
+             </div>
           ) : (
             <label
               htmlFor="file-upload"

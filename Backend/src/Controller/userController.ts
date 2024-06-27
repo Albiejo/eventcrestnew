@@ -514,16 +514,6 @@ console.log(otpCode)
       await s3.send(command2);
 
 
-      // const getObjectParams={
-      //   Bucket: process.env.BUCKET_NAME!,
-      //   Key:imageName
-      // }
-
-      // const command = new GetObjectCommand(getObjectParams);
-
-      // imageUrl = await getSignedUrl(s3, command , {
-      //     expiresIn: 86400 * 3,
-      //   });
 
       imageUrl=`${process.env.IMAGE_URL}/${imageName}`;
       

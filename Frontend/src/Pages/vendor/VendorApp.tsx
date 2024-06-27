@@ -40,6 +40,8 @@ const VendorApp = () => {
         <Route path="/vendor/verify" element={<VerifyEmail/>} />
 
         <Route path="" element={<VendorPrivateRoute />}>
+          
+          
           <Route
             index
             path="/vendor"

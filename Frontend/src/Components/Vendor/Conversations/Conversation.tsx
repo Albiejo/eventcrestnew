@@ -46,7 +46,7 @@ useEffect(() => {
     <div className="flex items-center">
         <img
             className="w-10 h-10 rounded-full object-cover mr-4"
-            src={user?.imageUrl ? user?.imageUrl : '/imgs/head.png'}
+            src={user?.image ? user?.image : '/imgs/head.png'}
             alt=""
         />
         <div>

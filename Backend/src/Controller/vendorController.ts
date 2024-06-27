@@ -46,19 +46,18 @@ function getCurrentWeekRange() {
   return { startOfWeek, endOfWeek };
 }
 
-// Function to get current year range
+
+function getCurrentMonthRange() {
+  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+  return { startOfMonth, endOfMonth };
+}
+
+
 function getCurrentYearRange() {
   const startOfYear = new Date(new Date().getFullYear(), 0, 1);
   const endOfYear = new Date(new Date().getFullYear() + 1, 0, 1);
   return { startOfYear, endOfYear };
-}
-
-// Function to calculate the last five years' range
-function getLastFiveYearsRange() {
-  const currentYear = new Date().getFullYear();
-  const startOfFiveYearsAgo = new Date(currentYear - 5, 0, 1);
-  const endOfCurrentYear = new Date(currentYear + 1, 0, 1);
-  return { startOfFiveYearsAgo, endOfCurrentYear };
 }
 
 
@@ -463,14 +462,7 @@ class VendorController {
           const covercommand = new PutObjectCommand(coverpicUploadParams);
           await s3.send(covercommand);
 
-          // const covercommand2 = new GetObjectCommand({
-          //   Bucket: process.env.BUCKET_NAME!,
-          //   Key: coverpicFile?.originalname,
-          // });
-
-          // coverpicUrl = await getSignedUrl(s3, covercommand2, {
-          //   expiresIn: 86400 * 3,
-          // });
+         
            coverpicUrl=`${process.env.IMAGE_URL}/${coverpicFile?.originalname}`
 
         }
@@ -492,13 +484,7 @@ class VendorController {
           const logocommand = new PutObjectCommand(logoUploadParams);
           await s3.send(logocommand);
   
-          // const logocommand2 = new GetObjectCommand({
-          //   Bucket: process.env.BUCKET_NAME!,
-          //   Key: logoFile?.originalname,
-          // });
-          // logoUrl = await getSignedUrl(s3, logocommand2, {
-          //   expiresIn: 86400 * 3,
-          // });
+          
         }
         }
         logoUrl=`${process.env.IMAGE_URL}/${logoFile?.originalname}`
@@ -581,6 +567,7 @@ class VendorController {
 
   async getRevenue(req: Request, res: Response): Promise<void> {
     try {
+
       const vendorId = req.query.vendorId as string;
       const dateType = req.query.date as string;
   
@@ -593,68 +580,74 @@ class VendorController {
   
       switch (dateType) {
         case 'week':
-          const { startOfWeek, endOfWeek } = getCurrentWeekRange();
-          start = startOfWeek;
-          end = endOfWeek;
-          groupBy = { day: { $dayOfMonth: '$createdAt' } }; // Group by day
-          sortField = 'day';// Sort by day
-          arrayLength = 7;
-          break;
+        const { startOfWeek, endOfWeek } = getCurrentWeekRange();
+        start = startOfWeek;
+        end = endOfWeek;
+        groupBy = { day: { $dayOfWeek: '$createdAt' } }; // Adjusted to $dayOfWeek
+        sortField = 'day';
+        arrayLength = 7;
+        break;
+        
         case 'month':
-          const { startOfYear, endOfYear } = getCurrentYearRange();
-          start = startOfYear;
-          end = endOfYear;
-          groupBy = { month: { $month: '$createdAt' } }; // Group by month
-          sortField = 'month'; // Sort by month
-          arrayLength = 12;
-          break;
+        const { startOfMonth, endOfMonth } = getCurrentMonthRange();
+        start = startOfMonth;
+        end = endOfMonth;
+        groupBy = { day: { $dayOfMonth: '$createdAt' } };
+        sortField = 'day';
+        arrayLength = new Date().getDate();
+        break;
+
         case 'year':
-          const { startOfFiveYearsAgo, endOfCurrentYear } = getLastFiveYearsRange();
-          start = startOfFiveYearsAgo;
-          end = endOfCurrentYear;
-          groupBy = { year: { $year: '$createdAt' } }; // Group by year
-          sortField = 'year';// Sort by year
-          arrayLength = 5;
-          break;
+        const { startOfYear, endOfYear } = getCurrentYearRange();
+        start = startOfYear;
+        end = endOfYear;
+        groupBy = { month: { $month: '$createdAt' } };
+        sortField = 'month';
+        arrayLength = 12;
+        break;
+
         default:
-          res.status(400).json({ message: 'Invalid date parameter' });
-          return;
+        res.status(400).json({ message: 'Invalid date parameter' });
+        return;
       }
   
       const revenueData = await Payment.aggregate([
-        {
-          $match: {
-            vendorId: new Types.ObjectId(vendorId),
-            createdAt: {
-              $gte: start,
-              $lt: end,
-            },
+      {
+        $match: {
+          vendorId: new Types.ObjectId(vendorId),
+          createdAt: {
+            $gte: start,
+            $lt: end,
           },
         },
-        {
-          $group: {
-            _id: groupBy,
-            totalRevenue: { $sum: '$amount' },
-          },
+      },
+      {
+        $group: {
+          _id: groupBy,
+          totalRevenue: { $sum: '$amount' },
         },
-        {
-          $sort: { [`_id.${sortField}`]: 1 },
-        },
-      ]);
+      },
+      {
+        $sort: { [`_id.${sortField}`]: 1 },
+      },
+    ]);
+
       const revenueArray = Array.from({ length: arrayLength }, (_, index) => {
-        const item = revenueData.find((r) => {
-          if (dateType === 'week') {
-            return r._id.day === index + 1;
-          } else if (dateType === 'month') {
-            return r._id.month === index + 1;
-          } else if (dateType === 'year') {
-            return r._id.year === new Date().getFullYear() - (arrayLength - 1) + index;
-          }
-          return false;
-        });
-        return item ? item.totalRevenue : 0; // Default to 0 if no data for the expected index
+      const item = revenueData.find((r) => {
+        if (dateType === 'week') {
+          return r._id.day === index + 1; // Adjusted for $dayOfWeek
+        } else if (dateType === 'month') {
+          return r._id.day === index + 1;
+        } else if (dateType === 'year') {
+          return r._id.month === index + 1;
+        }
+        return false;
       });
-  
+      return item ? item.totalRevenue : 0;
+    });
+
+    
+      console.log(revenueArray)
       res.status(200).json({ revenue: revenueArray }); 
     } catch (error) {
       handleError(res, error, "getRevenue");

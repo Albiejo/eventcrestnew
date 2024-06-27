@@ -490,15 +490,15 @@ const Messenger = () => {
                                 
                                 <>
                               
-                                {/* <div className="mt-4">
+                                <div className="mt-4">
                                     <img
                                         src={receiverdata.coverpicUrl}
                                         alt="image"
                                         className="w-full h-full rounded"
                                     />
-                                </div> */}
+                                </div>
 
-                      <div className="w-40 ml-20 border-4 border-gray-300 rounded-full p-1">
+                      {/* <div className="w-40 ml-28 border-4 border-gray-300 rounded-full p-1">
                           <Avatar
                             src={receiverdata?.logoUrl}
                             alt="Profile picture"
@@ -508,13 +508,8 @@ const Messenger = () => {
                             onPointerEnterCapture={undefined}
                             onPointerLeaveCapture={undefined}
                           />
-                    </div>
+                    </div> */}
 
-{/*                     
-                                <div>
-                                    <h4 className='text-center mt-2 font-bold text-gray-700'>ABOUT</h4>    
-                                    <p className='text-sm text-gray-700 mt-4'>{receiverdata?.about}</p>
-                                </div>   */}
 
                                 </>
                                 
@@ -523,7 +518,7 @@ const Messenger = () => {
                           <p className="font-bold text-black text-center mr-4 mt-6 text-xl">{receiverdata?.name}</p>
                           
                            
-                          <p className="mt-2 text-sm text-green-900 font-bold ">
+                          <p className="mt-2 text-sm text-green-900 font-bold text-center">
                               {notActive ? <span className="mr-1">Offline</span> : (
                                   Active ? (
                                       <>  

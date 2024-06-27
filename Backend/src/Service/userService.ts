@@ -399,6 +399,7 @@ export const UpdatePasswordService = async(newPassword:string , userId:string)=>
 export const UpdateUserProfile=async(userId:string , name:string , phone:number , image:string , imageUrl:string)=>{
   try {
     const data = await UpdateUserProfileDetails(userId , name , phone, imageUrl, image);
+    
     if(!data){
       return false;
     }

@@ -362,7 +362,7 @@ const Messenger = () => {
   <div className="chatboxHeader">
     <div className="headerUserInfo flex items-center space-x-4">
       <img 
-        src={receiverdata?.imageUrl ? receiverdata?.imageUrl : '/imgs/head.png'} 
+        src={receiverdata?.image ? receiverdata?.image : '/imgs/head.png'} 
         alt="User Avatar" 
         className="avatar" 
       />
