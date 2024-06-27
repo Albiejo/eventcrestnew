@@ -15,7 +15,7 @@ interface Booking{
   date:string;
   name:string;
   eventName:string;
-  city:string;
+  venue:string;
   pin:number;
   mobile:number;
   vendorId:VendorData;

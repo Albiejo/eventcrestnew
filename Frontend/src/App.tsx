@@ -8,6 +8,8 @@ import MyNavbar from './Components/User/Navbar';
 import Layout from './Layout/UserLayout';
 import { SnackbarProvider } from 'notistack';
 import ScrollToTopButton from './Components/Common/ScrollToTopButton';
+import { Toaster } from 'react-hot-toast';
+
 
 const App: React.FC = () => {
   
@@ -21,6 +23,7 @@ const App: React.FC = () => {
     <>
     <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
     <ToastContainer/>
+    <Toaster />
       {isProfileRoute ? (
         <Layout>
            <div className="flex-1 bg-white mt-10">
@@ -32,6 +35,7 @@ const App: React.FC = () => {
       ) : ( 
         <div >
            {!isAuthRoute && <MyNavbar/>}
+          <Toaster />
           <Outlet/>
           <ScrollToTopButton/>
 

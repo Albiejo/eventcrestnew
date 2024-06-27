@@ -10,26 +10,15 @@ import UpdateStatus from './UpdateStatus';
 import { useEffect, useState } from 'react';
 import { axiosInstanceVendor } from '../../../Api/axiosinstance';
 import { useLocation } from 'react-router-dom';
+import { Booking } from '../../../Types/Booking';
 
 
-
-interface Booking {
-  _id: string;
-  date: string;
-  name: string;
-  eventName: string;
-  city: string;
-  pin: number;
-  mobile: number;
-  status: string;
-  payment_status: string;
-}
 const initialBookingState: Booking = {
   _id: "",
   date: "",
   name: "",
   eventName: "",
-  city: "",
+  venue: "",
   pin: 0,
   mobile: 0,
   status: "",
@@ -134,7 +123,7 @@ const ViewBooking = () => {
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                 >
-                  {bookings.city}
+                  {bookings.venue}
                 </Typography>
               </div>
               <div>
@@ -253,7 +242,7 @@ const ViewBooking = () => {
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                 >
-                  {bookings.city}
+                  {bookings.venue}
                 </Typography>
                 <Typography
                   variant="small"

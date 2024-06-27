@@ -38,7 +38,7 @@ import {
     date: string;
     name: string;
     eventName: string;
-    city: string;
+    venue: string;
     pin: number;
     mobile: number;
     vendorId: Vendor;
@@ -211,7 +211,7 @@ const SingleBooking = () => {
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
                 >
-                    {booking?.city}
+                    {booking?.venue}
                 </Typography>
             </div>
             <div>
@@ -246,7 +246,7 @@ const SingleBooking = () => {
                 </Typography>
                 <Typography
                     variant="small"
-                    className="mb-2 text-blue-700 font-bold"
+                    className="mb-2 text-red-700 font-bold"
                     placeholder={undefined}
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}

@@ -11,7 +11,6 @@ import UserRootState from '../../Redux/rootstate/UserState';
 import { useSelector } from 'react-redux';
 import { FormValues } from '../../Types/commonTypes';
 
-
 const initialValues: FormValues = {
   eventName: '',
   name: '',
@@ -58,7 +57,8 @@ const BookEventForm: React.FC = () => {
         .then((response) =>{
         
           if (response.status === 201) {
-            toast.success(response.data.message);
+            console.log(response.data.message)
+            toast.success("Booking done Successfully");
             navigate("/profile/Bookings");
           } else if (response.status === 400) {
             toast.error(response.data.message);
