@@ -1,13 +1,12 @@
-import  { MouseEvent } from 'react';
+import  { MouseEvent, useCallback } from 'react';
 import './Messenger.css';
 import Conversation from '../../../Components/User/conversations/Conversation';
 import { useSelector } from 'react-redux';
 import UserRootState from '../../../Redux/rootstate/UserState';
 import { useEffect, useRef, useState } from 'react';
 import { axiosInstanceChat, axiosInstanceMsg, axiosInstanceVendor } from '../../../Api/axiosinstance';
-import {io } from 'socket.io-client'
+import {io  ,Socket } from 'socket.io-client'
 import Message from '../../../Components/User/messages/Message';
-import Picker from '@emoji-mart/react'
 import { Avatar, Button, IconButton } from '@material-tailwind/react';
 import { v4 as uuidv4 } from "uuid";
 import { ChangeEvent } from 'react';
@@ -24,6 +23,8 @@ import { conversationType  } from '../../../Types/ConversationType';
 import { useNavigate } from 'react-router-dom';
 
 
+
+//env variables
 const ACCESS_KEY = import.meta.env.VITE_ACCESS_KEY|| "";
 const BUCKET_REGION = import.meta.env.VITE_BUCKET_REGION || "";
 const BUCKET_NAME = import.meta.env.VITE_BUCKET_NAME || "";
@@ -39,8 +40,8 @@ interface FileState {
 const Messenger = () => {
 
 
-  const navigate = useNavigate();
-    const s3 = new S3Client({
+   const navigate = useNavigate();
+   const s3 = new S3Client({
         credentials: {
           accessKeyId: ACCESS_KEY!,
           secretAccessKey: SECRET_ACCESS_KEY!,
@@ -56,7 +57,6 @@ const Messenger = () => {
     const [messages , setmessages] = useState<MessageType[]>([]);
     const [arrivalMessage , setArrivalMessage] = useState<MessageType | null>(null)
     const [newMessage, setnewMessage] = useState("");
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [receiverdata , setReceiverdata] = useState<VendorData | null>(null);
     const [typingstatus , settypingstatus] = useState(false);
     const [Active , setActive] = useState(false);
@@ -64,24 +64,31 @@ const Messenger = () => {
     const [notActive ,setNotActive] = useState("");
     const [filemodal, setFileModal] = useState(false);
     const [file, setFile] =  useState<FileState | null>(null);
-
-
     const scrollRef = useRef<HTMLDivElement>(null);
-    const socket = useRef(io("http://localhost:3001")); 
 
-    
 
+
+    const socket = useRef<Socket | undefined>(); 
 
     const sendHeartbeat = () => {
-        socket.current.emit("heartbeat");
+      
+        socket.current?.emit("heartbeat");
     };
 
     setInterval(sendHeartbeat, 60000);
 
 
+
+
+
     useEffect(()=>{
-        socket.current = io("http://localhost:3001");
-        socket.current.on("getMessage" , (data)=>{
+      socket.current = io("http://localhost:3001");
+    },[])
+
+
+    useEffect(()=>{
+       
+        socket.current?.on("getMessage" , (data)=>{
             setArrivalMessage({
               senderId : data.senderId , 
               conversationId: data.conversationId || "",
@@ -92,25 +99,26 @@ const Messenger = () => {
             });
         })
 
-        socket.current.on("typingsent" , ()=>{  
+        socket.current?.on("typingsent" , ()=>{  
             settypingstatus(true)
         })
-        socket.current.on("stopTypingsent" , (senderId)=>{
+        socket.current?.on("stopTypingsent" , (senderId)=>{
           console.log(senderId)
             settypingstatus(false)      
         })
-   
 
-    },[typingstatus ,messages , conversation])
-
+    },[])
 
 
-    useEffect(()=>{
-        socket.current.emit("adduser" , user?._id);
-        socket.current.on("getUsers" , (users)=>{   
-          console.log(users)         
-        })
-    },[user])
+
+   useEffect(() => {
+    if (user?._id) {
+      socket.current?.emit("adduser", user._id);
+      socket.current?.on("getUsers", (users) => {
+        console.log(users);
+      });
+    }
+  }, [user]);
 
 
     
@@ -120,20 +128,24 @@ const Messenger = () => {
     },[arrivalMessage , currentchat])
 
 
-    const getconversation = async()=>{  
-      try {
-          const res = await axiosInstanceChat.get(`/?userId=${user?._id}`)
-          setconversation(res.data)
-      } catch (error) {
-          console.log(error)
-      }
-  }
+  
+
+  const getconversation = useCallback(async () => {
+    try {
+      const res = await axiosInstanceChat.get(`/?userId=${user?._id}`);
+      setconversation(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user?._id]);
 
   useEffect(()=>{
-       
+
     getconversation();
 
-  },[user?._id  , messages])
+  },[user?._id, messages, getconversation])
+
+
 
 
     useEffect(()=>{
@@ -159,8 +171,7 @@ const Messenger = () => {
 
 
 
-    
-    
+
     const handleDivClick = (conversation:conversationType) => {
       setcurrentchat(conversation)
       const receiverId = conversation?.members.find((member)=>member !==user?._id)
@@ -170,7 +181,7 @@ const Messenger = () => {
     const receiverId = currentchat?.members.find((member)=>member !==user?._id)
 
     const checkUserActiveStatus = (receiverId:string) => {
-        socket.current.emit("checkUserActiveStatus", receiverId);
+        socket.current?.emit("checkUserActiveStatus", receiverId);
     };
 
     const fetchreceiverdata = async(receiverId:string)=>{
@@ -190,7 +201,7 @@ const Messenger = () => {
                 imageUrl: "",
                 conversationId: currentchat?._id
             };
-            socket.current.emit("sendMessage" , {
+            socket.current?.emit("sendMessage" , {
                 senderId : user?._id,
                 receiverId,
                 text:newMessage
@@ -211,11 +222,11 @@ const Messenger = () => {
 
     const handleTyping = () => {
            
-     socket.current.emit('typing', { receiverId: receiverId });
+     socket.current?.emit('typing', { receiverId: receiverId });
     };
   
     const handleStopTyping = () => {
-     socket.current.emit('stopTyping', { receiverId: receiverId });
+     socket.current?.emit('stopTyping', { receiverId: receiverId });
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -223,28 +234,17 @@ const Messenger = () => {
     handleTyping();
     };
         
-  const handleEmojiSelect = (emoji: string | { native: string }) => {
-          setnewMessage("hello")
-          if (typeof emoji === 'string') {
-            console.log("Emoji Selected:", emoji);
-            setnewMessage(prev => prev + emoji);
-            
-          } else {
-            console.log("Emoji Selected:", emoji.native);
-            setnewMessage(prev => prev + emoji.native);
-          }
-  };
-    
+ 
   useEffect(() => {
 
-            socket.current.on("userActiveStatus", ({  active , lastSeen }) => {
+            socket.current?.on("userActiveStatus", ({  active , lastSeen }) => {
                 setActive(active);
                 const timePart = lastSeen.split(", ")[1];
                 setlastseen(timePart)
                 setNotActive("")
             });
 
-            socket.current.on("userNotACtive", ({  message }) => {               
+            socket.current?.on("userNotACtive", ({  message }) => {               
                 setNotActive(message);
             });
 
@@ -332,14 +332,6 @@ const Messenger = () => {
 
 
 
-
-
-
-
-
-
-
-
    return (
    <>
    
@@ -421,15 +413,7 @@ const Messenger = () => {
                               </div>
 
                         <textarea className='chatMessageInput' placeholder='write something..' onChange={handleInputChange} value={newMessage}  onBlur={handleStopTyping} ></textarea>
-                           {showEmojiPicker && (
-                                <Picker
-                                    set='apple'
-                                    onSelect={handleEmojiSelect} 
-                                    style={{ position: 'absolute', bottom: '70px', right: '10px' ,  zIndex: 1}}
-                                  
-                                />
-                            )}
-                        <button onClick={() => setShowEmojiPicker(prev => !prev)}>😀</button>
+                          
                         <button className='chatSubmitButton' onClick={handleSubmit}>send</button>
                     
                     </div>
@@ -526,8 +510,8 @@ const Messenger = () => {
                           />
                     </div>
 
-                    
-                                {/* <div>
+{/*                     
+                                <div>
                                     <h4 className='text-center mt-2 font-bold text-gray-700'>ABOUT</h4>    
                                     <p className='text-sm text-gray-700 mt-4'>{receiverdata?.about}</p>
                                 </div>   */}
@@ -542,9 +526,11 @@ const Messenger = () => {
                           <p className="mt-2 text-sm text-green-900 font-bold ">
                               {notActive ? <span className="mr-1">Offline</span> : (
                                   Active ? (
-                                      <>
-                                          <span className="mr-1">Active now</span>
-                                          <div className="inline-block w-2 h-2  bg-green-500 rounded-full"></div>
+                                      <>  
+                                        
+                                          <span className="text-center">Active now</span>
+                                          <div className="inline-block w-2 h-2 ml-2 bg-green-500 rounded-full"></div>
+                                          
                                       </>
                                   ) : `Last seen at ${lastseen}`
                               )}

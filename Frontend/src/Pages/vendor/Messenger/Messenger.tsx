@@ -4,11 +4,10 @@ import Message from '../../../Components/User/messages/Message';
 import { useSelector } from 'react-redux';
 import UserRootState from '../../../Redux/rootstate/UserState';
 import VendorRootState from '../../../Redux/rootstate/VendorState';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { axiosInstanceAdmin, axiosInstanceChat, axiosInstanceMsg } from '../../../Api/axiosinstance';
-import {io} from 'socket.io-client';
+import {io ,Socket} from 'socket.io-client';
 import DefaultLayout from '../../../Layout/VendorLayout';
-import Picker from '@emoji-mart/react';
 import {
     S3Client,
     PutObjectCommand,
@@ -26,19 +25,12 @@ import { conversationType  } from '../../../Types/ConversationType';
 
 
 
-
+//env variables
   const ACCESS_KEY = import.meta.env.VITE_ACCESS_KEY || "";
   const BUCKET_REGION = import.meta.env.VITE_BUCKET_REGION || "";
   const BUCKET_NAME = import.meta.env.VITE_BUCKET_NAME || "";
   const SECRET_ACCESS_KEY = import.meta.env.VITE_SECRET_ACCESS_KEY || "";
 
-
-  // interface conversationType{
-  //   _id:string;
-  //   members: string[];
-  //   latestMessageTimestamp:Date;
-  //   timestamps: Date;
-  // }
 
 
   interface FileState {
@@ -60,8 +52,6 @@ const Messenger = () => {
       });
 
 
-
-
     const user = useSelector((state: UserRootState) => state.user.userdata);
     const vendorData = useSelector(
         (state: VendorRootState) => state.vendor.vendordata,
@@ -73,7 +63,6 @@ const Messenger = () => {
     const [messages , setmessages] = useState<MessageType[]>([]);
     const [arrivalMessage , setArrivalMessage] = useState<MessageType | null>(null);
     const [newMessage, setnewMessage] = useState("");
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [typing , setTyping] = useState(false);
     const [filemodal, setFileModal] = useState(false);
     const [file, setFile] = useState<FileState | null>(null);
@@ -84,17 +73,23 @@ const Messenger = () => {
 
     const scrollRef = useRef<HTMLDivElement>(null);
     
-    const socket = useRef(io("http://localhost:3001")); 
+    const socket =  useRef<Socket | undefined>();
+
+
+      useEffect(()=>{
+        socket.current = io("http://localhost:3001")
+      },[])
+
 
 
 
     useEffect(()=>{
-        socket.current = io("http://localhost:3001")
+       
 
-        socket.current.on("getMessage" , (data)=>{
+        socket.current?.on("getMessage" , (data)=>{
             setArrivalMessage({
                 senderId : data.senderId , 
-              conversationId: data.conversationId || "",
+                conversationId: data.conversationId || "",
                 text : data.text,
                 imageName: "",
                 imageUrl: "",
@@ -102,20 +97,22 @@ const Messenger = () => {
             });
         })
 
-        socket.current.on("typingsent" , (senderId)=>{
+        socket.current?.on("typingsent" , (senderId)=>{
             console.log(senderId)
             setTyping(true);
 
         })
 
-        socket.current.on("stopTypingsent" , (senderId)=>{
+        socket.current?.on("stopTypingsent" , (senderId)=>{
             console.log(senderId)
             setTyping(false);
         })
 
-
+        return () => {
+          socket.current?.disconnect();
+        };
      
-    },[typing , conversation , messages])
+    },[])
 
 
     const handleDivClick = (conversation:conversationType) => {     
@@ -134,27 +131,28 @@ const Messenger = () => {
 
     useEffect(()=>{
      
-        socket.current.emit("adduser" , vendorData?._id);
-        socket.current.on("getUsers" , (users)=>{
+        socket.current?.emit("adduser" , vendorData?._id);
+        socket.current?.on("getUsers" , (users)=>{
             console.log(users)
         })
-    },[user])
+    },[vendorData])
 
 
 
-    const getconversation = async()=>{  
-      try {
-          const res = await axiosInstanceChat.get(`/?userId=${vendorData?._id}`)
-          setconversation(res.data)
-          
-      } catch (error) {
-          console.log(error)
-      }
-  }
+  const getconversation = useCallback(async () => {
+    try {
+      const res = await axiosInstanceChat.get(`/?userId=${vendorData?._id}`);
+      setconversation(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [vendorData?._id]);
 
-  useEffect(()=>{
+
+
+  useEffect(() => {
     getconversation();
-  },[conversation])
+  }, [messages, vendorData?._id, getconversation]);
 
   
     useEffect(()=>{
@@ -170,7 +168,7 @@ const Messenger = () => {
       }
       getmessages();
 
-    } , [ currentchat])
+    } , [currentchat])
 
     
     const receiverId = currentchat?.members.find((member)=>member !== vendorData?._id)
@@ -178,7 +176,7 @@ const Messenger = () => {
 
 
     const checkUserActiveStatus = (receiverId:string) => {
-      socket.current.emit("checkUserActiveStatus", receiverId);
+      socket.current?.emit("checkUserActiveStatus", receiverId);
   };
 
     const fetchreceiverdata = async(receiverId:string)=>{
@@ -190,6 +188,7 @@ const Messenger = () => {
 
 
      const handleSubmit=async(e: MouseEvent<HTMLButtonElement>)=>{
+
         e.preventDefault();
 
         const message = {
@@ -200,7 +199,7 @@ const Messenger = () => {
             imageUrl: "",
         };
         
-        socket.current.emit("sendMessage" , {
+        socket.current?.emit("sendMessage" , {
             senderId : vendorData?._id,
             receiverId,
             text:newMessage
@@ -222,14 +221,14 @@ const Messenger = () => {
      
      useEffect(() => {
 
-      socket.current.on("userActiveStatus", ({  active , lastSeen }) => {
+      socket.current?.on("userActiveStatus", ({  active , lastSeen }) => {
           setActive(active);
           const timePart = lastSeen.split(", ")[1];
           setlastseen(timePart)
           setNotActive("")
       });
 
-      socket.current.on("userNotACtive", ({  message }) => {               
+      socket.current?.on("userNotACtive", ({  message }) => {               
           setNotActive(message);
       });
 
@@ -239,26 +238,18 @@ const Messenger = () => {
 
 
         const handleTyping = () => {
-            socket.current.emit('typing', { receiverId: receiverId });
+            socket.current?.emit('typing', { receiverId: receiverId });
         };
   
        
         const handleStopTyping = () => {
-            socket.current.emit('stopTyping', { receiverId: receiverId });
+            socket.current?.emit('stopTyping', { receiverId: receiverId });
         };
 
 
         const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
             setnewMessage(e.target.value);
             handleTyping();
-        };
-
-        const handleEmojiSelect = (emoji: string | { native: string }) => {
-          if (typeof emoji === 'string') {
-            setnewMessage(prev => prev + emoji);
-          } else {
-            setnewMessage(prev => prev + emoji.native);
-          }
         };
 
 
@@ -448,15 +439,6 @@ const Messenger = () => {
 
                                     <textarea className='chatMessageInput' placeholder='write something..'onChange={handleInputChange} value={newMessage}  onBlur={handleStopTyping}></textarea>
                                     <button className='chatSubmitButton' onClick={handleSubmit}>send</button>
-
-                                    {showEmojiPicker && (
-                                            <Picker
-                                                set='apple'
-                                                onSelect={handleEmojiSelect} 
-                                                style={{ position: 'absolute', bottom: '70px', right: '10px' }}
-                                            />
-                                        )}
-                                    <button onClick={() => setShowEmojiPicker(prev => !prev)}>😀</button>
                                     
                                 </div>
                                     </> ):( <span className="noConversationtext font-bold text-gray-900">open a conversation to start a chat</span> )
