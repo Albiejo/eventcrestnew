@@ -168,7 +168,7 @@ const UsersTable=()=> {
                       <div className="flex items-center gap-3">
                         <Avatar
                           src={
-                           user.imageUrl?user.imageUrl: '/imgs/head.png' 
+                           user.image?user.image: '/imgs/head.png' 
                           }
                           
                           size="sm"

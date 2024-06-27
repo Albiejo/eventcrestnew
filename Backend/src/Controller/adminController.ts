@@ -203,13 +203,21 @@ class AdminController {
   async getAllAdminData(req: Request, res: Response){
     try {
       const adminData = await adminService.GetAllAdminDetails();
-      const adminEmails = adminData.map(admin => admin.email)
-      return res.status(200).json(adminEmails)
+      return res.status(200).json(adminData)
     } catch (error) {
       handleError(res , error , "getAllAdminData")
     }
   }
 
+  async DeleteAdmin(req:Request , res:Response){
+    try {
+      const Id = req.params.id;
+      const data = await adminService.DeleteAdmin(Id)
+      return res.status(200).json(data)
+    } catch (error) {
+      handleError(res , error , "DeleteAdmin")
+    }
+  }
 
 };
 

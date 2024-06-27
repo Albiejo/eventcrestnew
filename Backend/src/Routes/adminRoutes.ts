@@ -48,7 +48,7 @@ router.get('/notificationCount' ,authenticate , adminController.countNotificatio
 router.patch('/ClearAll' , authenticate , adminController.clearAllNotification )
 
 router.post('/createAdmin'  , adminController.AdmincreateAdmin)
-
+router.delete('/deleteAdmin/:id' , adminController.DeleteAdmin)
 
 export default router;
 

@@ -12,12 +12,12 @@ import { useState ,ChangeEvent, FormEvent, useEffect } from "react";
 import swal from 'sweetalert';
 import { axiosInstanceAdmin } from "../../Api/axiosinstance";
 import { toast } from "react-toastify";
-
+import { AdminData } from "../../Types/adminType";
 
 
 const AdminAddAdmin = () => {
 
-  const confirmDelete = (email:string) => {
+  const confirmDelete = (_id:string) => {
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this admin!",
@@ -35,7 +35,7 @@ const AdminAddAdmin = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        handleDelete(email);
+        handleDelete(_id);
         swal("Poof! Admin has been deleted!", {
           icon: "success",
         });
@@ -45,15 +45,24 @@ const AdminAddAdmin = () => {
     });
   };
 
-  const handleDelete = (emailToDelete:string) => {
-    setAdminList(adminList.filter(email => email !== emailToDelete));
-  };
+  const handleDelete = async (_id: string) => {
+    await axiosInstanceAdmin.delete(`/deleteAdmin/${_id}`)
+        .then(() => {
+            setAdminList(adminList.filter(admin => admin._id !== _id));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+
+
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const [adminList , setAdminList] = useState([]);
+    const [adminList , setAdminList] = useState<AdminData[]>([]);
 
      const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -125,12 +134,12 @@ const AdminAddAdmin = () => {
           <div className="md:w-1/2 mb-8 md:mb-0 md:mr-4">
             <Card className="w-96" placeholder={undefined}>
               <List  placeholder={undefined}>
-                {adminList.map((email, index) => (
+                {adminList.map((admin, index) => (
                   <ListItem key={index} className="flex justify-between items-center"  placeholder={undefined}>
                     <Typography variant="h6" color="black"  placeholder={undefined}>
-                      {index + 1} : {email}
+                      {index + 1} : {admin.email}
                     </Typography>
-                    <Button color="blue"  placeholder={undefined} onClick={() => confirmDelete(email)}>
+                    <Button color="blue"  placeholder={undefined} onClick={() => confirmDelete(admin._id)}>
                       Delete
                     </Button>
                   </ListItem>

@@ -183,10 +183,22 @@ interface LoginResponse {
 
   async GetAllAdminDetails(){
     try {
-      const adminDetails =  admin.find();
+      const adminDetails =  await admin.find();
       return adminDetails;
     } catch (error) {
       console.error("Error fetching all admin details", error);
+      throw error;
+    }
+  }
+
+
+
+  async DeleteAdmin(Id:string){
+    try {
+      const status = await admin.deleteOne({_id:Id});
+      return status;
+    } catch (error) {
+      console.error("Error deleting admin :", error);
       throw error;
     }
   }
