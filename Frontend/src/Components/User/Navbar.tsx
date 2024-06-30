@@ -17,7 +17,6 @@ import { axiosInstance } from "../../Api/axiosinstance";
 import { logout } from "../../Redux/slices/UserSlice";
 import {format} from 'timeago.js'
 import { USERROUTES } from "../../Constants/constants";
-import { current } from "@reduxjs/toolkit";
 
 
 interface Notification {

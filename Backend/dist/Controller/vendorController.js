@@ -17,7 +17,6 @@ const moment_1 = __importDefault(require("moment"));
 const generateOtp_1 = __importDefault(require("../Util/generateOtp"));
 const CustomError_1 = require("../Error/CustomError");
 const client_s3_1 = require("@aws-sdk/client-s3");
-const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const handleError_1 = require("../Util/handleError");
 const mongoose_1 = require("mongoose");
 const Payment_1 = __importDefault(require("../Model/Payment"));
@@ -26,18 +25,15 @@ function getCurrentWeekRange() {
     const endOfWeek = (0, moment_1.default)().endOf('isoWeek').toDate();
     return { startOfWeek, endOfWeek };
 }
-// Function to get current year range
+function getCurrentMonthRange() {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+    return { startOfMonth, endOfMonth };
+}
 function getCurrentYearRange() {
     const startOfYear = new Date(new Date().getFullYear(), 0, 1);
     const endOfYear = new Date(new Date().getFullYear() + 1, 0, 1);
     return { startOfYear, endOfYear };
-}
-// Function to calculate the last five years' range
-function getLastFiveYearsRange() {
-    const currentYear = new Date().getFullYear();
-    const startOfFiveYearsAgo = new Date(currentYear - 5, 0, 1);
-    const endOfCurrentYear = new Date(currentYear + 1, 0, 1);
-    return { startOfFiveYearsAgo, endOfCurrentYear };
 }
 const sharp = require("sharp");
 const s3 = new client_s3_1.S3Client({
@@ -394,13 +390,7 @@ class VendorController {
                         };
                         const covercommand = new client_s3_1.PutObjectCommand(coverpicUploadParams);
                         yield s3.send(covercommand);
-                        const covercommand2 = new client_s3_1.GetObjectCommand({
-                            Bucket: process.env.BUCKET_NAME,
-                            Key: coverpicFile === null || coverpicFile === void 0 ? void 0 : coverpicFile.originalname,
-                        });
-                        coverpicUrl = yield (0, s3_request_presigner_1.getSignedUrl)(s3, covercommand2, {
-                            expiresIn: 86400 * 3,
-                        });
+                        coverpicUrl = `${process.env.IMAGE_URL}/${coverpicFile === null || coverpicFile === void 0 ? void 0 : coverpicFile.originalname}`;
                     }
                     if (typeof req.files === "object" &&
                         "logo" in req.files &&
@@ -414,15 +404,9 @@ class VendorController {
                         };
                         const logocommand = new client_s3_1.PutObjectCommand(logoUploadParams);
                         yield s3.send(logocommand);
-                        const logocommand2 = new client_s3_1.GetObjectCommand({
-                            Bucket: process.env.BUCKET_NAME,
-                            Key: logoFile === null || logoFile === void 0 ? void 0 : logoFile.originalname,
-                        });
-                        logoUrl = yield (0, s3_request_presigner_1.getSignedUrl)(s3, logocommand2, {
-                            expiresIn: 86400 * 3,
-                        });
                     }
                 }
+                logoUrl = `${process.env.IMAGE_URL}/${logoFile === null || logoFile === void 0 ? void 0 : logoFile.originalname}`;
                 const ExistingVendor = yield (0, vendorService_1.getSingleVendor)(vendorId);
                 const updatedVendor = yield (0, vendorService_1.updateVendorprof)(vendorId, formData, coverpicUrl ? coverpicUrl : ExistingVendor.coverpicUrl, logoUrl ? logoUrl : ExistingVendor.logoUrl, (logoFile === null || logoFile === void 0 ? void 0 : logoFile.originalname) ? logoFile === null || logoFile === void 0 ? void 0 : logoFile.originalname : ExistingVendor.logo, (coverpicFile === null || coverpicFile === void 0 ? void 0 : coverpicFile.originalname) ? coverpicFile === null || coverpicFile === void 0 ? void 0 : coverpicFile.originalname : ExistingVendor.coverpic);
                 res.status(200).json(updatedVendor);
@@ -513,25 +497,25 @@ class VendorController {
                         const { startOfWeek, endOfWeek } = getCurrentWeekRange();
                         start = startOfWeek;
                         end = endOfWeek;
-                        groupBy = { day: { $dayOfMonth: '$createdAt' } }; // Group by day
-                        sortField = 'day'; // Sort by day
+                        groupBy = { day: { $dayOfWeek: '$createdAt' } }; // Adjusted to $dayOfWeek
+                        sortField = 'day';
                         arrayLength = 7;
                         break;
                     case 'month':
+                        const { startOfMonth, endOfMonth } = getCurrentMonthRange();
+                        start = startOfMonth;
+                        end = endOfMonth;
+                        groupBy = { day: { $dayOfMonth: '$createdAt' } };
+                        sortField = 'day';
+                        arrayLength = new Date().getDate();
+                        break;
+                    case 'year':
                         const { startOfYear, endOfYear } = getCurrentYearRange();
                         start = startOfYear;
                         end = endOfYear;
-                        groupBy = { month: { $month: '$createdAt' } }; // Group by month
-                        sortField = 'month'; // Sort by month
+                        groupBy = { month: { $month: '$createdAt' } };
+                        sortField = 'month';
                         arrayLength = 12;
-                        break;
-                    case 'year':
-                        const { startOfFiveYearsAgo, endOfCurrentYear } = getLastFiveYearsRange();
-                        start = startOfFiveYearsAgo;
-                        end = endOfCurrentYear;
-                        groupBy = { year: { $year: '$createdAt' } }; // Group by year
-                        sortField = 'year'; // Sort by year
-                        arrayLength = 5;
                         break;
                     default:
                         res.status(400).json({ message: 'Invalid date parameter' });
@@ -560,18 +544,19 @@ class VendorController {
                 const revenueArray = Array.from({ length: arrayLength }, (_, index) => {
                     const item = revenueData.find((r) => {
                         if (dateType === 'week') {
-                            return r._id.day === index + 1;
+                            return r._id.day === index + 1; // Adjusted for $dayOfWeek
                         }
                         else if (dateType === 'month') {
-                            return r._id.month === index + 1;
+                            return r._id.day === index + 1;
                         }
                         else if (dateType === 'year') {
-                            return r._id.year === new Date().getFullYear() - (arrayLength - 1) + index;
+                            return r._id.month === index + 1;
                         }
                         return false;
                     });
-                    return item ? item.totalRevenue : 0; // Default to 0 if no data for the expected index
+                    return item ? item.totalRevenue : 0;
                 });
+                console.log(revenueArray);
                 res.status(200).json({ revenue: revenueArray });
             }
             catch (error) {

@@ -48,7 +48,7 @@ app.use('/api/user', userRoutes_1.default);
 app.use('/api/vendor', vendorRoutes_1.default);
 app.use('/api/conversation', conversation_1.router);
 app.use('/api/messages', messageRoute_1.router);
-// initializeSocket(server);
+initializeSocket(server);
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../../Frontend/dist/index.html'));
 });

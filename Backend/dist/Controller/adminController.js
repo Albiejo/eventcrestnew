@@ -210,11 +210,22 @@ class AdminController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const adminData = yield adminService_1.default.GetAllAdminDetails();
-                const adminEmails = adminData.map(admin => admin.email);
-                return res.status(200).json(adminEmails);
+                return res.status(200).json(adminData);
             }
             catch (error) {
                 (0, handleError_1.handleError)(res, error, "getAllAdminData");
+            }
+        });
+    }
+    DeleteAdmin(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const Id = req.params.id;
+                const data = yield adminService_1.default.DeleteAdmin(Id);
+                return res.status(200).json(data);
+            }
+            catch (error) {
+                (0, handleError_1.handleError)(res, error, "DeleteAdmin");
             }
         });
     }

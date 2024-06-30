@@ -11,6 +11,9 @@ import ScrollToTopButton from './Components/Common/ScrollToTopButton';
 import { Toaster } from 'react-hot-toast';
 
 
+
+
+
 const App: React.FC = () => {
   
   const location = useLocation();
@@ -21,17 +24,17 @@ const App: React.FC = () => {
   return (
     
     <>
-    <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-    <ToastContainer/>
-    <Toaster />
+          <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <ToastContainer/>
+          <Toaster />
       {isProfileRoute ? (
-        <Layout>
-           <div className="flex-1 bg-white mt-10">
-              <div style={{ maxHeight: "calc(100vh - 120px)" }} >
-                <Outlet/>
-              </div>
-          </div>
-        </Layout>
+          <Layout>
+            <div className="flex-1 bg-white mt-10">
+                <div style={{ maxHeight: "calc(100vh - 120px)" }} >
+                  <Outlet/>
+                </div>
+            </div>
+          </Layout>
       ) : ( 
         <div >
            {!isAuthRoute && <MyNavbar/>}

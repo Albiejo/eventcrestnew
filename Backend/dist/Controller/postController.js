@@ -49,7 +49,8 @@ class PostController {
                 };
                 const command = new client_s3_1.PutObjectCommand(params);
                 yield s3.send(command);
-                const post = yield (0, postService_1.createPost)(caption, imageName, vendor_id);
+                let imageUrl = `${process.env.IMAGE_URL}/${imageName}`;
+                const post = yield (0, postService_1.createPost)(caption, imageName, vendor_id, imageUrl);
                 return res.status(201).json(post);
             }
             catch (error) {

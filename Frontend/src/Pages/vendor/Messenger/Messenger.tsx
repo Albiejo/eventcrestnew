@@ -2,7 +2,6 @@ import './vendorMessenger.css';
 import Conversation from '../../../Components/Vendor/Conversations/Conversation';
 import Message from '../../../Components/User/messages/Message';
 import { useSelector } from 'react-redux';
-import UserRootState from '../../../Redux/rootstate/UserState';
 import VendorRootState from '../../../Redux/rootstate/VendorState';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { axiosInstanceAdmin, axiosInstanceChat, axiosInstanceMsg } from '../../../Api/axiosinstance';
@@ -52,7 +51,6 @@ const Messenger = () => {
       });
 
 
-    const user = useSelector((state: UserRootState) => state.user.userdata);
     const vendorData = useSelector(
         (state: VendorRootState) => state.vendor.vendordata,
       );

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { axiosInstanceChat, axiosInstanceMsg, axiosInstanceVendor } from '../../../Api/axiosinstance';
 import {io  ,Socket } from 'socket.io-client'
 import Message from '../../../Components/User/messages/Message';
-import { Avatar, Button, IconButton } from '@material-tailwind/react';
+import {  Button, IconButton } from '@material-tailwind/react';
 import { v4 as uuidv4 } from "uuid";
 import { ChangeEvent } from 'react';
 import React from 'react';

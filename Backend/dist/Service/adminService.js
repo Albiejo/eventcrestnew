@@ -165,11 +165,23 @@ class AdminService {
     GetAllAdminDetails() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const adminDetails = Admin_1.default.find();
+                const adminDetails = yield Admin_1.default.find();
                 return adminDetails;
             }
             catch (error) {
                 console.error("Error fetching all admin details", error);
+                throw error;
+            }
+        });
+    }
+    DeleteAdmin(Id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const status = yield Admin_1.default.deleteOne({ _id: Id });
+                return status;
+            }
+            catch (error) {
+                console.error("Error deleting admin :", error);
                 throw error;
             }
         });

@@ -16,10 +16,10 @@ exports.deletePost = exports.getPostById = exports.getAllPosts = exports.createP
 const CustomError_1 = require("../Error/CustomError");
 const postRepo_1 = require("../Repository/postRepo");
 const mongoose_1 = __importDefault(require("mongoose"));
-const createPost = (caption, imageName, vendor_id) => __awaiter(void 0, void 0, void 0, function* () {
+const createPost = (caption, imageName, vendor_id, imageUrl) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const vendorIdObjectId = new mongoose_1.default.Types.ObjectId(vendor_id);
-        const add = yield (0, postRepo_1.createNewPost)({ caption, image: imageName, vendor_id: vendorIdObjectId });
+        const add = yield (0, postRepo_1.createNewPost)({ caption, image: imageName, vendor_id: vendorIdObjectId, imageUrl });
         return { post: add };
     }
     catch (error) {

@@ -38,4 +38,5 @@ router.get('/revenue', AdminAuth_1.default, adminController_2.default.getRevenue
 router.get('/notificationCount', AdminAuth_1.default, adminController_2.default.countNotifications);
 router.patch('/ClearAll', AdminAuth_1.default, adminController_2.default.clearAllNotification);
 router.post('/createAdmin', adminController_2.default.AdmincreateAdmin);
+router.delete('/deleteAdmin/:id', adminController_2.default.DeleteAdmin);
 exports.default = router;
