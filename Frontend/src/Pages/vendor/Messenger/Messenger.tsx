@@ -75,10 +75,8 @@ const Messenger = () => {
 
 
       useEffect(()=>{
-        socket.current = io("https://eventcrest.online")
+        socket.current = io("https://eventcrest.online/")
       },[])
-
-
 
 
     useEffect(()=>{
