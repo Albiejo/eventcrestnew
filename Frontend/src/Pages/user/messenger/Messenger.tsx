@@ -82,7 +82,7 @@ const Messenger = () => {
 
 
     useEffect(()=>{
-      socket.current = io("http://localhost:3001");
+      socket.current = io("https://eventcrest.online");
     },[])
 
 
