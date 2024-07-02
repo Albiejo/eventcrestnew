@@ -67,14 +67,14 @@ const AdminLogin=()=> {
   }
   }
   
-const image = "https://www.shutterstock.com/image-photo/admin-word-built-letter-cubes-600nw-1634303020.jpg"
+const image = "./imgs/6310507.jpg"
   return (
     <div
     className="min-h-screen flex justify-center items-center"
     style={{ backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}
   >
     <div className="w-96">
-      <Card className="mt-20 border-4 border-gray-900 bg-gray-200" shadow={false}  placeholder={undefined}>
+      <Card className="mt-20 border-2 border-gray-900 bg-gray-200" shadow={false}  placeholder={undefined}>
         <CardHeader
             floated={false}
             shadow={false}
@@ -90,7 +90,7 @@ const image = "https://www.shutterstock.com/image-photo/admin-word-built-letter-
             <p style={{ color: 'red', fontSize: '12px', marginTop: "-12px" }}>{formErrors.email}</p>
             <Input label="Password" size="md" crossOrigin={undefined} color="black" className="bg-white bg-opacity-50" value={formValues.password} onChange={handleChange} name="password" type="password" />
             <p style={{ color: 'red', fontSize: '12px', marginTop: "-12px" }}>{formErrors.password}</p>
-            <Button fullWidth type='submit' className="bg-gray-700"  placeholder={undefined}>
+            <Button fullWidth type='submit' className="bg-blue-900"  placeholder={undefined}>
               Login
             </Button>
           </CardBody>

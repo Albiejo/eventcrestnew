@@ -16,9 +16,7 @@ import { VendorData } from '../../../Types/vendorType';
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { conversationType  } from '../../../Types/ConversationType';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,7 +80,7 @@ const Messenger = () => {
 
 
     useEffect(()=>{
-      socket.current = io("https://eventcrest.online/");
+      socket.current = io("http://eventcrest.online");
     },[])
 
 
@@ -288,18 +286,15 @@ const Messenger = () => {
       };
       const command = new PutObjectCommand(params);
       await s3.send(command);
-      const getObjectParams = {
-        Bucket: BUCKET_NAME!,
-        Key: imageName,
-      };
-      const command2 = new GetObjectCommand(getObjectParams);
-      const url = await getSignedUrl(s3, command2, { expiresIn: 86400 * 3 });
+      
+      const imageURL=`${process.env.IMAGE_URL}/${imageName}`;
+     
       const message = {
         senderId: user?._id,
         text: "",
         conversationId: currentchat?._id,
         imageName: imageName,
-        imageUrl: url,
+        imageUrl: imageURL,
       };
 
       socket.current?.emit("sendMessage", {
@@ -307,7 +302,7 @@ const Messenger = () => {
         receiverId,
         text: "",
         image: imageName,
-        imageUrl: url,
+        imageUrl: imageURL,
       });
 
       await axiosInstanceMsg

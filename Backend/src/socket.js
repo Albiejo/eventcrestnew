@@ -6,7 +6,7 @@ const { Server } = require('socket.io');
     
     const io = new Server(httpServer, {
         cors: {
-            origin: ["http://localhost:5000" ,"http://localhost:3001" ,"https://eventcrest.online" ]
+            origin: ["http://localhost:5000" ,"http://localhost:3001" ,"https://eventcrest.online" , "http://eventcrest.online"]
         }
     });
 
