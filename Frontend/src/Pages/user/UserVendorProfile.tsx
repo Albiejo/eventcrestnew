@@ -149,7 +149,7 @@ import Footer from '../../Components/Home/Footer';
                     <Typography
                       variant="paragraph"
                       color="black"
-                      className="!mt-0 font-bold"
+                      className="!mt-0"
                       placeholder={undefined}
                       onPointerEnterCapture={undefined}
                       onPointerLeaveCapture={undefined}
