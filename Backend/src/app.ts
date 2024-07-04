@@ -72,8 +72,8 @@ app.get('*',(req:Request,res:Response) =>{
 })
 
 
-const PORT = process.env.PORT;
-server.listen(PORT , ()=>{
+const PORT = 3001;
+server.listen(PORT ,'0.0.0.0', ()=>{
     console.log(`BACKEND SERVER RUNNING ON ${PORT}...`);
     
 });

@@ -70,19 +70,19 @@ export  const Review: React.FC=() => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-8 p-8 bg-gray-300 rounded-md shadow-md ">
+    <div className="max-w-2xl mx-5 lg:mx-auto mt-20 p-8 bg-gray rounded-md shadow-md">
       <h2 className="text-xl font-semibold mb-4 text-black">Leave a Review</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="rating" className="block text-sm text-black font-medium text-gray-900">Rating</label>
+          <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating</label>
           <Rating value={rating} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
         </div>
         <div className="mb-4">
-          <label htmlFor="review" className="block text-sm font-medium text-gray-900 text-black">Review</label>
-          <textarea id="review" name="review" rows={4} value={review} onChange={handleReviewChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 border-2"></textarea>
+          <label htmlFor="review" className="block text-sm font-medium text-gray-700">Review</label>
+          <textarea id="review" name="review" rows={4} value={review} onChange={handleReviewChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
         </div>
         <div className="text-right ">
-          <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+          <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
         </div>
       </form>
     </div>

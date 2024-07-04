@@ -113,20 +113,21 @@ import Footer from '../../Components/Home/Footer';
       
       <section className="relative block h-[80vh] lg:h-[100vh] overflow-hidden" ref={topRef}>
         <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center scale-105" style={{ backgroundImage: `url(${vendor?.coverpicUrl})` }} />
-        <div className="absolute top-0 h-full w-full bg-black/30 bg-cover bg-center" />
+        <div className="absolute top-0 h-full w-full bg-black/30 bg-cover" />
       </section>
 
-        <section className="relative bg-white py-10">
-          <div className="relative -mt-40 flex w-full px-8 min-w-0 flex-col break-words bg-white px-15">
+        <section className="relative bg-white">
+          <div className="relative -mt-40 flex w-full  min-w-0 flex-col break-words bg-white">
+           
             <div className="container mx-auto">
               <div className="flex flex-col lg:flex-row justify-between">
                 <div className="relative flex gap-6 items-start">
-                 <div className="-mt-20 w-40 ml-20 border-4 border-gray-300 rounded-full p-1">
+                 <div className="flex justify-center lg:justify-start lg:ml-20 lg:-mt-20 xsm:ml-10 ml-5 -mt-10">
                       <Avatar
                         src={vendor?.logoUrl}
-                        alt="Profile picture"
+                        alt="LOGO"
                         variant="circular"
-                        className="h-40 w-50 rounded-full"
+                        className="h-26 w-26 sm:h-20 sm:w-30 lg:h-40 lg:w-40"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -157,24 +158,24 @@ import Footer from '../../Components/Home/Footer';
                     </Typography>
 
                     {vendor?.isVerified ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                x="0px"
-                y="0px"
-                width="48"
-                height="48"
-                viewBox="0 0 48 48"
-                className=" h-10  w-10"
-              >
-                <polygon
-                  fill="#42a5f5"
-                  points="29.62,3 33.053,8.308 39.367,8.624 39.686,14.937 44.997,18.367 42.116,23.995 45,29.62 39.692,33.053 39.376,39.367 33.063,39.686 29.633,44.997 24.005,42.116 18.38,45 14.947,39.692 8.633,39.376 8.314,33.063 3.003,29.633 5.884,24.005 3,18.38 8.308,14.947 8.624,8.633 14.937,8.314 18.367,3.003 23.995,5.884"
-                ></polygon>
-                <polygon
-                  fill="#fff"
-                  points="21.396,31.255 14.899,24.76 17.021,22.639 21.428,27.046 30.996,17.772 33.084,19.926"
-                ></polygon>
-              </svg>
+             <svg
+             xmlns="http://www.w3.org/2000/svg"
+             x="0px"
+             y="0px"
+             width="48"
+             height="48"
+             viewBox="0 0 48 48"
+             className="absolute top-2 right-2 h-7 w-7"
+           >
+             <polygon
+               fill="#42a5f5"
+               points="29.62,3 33.053,8.308 39.367,8.624 39.686,14.937 44.997,18.367 42.116,23.995 45,29.62 39.692,33.053 39.376,39.367 33.063,39.686 29.633,44.997 24.005,42.116 18.38,45 14.947,39.692 8.633,39.376 8.314,33.063 3.003,29.633 5.884,24.005 3,18.38 8.308,14.947 8.624,8.633 14.937,8.314 18.367,3.003 23.995,5.884"
+             ></polygon>
+             <polygon
+               fill="#fff"
+               points="21.396,31.255 14.899,24.76 17.021,22.639 21.428,27.046 30.996,17.772 33.084,19.926"
+             ></polygon>
+           </svg>
             ): (
               <Typography
                       variant="paragraph"
@@ -229,11 +230,13 @@ import Footer from '../../Components/Home/Footer';
 
 
               </div>
+
+
               <div className="-mt-4 lg:pl-20 container space-y-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mx-5">
                   <MapPinIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
                   <Typography
-                    className="font-medium text-blue-gray-900 font-bold"
+                    className="font-medium text-blue-gray-500"
                     placeholder={undefined}
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
@@ -243,10 +246,12 @@ import Footer from '../../Components/Home/Footer';
                 </div>
               
               </div>
-              <div className="mb-10 py-6 lg:pl-20">
+
+
+              <div className="mb-10 py-6 lg:pl-20 mx-5">
                 <div className="flex w-full flex-col items-start lg:w-1/2">
                   <Typography
-                    className="mb-6 font-normal text-blue-gray-900 font-bold"
+                    className="mb-6 font-normal text-blue-gray-500"
                     placeholder={undefined}
                     onPointerEnterCapture={undefined}
                     onPointerLeaveCapture={undefined}
