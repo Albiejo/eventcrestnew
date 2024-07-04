@@ -15,11 +15,10 @@ const AboutPage = () => {
         <>
         <div className=" text-white pt-2"  style={{ fontFamily: 'Arial, sans-serif' }}>
           <div className="max-w-8xl ">
+            
             <div className="text-center relative ">
               <img src="/imgs/banner6.jpg" alt="Event Crest Banner" className="w-full h-96 object-cover rounded-lg" />
-              <div className="absolute inset-0 flex flex-col justify-center items-center">
-                <img src="/imgs/log.jpeg" alt="Event Crest Logo" className="w-64 mx-auto" />
-              </div>
+             
             </div>
 
             <div className="text-center relative ">
@@ -33,20 +32,22 @@ const AboutPage = () => {
             </div>
 
             <div className="text-center mt-10">
-                <div className="max-w-3xl mx-auto" style={{ fontFamily: "playfair display", fontSize: "30px" }}>
-                
-                  <p className="text-lg  text-gray-700  mb-4"> Event Crest is an Indian online event planning platform and event media publisher, enabling people to plan their events conveniently and cost-effectively.</p>
-                  
-               
-                  <p className="text-lg mb-4 text-gray-700 ">  We're a driven team of event enthusiasts working to build a new way of event planning through delightful products and amazing customer service. We're proud to have been the official event planner of celebrities like Yuvraj Singh & Bhuvneshwar Kumar. We love what we do, and that's how we help plan your event like a loved one!</p>
-                
-                
-                  <p className="text-lg mb-4 text-gray-700 ">  Event Crest is on a mission to make event planning in India exciting and hassle-free. With a millennial army of event fanatics, Event Crest aims to aid the event blues of every new-age couple across the country.</p>
+                <div className="max-w-3xl mx-auto px-4 sm:px-10 lg:px-10" style={{ fontFamily: "playfair display", fontSize: "30px" }}>
+                    <p className="text-lg text-gray-700 mb-4 sm:text-base md:text-lg lg:text-xl">
+                        Event Crest is an Indian online event planning platform and event media publisher, enabling people to plan their events conveniently and cost-effectively.
+                    </p>
+                    <p className="text-lg mb-4 text-gray-700 sm:text-base md:text-lg lg:text-xl">
+                        We're a driven team of event enthusiasts working to build a new way of event planning through delightful products and amazing customer service. We're proud to have been the official event planner of celebrities like Yuvraj Singh & Bhuvneshwar Kumar. We love what we do, and that's how we help plan your event like a loved one!
+                    </p>
+                    <p className="text-lg mb-4 text-gray-700 sm:text-base md:text-lg lg:text-xl">
+                        Event Crest is on a mission to make event planning in India exciting and hassle-free. With a millennial army of event fanatics, Event Crest aims to aid the event blues of every new-age couple across the country.
+                    </p>
                 </div>
             </div>
 
+
             <div className="text-center mt-16">
-                <div className="max-w-3xl mx-auto">
+                <div className="max-w-3xl mx-auto px-4 sm:px-10 lg:px-10">
                   <h3 className="text-2xl text-black font-bold mb-20" style={{ fontFamily: "playfair display", fontSize: "30px" }}>What do we offer?</h3>
                   <p className="text-lg  text-gray-700  mb-20" style={{ fontFamily: "playfair display"}}>Event offers an end-to-end wedding planning solution for couples to ideate & realize their dream wedding conveniently & reliably. Event is the only wedding planning startup in India that offers assisted wedding planning through personal wedding manager for all your needs of booking the perfect service provider. Event is also an encyclopedia of latest trends, expert opinions and practical advice on wedding planning - from choosing wedding theme, best lehenga designs, mehndi designs, sangeet ideas, photo poses, etc.</p>
                   

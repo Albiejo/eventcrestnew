@@ -11,15 +11,15 @@ const Hero = () => {
         <div className="max-w-8xl container relative mx-auto">
           <div className="flex flex-wrap items-center">
             <div className="ml-auto mr-auto w-full px-4 text-center lg:w-8/12">
-              <Typography
+               <Typography
                 variant="h1"
                 color="white"
-                className="mb-6 font-black text-4xl lg:text-5xl" // Adjust font size for different screen sizes
+                className="mb-6 font-black text-4xl lg:text-5xl" 
                 placeholder={undefined}
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
               >
-                Craft Unforgettable Moments: Your Event Starts Here
+               Design Your Dream Event Where Memories Begin
               </Typography>
               <Typography
                 variant="lead"
@@ -29,9 +29,7 @@ const Hero = () => {
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
               >
-                Every event is a blank canvas waiting for your imagination to
-                paint the perfect picture. Let's create memories that last a
-                lifetime.
+                Every event is a story waiting to be told. Let’s craft an experience you'll cherish forever.
               </Typography>
             </div>
           </div>

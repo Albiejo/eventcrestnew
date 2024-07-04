@@ -11,6 +11,11 @@ const VendorCard = lazy(
 import { useLocation } from "react-router-dom";
 import debounce from "lodash/debounce";
 import { useMemo } from "react";
+import Pagination from "../../Components/Common/Pagination";
+
+
+
+
 
 interface Vendors {
   _id: string;
@@ -101,40 +106,50 @@ const VendorsListing = () => {
 
   return (
     <>
-      <div
-        className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/imgs/sea.jpg')" }}
-        ref={topRef}
-      >
-        <div className="absolute inset-0 " />
-        <div className="max-w-md mx-auto">
-          <Card className="mt-6 bg-gray-300" placeholder={undefined}>
-            <CardBody placeholder={undefined}>
-              <Typography
+
+      <div className="relative flex h-screen content-center items-center justify-start lg:pt-16 pt-6 pb-20">
+      <div className="absolute  inset-0 lg:h-3/4 w-full bg-[url('/imgs/sea.jpg')] bg-cover bg-top transform" />
+
+        <div className="absolute top-0 h-100 w-full bg-black/30 bg-cover bg-center" />
+        <Card
+          className="mt-6 m-6 lg:justify-start"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
+          <CardBody
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          >
+             <Typography
                 variant="h5"
                 color="black"
                 className="mb-2"
                 placeholder={undefined}
               >
-                Find Vendors
+                Find Your Ideal Vendor.
               </Typography>
-              <Typography placeholder={undefined}>
-                Discover the perfect vendors for your perfect day. Start your
-                search now!
-              </Typography>
-            </CardBody>
-          </Card>
-        </div>
+            <Typography
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+             Find the Ideal Vendors for Your Special Day. Begin Your Search Today!
+            </Typography>
+          </CardBody>
+        </Card>
       </div>
 
-      <section className="mt-8 mb-20 px-4">
-        <div className="flex justify-between mb-6 ">
-          <div>
-            <h3 className="text-lg font-semibold">
-              Found {vendors.length} Vendors
-            </h3>
-          </div>
-          <div className="flex items-center space-x-4">
+
+      <section className="mx-20 -mt-15 mb-20">
+        
+        
+        <div className="flex justify-end gap-6 md:flex-row flex-col mb-10 mr-5">
+              <div>
+                <h3>Found {vendors.length} Vendors</h3>
+              </div>
+          <div className="relative flex w-full gap-2 md:w-max">
             <input
               type="text"
               name="search"
@@ -143,20 +158,27 @@ const VendorsListing = () => {
               onKeyUp={handleSearch}
               className="px-4 py-2 border border-gray-500 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
             />
-            <VendorSort onChange={handleSortChange} />
           </div>
+          <h3>Sort By:</h3>
+            <div>
+              <VendorSort onChange={handleSortChange} />
+            </div>
         </div>
 
-        <div className="flex flex-wrap justify-center md:justify-between ">
-          <div className="w-full md:w-1/6 mb-6 md:mb-0 flex-shrink-0 ">
-            <h3 className="mt-4 mb-2 text-lg font-semibold">Filter By</h3>
+
+
+        <div className="flex md:flex-row flex-col">
+          
+          <div>
+            <h3 className="-mt-10 mb-5 font-semibold">Filter By</h3>
 
             <VendorFilters
               vendorTypeData={vendorTypeData}
               setCategory={setCategory}
             />
           </div>
-          <div className="flex flex-wrap justify-center md:justify-start w-full md:w-3/4 flex-grow">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 md:ml-10">
             {noResults ? (
               <p className="text-center w-full text-red-500 font-bold">
                 Sorry, no search results found.
@@ -164,58 +186,26 @@ const VendorsListing = () => {
             ) : (
               <Suspense fallback={<LoadingSpinner />}>
                 {vendors.map((vendor, index) => (
-                  <div
-                    key={index}
-                    className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/4 p-4"
-                  >
+                  <div key={index} className="w-full">
                     <VendorCard {...vendor} />
                   </div>
                 ))}
               </Suspense>
             )}
           </div>
+
         </div>
 
-        {vendors.length > 0 && (
-          <div className="flex justify-center mt-8">
-            <div className="space-x-2">
-              {currentPage > 1 && (
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className="px-4 py-2 rounded-md bg-blue-900 text-gray-700"
-                >
-                  Previous
-                </button>
-              )}
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={`px-4 py-2 rounded-md ${
-                      page === currentPage
-                        ? "bg-blue-900 text-white"
-                        : "bg-gray-300 text-gray-700"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              )}
-              {currentPage < totalPages && (
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className="px-4 py-2 rounded-md bg-blue-900 text-gray-700"
-                >
-                  Next
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </section>
 
-      <div className="bg-white">
+        <Pagination 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        />
+
+
+      <div className="mt-10 bg-white">
         <Footer />
       </div>
     </>
