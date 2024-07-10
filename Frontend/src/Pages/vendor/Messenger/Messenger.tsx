@@ -27,7 +27,7 @@ import { conversationType  } from '../../../Types/ConversationType';
   const BUCKET_REGION = import.meta.env.VITE_BUCKET_REGION || "";
   const BUCKET_NAME = import.meta.env.VITE_BUCKET_NAME || "";
   const SECRET_ACCESS_KEY = import.meta.env.VITE_SECRET_ACCESS_KEY || "";
-
+  const IMAGE_URL = import.meta.env.VITE_IMAGE_URL
 
 
   interface FileState {
@@ -286,14 +286,14 @@ const Messenger = () => {
         
               const command = new PutObjectCommand(params);
               await s3.send(command);
-              const imageURL=`${process.env.IMAGE_URL}/${imageName}`;
+              const IMAGEURL=`${IMAGE_URL}/${imageName}`;
         
               const message = {
                 senderId: vendorData?._id,
                 text: "",
                 conversationId: currentchat?._id,
                 imageName: imageName,
-                imageUrl: imageURL,
+                imageUrl: IMAGEURL,
               };
         
               socket.current?.emit("sendMessage", {
@@ -301,7 +301,7 @@ const Messenger = () => {
                 receiverId,
                 text: "",
                 image: imageName,
-                imageUrl: imageURL,
+                imageUrl: IMAGEURL,
               });
         
               await axiosInstanceMsg

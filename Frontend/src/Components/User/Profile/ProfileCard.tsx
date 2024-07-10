@@ -169,6 +169,17 @@ const handleCancel = () => {
               className="h-40 w-40 rounded-full"
             />
              </div>
+          ):user?.imageUrl?(
+            <div onClick={() => {
+              const fileInput = document.getElementById('file-upload');
+              if (fileInput) fileInput.click();
+            }}>
+              <img
+                src={user?.imageUrl}
+                alt="Selected Profile"
+                className="h-40 w-40 rounded-full cursor-pointer"
+              />
+            </div>
           ) : (
             <label
               htmlFor="file-upload"
