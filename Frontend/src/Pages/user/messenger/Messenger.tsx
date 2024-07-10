@@ -80,7 +80,7 @@ const Messenger = () => {
 
 
     useEffect(()=>{
-      socket.current = io("http://eventcrest.online");
+      socket.current = io("https://eventcrest.online");
     },[])
 
 
