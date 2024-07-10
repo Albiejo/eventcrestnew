@@ -34,6 +34,7 @@ interface Vendor {
 }
 
 const Profile = () => {
+
   const vendorData = useSelector(
     (state: VendorRootState) => state.vendor.vendordata
   );
@@ -42,6 +43,9 @@ const Profile = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
   const [vendor, setVendor] = useState<Vendor>();
+
+
+
 
   useEffect(() => {
     if (id) {
@@ -66,6 +70,8 @@ const Profile = () => {
     }
   }, [id, vendorData]);
 
+
+
   const handleVerification = async () => {
     axiosInstanceVendor
       .post(
@@ -74,8 +80,8 @@ const Profile = () => {
         { withCredentials: true }
       )
       .then(() => {
-
-        toast.success("Requested for Verification!");
+        toast.success("Verification Requested ..")
+        console.log("requested..")
       })
       .catch((error) => {
         console.log("here", error);
